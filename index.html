@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GP Sakhi — ग्रामपंचायत सखी</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --saffron:#E8701A;
+  --navy:#1A2744;
+  --green:#1A6E3C;
+  --gold:#C49A22;
+  --cream:#FAF7F2;
+  --sand:#EDE8DF;
+  --text:#1C1410;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,39,68,0.97);backdrop-filter:blur(10px);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo .emblem{width:36px;height:36px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:17pt;color:white;letter-spacing:0.5px;}
+.nav-logo small{font-size:8pt;color:rgba(255,255,255,0.55);display:block;margin-top:-4px;letter-spacing:1px;text-transform:uppercase;}
+.nav-login-btn{background:var(--saffron);color:white;border:none;border-radius:6px;padding:8px 18px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:700;cursor:pointer;transition:background 0.2s;}
+.nav-login-btn:hover{background:#d4620f;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px 40px;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#1A2744 0%,#0F1829 50%,#1A3A22 100%);z-index:0;}
+.hero-pattern{position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,1) 40px,rgba(255,255,255,1) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(255,255,255,1) 40px,rgba(255,255,255,1) 41px);z-index:1;}
+.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(232,112,26,0.15) 0%,transparent 70%);z-index:1;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:680px;}
+.hero-badge{display:inline-block;background:rgba(232,112,26,0.15);border:1px solid rgba(232,112,26,0.4);color:rgba(255,200,150,0.9);padding:5px 16px;border-radius:20px;font-size:9pt;font-weight:600;letter-spacing:1px;margin-bottom:28px;}
+.hero h1{font-family:'Tiro Devanagari Marathi',serif;font-size:48pt;color:white;line-height:1.1;margin-bottom:8px;}
+.hero h1 span{color:var(--saffron);}
+.hero-tagline{font-size:13pt;color:rgba(255,255,255,0.65);margin-bottom:40px;line-height:1.7;}
+.hero-tagline strong{color:rgba(255,255,255,0.9);}
+.hero-cta{display:flex;flex-direction:column;align-items:center;gap:14px;}
+.btn-google{display:flex;align-items:center;gap:12px;background:white;color:#1C1410;border:none;border-radius:10px;padding:14px 28px;font-family:'Noto Sans Devanagari',sans-serif;font-size:12pt;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:transform 0.2s,box-shadow 0.2s;}
+.btn-google:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.4);}
+.btn-google img{width:22px;height:22px;}
+.hero-note{font-size:9pt;color:rgba(255,255,255,0.4);}
+.scroll-hint{margin-top:60px;color:rgba(255,255,255,0.3);font-size:9pt;animation:bounce 2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* FEATURES */
+.features{padding:80px 20px;background:var(--cream);}
+.section-label{text-align:center;font-size:9pt;font-weight:700;color:var(--saffron);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.section-title{text-align:center;font-family:'Tiro Devanagari Marathi',serif;font-size:26pt;color:var(--navy);margin-bottom:50px;line-height:1.3;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:960px;margin:0 auto;}
+.feat-card{background:white;border:1px solid var(--sand);border-radius:12px;padding:28px;transition:transform 0.2s,box-shadow 0.2s;}
+.feat-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.08);}
+.feat-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;}
+.feat-card h3{font-size:12pt;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.feat-card p{font-size:10pt;color:#6B5E4E;line-height:1.7;}
+
+/* HOW IT WORKS */
+.how{padding:80px 20px;background:var(--navy);}
+.how .section-title{color:white;}
+.steps{display:flex;flex-wrap:wrap;justify-content:center;gap:0;max-width:900px;margin:0 auto;position:relative;}
+.steps::before{content:'';position:absolute;top:36px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--saffron),var(--gold));opacity:0.3;}
+.step{flex:1;min-width:180px;max-width:220px;text-align:center;padding:0 16px;}
+.step-num{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));color:white;font-size:22pt;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 20px rgba(232,112,26,0.4);}
+.step h4{font-size:11pt;font-weight:700;color:white;margin-bottom:8px;}
+.step p{font-size:9.5pt;color:rgba(255,255,255,0.55);line-height:1.6;}
+
+/* TOOLS PREVIEW */
+.tools-preview{padding:80px 20px;background:white;}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:960px;margin:0 auto;}
+.tool-card{border:1.5px solid var(--sand);border-radius:12px;padding:24px;text-align:center;position:relative;overflow:hidden;}
+.tool-card.active{border-color:var(--saffron);background:linear-gradient(135deg,#FFF8F3,#FFF3E8);}
+.tool-badge{position:absolute;top:12px;right:12px;font-size:7.5pt;font-weight:700;padding:3px 8px;border-radius:10px;}
+.badge-live{background:#DCFCE7;color:#166534;}
+.badge-soon{background:#F3F4F6;color:#9CA3AF;}
+.tool-emoji{font-size:32px;margin-bottom:12px;display:block;}
+.tool-card h4{font-size:11pt;font-weight:700;color:var(--navy);margin-bottom:6px;}
+.tool-card p{font-size:9pt;color:#9CA3AF;}
+
+/* FOOTER */
+footer{background:#0F1829;color:rgba(255,255,255,0.4);text-align:center;padding:24px 20px;font-size:9pt;}
+footer strong{color:rgba(255,255,255,0.7);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal{background:white;border-radius:16px;padding:40px;max-width:440px;width:90%;text-align:center;transform:translateY(20px);transition:transform 0.3s;}
+.modal-overlay.show .modal{transform:translateY(0);}
+.modal h2{font-family:'Tiro Devanagari Marathi',serif;font-size:20pt;color:var(--navy);margin-bottom:8px;}
+.modal p{font-size:10pt;color:#6B5E4E;margin-bottom:28px;line-height:1.6;}
+.modal .btn-google{width:100%;justify-content:center;margin-bottom:16px;}
+.modal-note{font-size:8.5pt;color:#9CA3AF;line-height:1.6;}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#9CA3AF;}
+
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--navy);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s;}
+.loading-screen.hide{opacity:0;pointer-events:none;}
+.loading-logo{font-family:'Tiro Devanagari Marathi',serif;font-size:32pt;color:white;margin-bottom:8px;}
+.loading-logo span{color:var(--saffron);}
+.load-bar{width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:24px;overflow:hidden;}
+.load-bar-inner{height:100%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:2px;animation:load 1.5s ease forwards;}
+@keyframes load{from{width:0}to{width:100%}}
+
+/* USER STATE (when logged in) */
+.nav-user{display:none;align-items:center;gap:10px;}
+.nav-user.show{display:flex;}
+.nav-user img{width:32px;height:32px;border-radius:50%;border:2px solid var(--saffron);}
+.nav-user span{color:white;font-size:10pt;}
+.nav-logout{background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);border-radius:5px;padding:5px 12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;}
+.nav-dashboard-btn{background:var(--green);color:white;border:none;border-radius:6px;padding:8px 16px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:700;cursor:pointer;transition:background 0.2s;}
+.nav-dashboard-btn:hover{background:#145530;}
+
+@media(max-width:600px){
+  .hero h1{font-size:30pt;}
+  .steps::before{display:none;}
+  .step{min-width:160px;}
+}
+
+/* AD SPACE */
+.ad-banner{background:#F9F9F9;border:1px dashed #DDD;border-radius:8px;padding:16px;text-align:center;color:#AAA;font-size:9pt;max-width:960px;margin:0 auto 32px;}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-logo">GP <span>Sakhi</span></div>
+  <div style="color:rgba(255,255,255,0.5);font-size:10pt;">ग्रामपंचायत सखी</div>
+  <div class="load-bar"><div class="load-bar-inner"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="emblem">🏛️</div>
+    <div>
+      <span>GP Sakhi</span>
+      <small>ग्रामपंचायत सखी</small>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="nav-user" id="navUser">
+      <img id="navUserImg" src="" alt="">
+      <span id="navUserName"></span>
+      <button class="nav-dashboard-btn" onclick="window.location.href='dashboard.html'">Dashboard</button>
+      <button class="nav-logout" onclick="handleLogout()">बाहेर</button>
+    </div>
+    <button class="nav-login-btn" id="navLoginBtn" onclick="showLoginModal()">🔑 लॉगिन करा</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🇮🇳 महाराष्ट्र ग्रामपंचायत</div>
+    <h1>GP <span>Sakhi</span></h1>
+    <p class="hero-tagline">
+      ग्रामपंचायतींसाठी <strong>डिजिटल मदतनीस</strong><br>
+      मजुरी बिल, पत्र, ठराव — सर्व एकाच ठिकाणी, झटपट तयार
+    </p>
+    <div class="hero-cta">
+      <button class="btn-google" onclick="showLoginModal()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Google ने लॉगिन करा — मोफत
+      </button>
+      <p class="hero-note">कोणत्याही Google खात्याने लॉगिन करा • कोणतेही शुल्क नाही</p>
+    </div>
+    <div class="scroll-hint" style="margin-top:50px;">↓ अधिक माहिती</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-label">का वापरावे?</div>
+  <div class="section-title">GP Sakhi चे फायदे</div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#FFF3E8;">📋</div>
+      <h3>एकदा माहिती — वारंवार वापर</h3>
+      <p>ग्रामपंचायतची माहिती एकदा सेव करा — सरपंच, ग्रामसेवक, जिल्हा — प्रत्येक वेळी पुन्हा टाकण्याची गरज नाही.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#EAF5EE;">⚡</div>
+      <h3>झटपट मजुरी बिल</h3>
+      <p>मजुरांची नावे, रक्कम टाका — हप्तेवारी, गोषवारा, अक्षरी रक्कम सर्व automatic. Print-ready PDF मिळेल.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#EEF2FF;">📁</div>
+      <h3>इतिहास व Google Drive</h3>
+      <p>तयार केलेले सर्व vouchers history मध्ये साठवले जातात. तुमच्या Google Drive मध्ये PDF save होतो.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#FEF9C3;">🔒</div>
+      <h3>सुरक्षित व खाजगी</h3>
+      <p>Google Login मुळे तुमची माहिती फक्त तुम्हालाच दिसेल. प्रत्येक ग्रामपंचायतीचा स्वतंत्र account.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#FCE7F3;">🌐</div>
+      <h3>कोठूनही वापरा</h3>
+      <p>मोबाईल, टॅब्लेट, संगणक — कुठूनही. इंटरनेट असेल तर GP Sakhi वापरता येईल.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:#F0FDF4;">💰</div>
+      <h3>पूर्णपणे मोफत</h3>
+      <p>सर्व ग्रामपंचायतींसाठी मोफत. कोणतेही subscription नाही, कोणतेही hidden charges नाही.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-label" style="color:var(--saffron);">कसे वापरावे?</div>
+  <div class="section-title">४ सोप्या पायऱ्या</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">१</div>
+      <h4>Google Login</h4>
+      <p>तुमच्या Google account ने sign in करा — एकदाच.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">२</div>
+      <h4>GP माहिती सेव करा</h4>
+      <p>ग्रामपंचायत, सरपंच, ग्रामसेवक माहिती एकदा भरा.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">३</div>
+      <h4>Tool वापरा</h4>
+      <p>मजुरी बिल generator मध्ये काम व मजुरांची माहिती टाका.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">४</div>
+      <h4>Print / Download</h4>
+      <p>तयार voucher print करा किंवा Google Drive मध्ये save करा.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS PREVIEW -->
+<section class="tools-preview">
+  <div class="section-label">उपलब्ध साधने</div>
+  <div class="section-title">GP Sakhi Tools</div>
+  <div class="ad-banner">Advertisement</div>
+  <div class="tools-grid">
+    <div class="tool-card active">
+      <span class="tool-badge badge-live">✓ उपलब्ध</span>
+      <span class="tool-emoji">📋</span>
+      <h4>मजुरी बिल जनरेटर</h4>
+      <p>हप्तेवारी व गोषवारा</p>
+    </div>
+    <div class="tool-card">
+      <span class="tool-badge badge-soon">लवकरच</span>
+      <span class="tool-emoji">📝</span>
+      <h4>पत्र तयार करणे</h4>
+      <p>शासकीय पत्रव्यवहार</p>
+    </div>
+    <div class="tool-card">
+      <span class="tool-badge badge-soon">लवकरच</span>
+      <span class="tool-emoji">📜</span>
+      <h4>ठराव तयार करणे</h4>
+      <p>ग्रामसभा ठराव</p>
+    </div>
+    <div class="tool-card">
+      <span class="tool-badge badge-soon">लवकरच</span>
+      <span class="tool-emoji">📄</span>
+      <h4>नमुना / प्रमाणपत्र</h4>
+      <p>विविध नमुने</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>GP Sakhi — ग्रामपंचायत सखी</strong></p>
+  <p style="margin-top:6px;">महाराष्ट्रातील ग्रामपंचायतींसाठी • मोफत डिजिटल सेवा</p>
+  <p style="margin-top:10px;font-size:8pt;">
+    <a href="privacy.html" style="color:rgba(255,255,255,0.4);text-decoration:none;">Privacy Policy</a> &nbsp;|&nbsp;
+    <a href="terms.html" style="color:rgba(255,255,255,0.4);text-decoration:none;">Terms of Use</a>
+  </p>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    <div style="font-size:48px;margin-bottom:16px;">🏛️</div>
+    <h2>GP Sakhi मध्ये स्वागत</h2>
+    <p>तुमच्या Google account ने लॉगिन करा.<br>पहिल्यांदा लॉगिन केल्यावर account आपोआप तयार होईल.</p>
+    <button class="btn-google" id="modalGoogleBtn" onclick="handleGoogleLogin()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      Google ने Continue करा
+    </button>
+    <p class="modal-note">
+      लॉगिन केल्यावर तुमची माहिती Google च्या सुरक्षित servers वर साठवली जाते.<br>
+      आम्ही तुमचा डेटा कधीही विकत नाही.
+    </p>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+// ══════════════════════════════════════════════
+// 🔧 FIREBASE CONFIG — येथे तुमची config टाका
+// Firebase Console → Project Settings → Your apps
+// ══════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
+  authDomain: "gpsakhi-9685e.firebaseapp.com",
+  projectId: "gpsakhi-9685e",
+  storageBucket: "gpsakhi-9685e.firebasestorage.app",
+  messagingSenderId: "107629589245",
+  appId: "1:107629589245:web:7b288fda76b26aaadac494"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Auth state listener
+onAuthStateChanged(auth, (user) => {
+  document.getElementById('loadingScreen').classList.add('hide');
+  setTimeout(() => { document.getElementById('loadingScreen').style.display='none'; }, 600);
+  
+  if (user) {
+    // User logged in
+    document.getElementById('navLoginBtn').style.display = 'none';
+    document.getElementById('navUser').classList.add('show');
+    document.getElementById('navUserImg').src = user.photoURL || '';
+    document.getElementById('navUserName').textContent = user.displayName ? user.displayName.split(' ')[0] : '';
+    // Save user to session
+    sessionStorage.setItem('gpUser', JSON.stringify({
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL
+    }));
+  } else {
+    document.getElementById('navLoginBtn').style.display = 'block';
+    document.getElementById('navUser').classList.remove('show');
+    sessionStorage.removeItem('gpUser');
+  }
+});
+
+window.handleGoogleLogin = async function() {
+  const btn = document.getElementById('modalGoogleBtn');
+  btn.textContent = 'लॉगिन होत आहे...';
+  btn.disabled = true;
+  try {
+    const result = await signInWithPopup(auth, provider);
+    closeLoginModal();
+    window.location.href = 'dashboard.html';
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:22px"> Google ने Continue करा';
+    alert('Login failed: ' + e.message);
+  }
+};
+
+window.handleLogout = async function() {
+  await signOut(auth);
+  sessionStorage.removeItem('gpUser');
+};
+</script>
+
+<script>
+function showLoginModal() {
+  document.getElementById('loginModal').classList.add('show');
+}
+function closeLoginModal() {
+  document.getElementById('loginModal').classList.remove('show');
+}
+document.getElementById('loginModal').onclick = function(e) {
+  if (e.target === this) closeLoginModal();
+};
+</script>
+</body>
+</html>
