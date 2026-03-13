@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>मजुरी बिल जनरेटर — GP Sakhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
+:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans Devanagari',Arial,sans-serif;background:#F5F0E8;color:#2C2416;}
+
+/* NAV */
+nav{background:var(--navy);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav-logo{font-family:serif;font-size:15pt;color:white;text-decoration:none;}
+.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:10pt;}
+.back-btn:hover{color:white;}
+.nav-save-status{font-size:9pt;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:6px;}
+.dot-saved{width:8px;height:8px;border-radius:50%;background:#4ADE80;}
+
+/* GP INFO BAR */
+.gp-bar{background:white;border-bottom:2px solid #E8701A;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;font-size:9.5pt;}
+.gp-bar-info{color:var(--navy);font-weight:700;}
+.gp-bar-link{color:var(--saffron);text-decoration:none;font-size:9pt;}
+
+/* VOUCHER TOOL STYLES — copied from original */
+.hdr{background:#1A2744;color:white;padding:14px 18px 12px;display:none;}
+.hdr h1{font-size:15pt;font-weight:700;}
+.hdr p{font-size:9pt;color:rgba(255,255,255,0.55);margin-top:2px;}
+.cont{max-width:900px;margin:0 auto;padding:18px 12px 60px;}
+.card{background:white;border:1px solid #D4C5A9;border-radius:8px;margin-bottom:16px;overflow:hidden;}
+.ch{background:#E8701A;color:white;padding:10px 16px;font-size:10.5pt;font-weight:700;}
+.cb{padding:16px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+.fld:last-child{margin-bottom:0;}
+.fld label{font-size:9pt;font-weight:700;color:#1A2744;}
+.req{color:#E8701A;}
+.fld input,.fld select,.fld textarea{padding:8px 10px;border:1.5px solid #D4C5A9;border-radius:5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;background:#FAFAF7;width:100%;}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:#E8701A;background:white;}
+.fld textarea{min-height:62px;resize:vertical;}
+.sec-title{text-align:center;font-size:9pt;font-weight:700;color:#E8701A;margin:6px 0 10px;}
+.wtable{width:100%;border-collapse:collapse;font-size:9.5pt;margin-bottom:8px;}
+.wtable th{background:#1A2744;color:white;padding:7px 6px;text-align:center;font-size:9pt;font-weight:700;border:1px solid #333;}
+.wtable td{border:1px solid #D4C5A9;padding:5px 4px;background:white;}
+.wtable tr:nth-child(even) td{background:#FFF8F0;}
+.wtable td input,.wtable td select{width:100%;padding:5px 6px;border:1px solid #D4C5A9;border-radius:4px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:9pt;background:white;}
+.tdnum{width:30px;text-align:center;font-weight:700;color:#C45A0E;}
+.tddel{width:32px;text-align:center;}
+.delbtn{background:#FEE2E2;border:1px solid #FECACA;border-radius:4px;color:#C0392B;font-size:12px;cursor:pointer;width:26px;height:26px;padding:0;}
+.badd{background:#EAF5EE;border:2px dashed #1A6E3C;border-radius:6px;color:#1A6E3C;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;font-weight:700;padding:9px;cursor:pointer;width:100%;display:block;}
+.bgen{display:block;width:100%;background:#1A2744;color:white;border:none;border-radius:7px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:12pt;font-weight:700;padding:13px;cursor:pointer;margin-top:16px;}
+.bgen:disabled{background:#888;cursor:not-allowed;}
+.spin-box{display:none;text-align:center;background:#1A2744;color:white;border-radius:8px;padding:20px;margin-top:14px;}
+.spin-box.on{display:block;}
+.spin{width:34px;height:34px;border:4px solid rgba(255,255,255,0.2);border-top-color:#E8701A;border-radius:50%;animation:sp 0.8s linear infinite;margin:0 auto 10px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.eb{display:none;background:#FEE2E2;border:1px solid #FECACA;border-radius:6px;padding:10px 14px;color:#C0392B;font-size:10pt;margin-top:10px;}
+.eb.on{display:block;}
+.rbar{display:none;background:#1A6E3C;color:white;padding:11px 16px;border-radius:8px 8px 0 0;align-items:center;justify-content:space-between;margin-top:24px;flex-wrap:wrap;gap:8px;}
+.rbar.on{display:flex;}
+.bprt{background:white;color:#1A6E3C;border:none;border-radius:5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;font-weight:700;padding:7px 14px;cursor:pointer;}
+.bsave{background:#E8701A;color:white;border:none;border-radius:5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;font-weight:700;padding:7px 14px;cursor:pointer;}
+#VOUT{display:none;border:1px solid #D4C5A9;border-top:none;border-radius:0 0 8px 8px;background:white;padding:10px;overflow-x:auto;}
+#VOUT.on{display:block;}
+.note{background:#FFF8E6;border-left:3px solid #E8701A;padding:7px 11px;font-size:9pt;color:#7A6A52;margin-top:8px;border-radius:0 4px 4px 0;}
+.info-row{background:#E8F4FD;border:1px solid #BEE3F8;border-radius:5px;padding:8px 12px;font-size:9pt;color:#2C5282;margin-bottom:12px;}
+.gp-autofill-bar{background:#EAF5EE;border:1px solid #86EFAC;border-radius:6px;padding:8px 12px;font-size:9pt;color:#166534;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+
+/* VOUCHER PRINT STYLES */
+.vp{width:277mm;min-height:205mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:space-between;}
+.gp{width:277mm;background:white;margin:0 auto 14px;padding:8mm 10mm;border:1px solid #888;}
+.vhd{text-align:center;margin-bottom:4px;}
+.vof{font-size:14pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:3px;margin-bottom:4px;}
+.vti{font-size:12pt;font-weight:700;margin-bottom:3px;}
+.vwd{font-size:11pt;font-weight:600;margin-bottom:3px;}
+.vvn{text-align:right;font-size:11pt;font-weight:700;margin-bottom:4px;border-bottom:1px solid #000;padding-bottom:3px;}
+.vt{width:100%;border-collapse:collapse;font-size:10.5pt;}
+.vt th,.vt td{border:1px solid #000;text-align:center;padding:6px 2px;line-height:1.4;height:34px;}
+.vt th{background:#e0e0e0;font-weight:700;font-size:9.5pt;padding:5px 2px;}
+.vcn{text-align:left!important;padding-left:6px!important;width:130px;}
+.vcp{width:58px;}.vcv{width:54px;}
+.vcd{width:22px;font-size:9pt!important;padding:6px 1px!important;}
+.vct{width:48px;}.vcr{width:46px;}.vca{width:62px;}.vcpa{width:68px;}.vcs{width:82px;}
+.VHL{background:#c8c8c8!important;font-weight:700;}
+.vt tr:nth-child(even) td{background:#f5f5f5;}
+.vt tr:nth-child(even) td.VHL{background:#c8c8c8!important;}
+.VTR td{background:#e8e8e8!important;font-weight:700;font-size:10.5pt;border-top:2px solid #000;}
+.vft{margin-top:6px;border-top:1px solid #000;padding-top:6px;}
+.vra{text-align:center;font-size:10.5pt;font-weight:700;margin-bottom:3px;}
+.vst{text-align:center;font-size:9.5pt;border:1px solid #000;padding:3px 8px;margin:3px auto;width:78%;}
+.vsg{display:flex;justify-content:space-around;margin-top:18px;font-size:10pt;font-weight:700;}
+.vsg div{text-align:center;width:130px;}
+.vsl{border-top:1px solid #000;padding-top:4px;}
+
+/* AD */
+.ad-box{background:#F9F9F9;border:1px dashed #CCC;border-radius:6px;padding:12px;text-align:center;color:#BBB;font-size:9pt;margin-bottom:14px;}
+
+@media screen{.vp,.gp{box-shadow:0 2px 8px rgba(0,0,0,0.1);}}
+@page{size:A4 landscape;margin:6mm 8mm;}
+@media print{
+  nav,.gp-bar,.cont>.card,.bgen,.spin-box,.eb,.rbar,.bprt,.bsave,.ad-box{display:none!important;}
+  body{background:white!important;padding:0!important;margin:0!important;}
+  .cont{padding:0!important;max-width:none!important;}
+  #VOUT{display:block!important;border:none!important;padding:0!important;margin:0!important;}
+  .vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;padding:0!important;margin:0 0 0 0!important;}
+  .gp{border:none!important;box-shadow:none!important;width:100%!important;padding:0!important;margin:0!important;}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="index.html" class="nav-logo">GP Sakhi</a>
+  <div class="nav-save-status" id="saveStatus" style="display:none;">
+    <div class="dot-saved"></div>
+    <span>इतिहासात सेव झाले</span>
+  </div>
+</nav>
+
+<div class="gp-bar" id="gpBar" style="display:none;">
+  <span class="gp-bar-info" id="gpBarInfo">ग्रामपंचायत माहिती लोड होत आहे...</span>
+  <a href="profile.html" class="gp-bar-link">✏️ बदला</a>
+</div>
+
+<div class="cont">
+  <div class="ad-box">Advertisement</div>
+
+  <div class="card">
+    <div class="ch">🏛️ ग्रामपंचायत माहिती</div>
+    <div class="cb">
+      <div class="gp-autofill-bar" id="autofillBar" style="display:none;">
+        ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;">बदलायचे असेल तर येथे क्लिक करा</a>
+      </div>
+      <div class="g3">
+        <div class="fld"><label>ग्रामपंचायत <span class="req">*</span></label><input type="text" id="GP_NAME" placeholder="उदा. तोंडली"></div>
+        <div class="fld"><label>पंचायत समिती</label><input type="text" id="GP_PS" placeholder="उदा. मौदा"></div>
+        <div class="fld"><label>जिल्हा</label><input type="text" id="GP_DIST" placeholder="उदा. नागपूर"></div>
+      </div>
+      <div class="g3">
+        <div class="fld"><label>सरपंच नाव</label><input type="text" id="GP_SARP" placeholder="उदा. सौ. दर्शना बागडे"></div>
+        <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="GP_GRAM" placeholder="उदा. श्री. वैभव बावनकर"></div>
+        <div class="fld"><label>साप्ताहिक सुट्टी</label>
+          <select id="GP_HOL">
+            <option value="4">गुरुवार</option>
+            <option value="0">रविवार</option>
+            <option value="1">सोमवार</option>
+            <option value="2">मंगळवार</option>
+            <option value="3">बुधवार</option>
+            <option value="5">शुक्रवार</option>
+            <option value="6">शनिवार</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch">📋 कामाची माहिती</div>
+    <div class="cb">
+      <div class="fld"><label>कामाचा तपशील <span class="req">*</span></label><textarea id="F_WORK" placeholder="उदा. मौजा खिडकी येथे सांडपाणी व घनकचरा व्यवस्थापन बांधकाम करणे"></textarea></div>
+      <div class="g4">
+        <div class="fld"><label>सुरुवातीची तारीख <span class="req">*</span></label><input type="date" id="F_DATE"></div>
+        <div class="fld"><label>एकूण रक्कम (₹) <span class="req">*</span></label><input type="number" id="F_AMT" placeholder="76700"></div>
+        <div class="fld"><label>मिस्त्री रोजी (₹)</label><input type="number" id="F_MR" value="800"></div>
+        <div class="fld"><label>लेबर रोजी (₹)</label><input type="number" id="F_LR" value="500"></div>
+      </div>
+      <div class="g2">
+        <div class="fld"><label>हप्ता क्र. सुरुवात</label><input type="number" id="F_VNO" value="1" min="1"></div>
+        <div class="fld"><label>Default राहणार गाव</label><input type="text" id="F_VLG" placeholder="उदा. तोंडली"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ch">👷 मजुरांची माहिती</div>
+    <div class="cb">
+      <div class="info-row">💡 <b>दिलेली रक्कम:</b> रिकामे सोडल्यास एकूण रुपये इतकीच रक्कम आपोआप भरेल. वेगळी रक्कम असल्यास manually टाका.</div>
+      <div class="sec-title">— मजुरांची यादी —</div>
+      <div style="overflow-x:auto">
+        <table class="wtable">
+          <thead><tr>
+            <th class="tdnum">क्र.</th>
+            <th style="min-width:130px">मजुराचे नाव</th>
+            <th style="min-width:80px">पद</th>
+            <th style="min-width:90px">राहणार</th>
+            <th style="min-width:105px">दिलेली रक्कम (₹)<br><small style="font-weight:400;font-size:8pt">रिकामे = auto</small></th>
+            <th class="tddel"></th>
+          </tr></thead>
+          <tbody id="WBODY"></tbody>
+        </table>
+      </div>
+      <button class="badd" id="BTN_ADD">+ मजूर जोडा</button>
+      <div class="note">💡 राहणार रिकामे सोडल्यास वरील "Default राहणार गाव" वापरला जाईल.</div>
+    </div>
+  </div>
+
+  <button class="bgen" id="BTN_GEN">⚡ मजुरी बिल तयार करा</button>
+  <div class="eb" id="ERRBOX"></div>
+  <div class="spin-box" id="SPINBOX"><div class="spin"></div><div style="font-size:11pt;font-weight:700;">व्हाउचर तयार होत आहे...</div></div>
+
+  <div class="rbar" id="RBAR">
+    <span style="font-weight:700;">✅ मजुरी बिल तयार झाले</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="bsave" id="BTN_SAVE" onclick="saveVoucher()">💾 इतिहासात सेव करा</button>
+      <button class="bprt" id="BTN_PRT">🖨️ Print करा</button>
+    </div>
+  </div>
+  <div id="VOUT"></div>
+</div>
+
+<!-- Firebase + Voucher Logic -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ══ FIREBASE CONFIG ══
+const firebaseConfig = {
+  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
+  authDomain: "gpsakhi-9685e.firebaseapp.com",
+  projectId: "gpsakhi-9685e",
+  storageBucket: "gpsakhi-9685e.firebasestorage.app",
+  messagingSenderId: "107629589245",
+  appId: "1:107629589245:web:7b288fda76b26aaadac494"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let currentUser = null;
+let lastVoucherData = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+  
+  // Load GP profile → auto-fill
+  const ref = doc(db, 'users', user.uid, 'profile', 'gp');
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    const d = snap.data();
+    document.getElementById('GP_NAME').value = d.gpName || '';
+    document.getElementById('GP_PS').value = d.ps || '';
+    document.getElementById('GP_DIST').value = d.dist || '';
+    document.getElementById('GP_SARP').value = d.sarp || '';
+    document.getElementById('GP_GRAM').value = d.gram || '';
+    document.getElementById('GP_HOL').value = d.hol || '4';
+    document.getElementById('F_VLG').value = d.village || '';
+    document.getElementById('F_MR').value = d.mr || 800;
+    document.getElementById('F_LR').value = d.lr || 500;
+    document.getElementById('autofillBar').style.display = 'flex';
+    document.getElementById('gpBar').style.display = 'flex';
+    document.getElementById('gpBarInfo').textContent = 'ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
+  }
+});
+
+window.saveVoucher = async function() {
+  if (!currentUser || !lastVoucherData) return;
+  const btn = document.getElementById('BTN_SAVE');
+  btn.textContent = 'सेव होत आहे...'; btn.disabled = true;
+  try {
+    await addDoc(collection(db, 'users', currentUser.uid, 'vouchers'), {
+      ...lastVoucherData,
+      createdAt: serverTimestamp()
+    });
+    btn.textContent = '✅ सेव झाले';
+    document.getElementById('saveStatus').style.display = 'flex';
+  } catch(e) {
+    btn.textContent = '💾 इतिहासात सेव करा'; btn.disabled = false;
+    alert('त्रुटी: ' + e.message);
+  }
+};
+
+window.setLastVoucherData = function(data) { lastVoucherData = data; };
+</script>
+
+<script type="text/javascript">
+var WC = 0;
+function ADD_WORKER() {
+  WC = WC + 1;
+  var id = WC;
+  var defV = document.getElementById('F_VLG').value.trim();
+  var tr = document.createElement('tr');
+  tr.id = 'WR' + id;
+  tr.innerHTML = '<td class="tdnum"><span class="wnum">' + id + '</span></td>' +
+    '<td><input type="text" class="WN" placeholder="मजुराचे नाव"></td>' +
+    '<td><select class="WP"><option value="लेबर">लेबर</option><option value="मिस्त्री">मिस्त्री</option></select></td>' +
+    '<td><input type="text" class="WV" value="' + defV + '" placeholder="रिकामे=default"></td>' +
+    '<td><input type="number" class="WA" placeholder="auto" min="0"></td>' +
+    '<td class="tddel"><button class="delbtn" onclick="DEL(' + id + ')">✕</button></td>';
+  document.getElementById('WBODY').appendChild(tr);
+  RENUM();
+}
+function DEL(id) { var el = document.getElementById('WR' + id); if (el) { el.parentNode.removeChild(el); RENUM(); } }
+function RENUM() { var rows = document.getElementById('WBODY').getElementsByTagName('tr'); for (var i = 0; i < rows.length; i++) { rows[i].getElementsByClassName('wnum')[0].innerHTML = i + 1; } }
+function GETW() {
+  var out = [], rows = document.getElementById('WBODY').getElementsByTagName('tr');
+  var defV = document.getElementById('F_VLG').value.trim();
+  for (var i = 0; i < rows.length; i++) {
+    var nm = rows[i].getElementsByClassName('WN')[0].value.trim();
+    if (!nm) continue;
+    var av = rows[i].getElementsByClassName('WA')[0].value.trim();
+    out.push({ name: nm, post: rows[i].getElementsByClassName('WP')[0].value, village: rows[i].getElementsByClassName('WV')[0].value.trim() || defV, manualAmt: av === '' ? null : parseInt(av) });
+  }
+  return out;
+}
+document.getElementById('BTN_ADD').onclick = ADD_WORKER;
+document.getElementById('BTN_GEN').onclick = GENERATE;
+document.getElementById('BTN_PRT').onclick = PRINTIT;
+ADD_WORKER(); ADD_WORKER(); ADD_WORKER(); ADD_WORKER(); ADD_WORKER(); ADD_WORKER();
+
+function ISHOL(d, h) { return d.getDay() === h; }
+function NXT(d) { var r = new Date(d.getTime()); r.setDate(r.getDate() + 1); return r; }
+function SKIPHOL(d, h) { var r = new Date(d.getTime()); while (ISHOL(r, h)) r = NXT(r); return r; }
+var MN = ['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर'];
+var DN = ['र','सो','मं','बु','गु','शु','श'];
+function FD(d) { return (d.getDate()<10?'0':'')+d.getDate()+' '+MN[d.getMonth()]+' '+d.getFullYear(); }
+var DevaD = ['०','१','२','३','४','५','६','७','८','९'];
+function D(n) { return String(Math.round(n)).replace(/[0-9]/g, function(c) { return DevaD[parseInt(c)]; }); }
+function FM(n) { return Number(n).toLocaleString('en-IN'); }
+function WDAYS(start, n, h) { var days = [], d = new Date(start.getTime()); while (days.length < n) { if (!ISHOL(d, h)) days.push(new Date(d.getTime())); d = NXT(d); } return days; }
+function WORDS(n) {
+  var o=['','एक','दोन','तीन','चार','पाच','सहा','सात','आठ','नऊ','दहा','अकरा','बारा','तेरा','चौदा','पंधरा','सोळा','सतरा','अठरा','एकोणीस','वीस','एकवीस','बावीस','तेवीस','चोवीस','पंचवीस','सव्वीस','सत्तावीस','अठ्ठावीस','एकोणतीस','तीस','एकतीस','बत्तीस','तेहतीस','चौतीस','पस्तीस','छत्तीस','सदतीस','अडतीस','एकोणचाळीस','चाळीस','एकेचाळीस','बेचाळीस','त्रेचाळीस','चव्वेचाळीस','पंचेचाळीस','सेहेचाळीस','सत्तेचाळीस','अठ्ठेचाळीस','एकोणपन्नास','पन्नास','एकावन्न','बावन्न','त्रेपन्न','चोपन्न','पंचावन्न','छपन्न','सत्तावन्न','अठ्ठावन्न','एकोणसाठ','साठ','एकसष्ट','बासष्ट','त्रेसष्ट','चौसष्ट','पासष्ट','सहासष्ट','सत्तेसष्ट','अडुसष्ट','एकोणसत्तर','सत्तर','एकाहत्तर','बाहत्तर','त्र्याहत्तर','चौर्याहत्तर','पंचाहत्तर','शहात्तर','सत्त्याहत्तर','अठ्ठ्याहत्तर','एकोणऐंशी','ऐंशी','एक्याऐंशी','ब्याऐंशी','त्र्याऐंशी','चौर्याऐंशी','पंच्याऐंशी','शहाऐंशी','सत्त्याऐंशी','अठ्ठ्याऐंशी','एकोणनव्वद','नव्वद','एक्याण्णव','ब्याण्णव','त्र्याण्णव','चौर्याण्णव','पंच्याण्णव','शहाण्णव','सत्त्याण्णव','अठ्ठ्याण्णव','नव्व्याण्णव'];
+  if(n<=0)return 'शून्य रुपये फक्त';
+  var w='';
+  if(n>=100000){w+=o[Math.floor(n/100000)]+' लाख ';n=n%100000;}
+  if(n>=1000){w+=o[Math.floor(n/1000)]+' हजार ';n=n%1000;}
+  if(n>=100){w+=o[Math.floor(n/100)]+'शे ';n=n%100;}
+  if(n>0){w+=o[n]+' ';}
+  return w.trim()+' रुपये फक्त';
+}
+function CALC(sd, total, workers, mr, lr, h) {
+  var mw=[],lw=[];
+  for(var i=0;i<workers.length;i++){if(workers[i].post==='मिस्त्री')mw.push(workers[i]);else lw.push(workers[i]);}
+  var pd=mw.length*mr+lw.length*lr;
+  if(pd===0)throw new Error('मजूर नाही');
+  var fd=Math.floor(total/pd), lo=total%pd;
+  var vs=[], cur=new Date(sd.getTime()), rem=fd, MAX=13;
+  while(rem>0){
+    var take=rem<MAX?rem:MAX;
+    var wds=WDAYS(cur,take,h), vEnd=wds[wds.length-1];
+    var vAmt=take*pd, pDay=null, pW=null;
+    if(rem<=MAX&&lo>0){
+      pDay=SKIPHOL(NXT(vEnd),h);
+      var r2=lo, allW=mw.concat(lw); pW=[];
+      for(var j=0;j<allW.length;j++){
+        var rt=allW[j].post==='मिस्त्री'?mr:lr;
+        if(r2>=rt){pW.push({w:allW[j],type:'full',amt:rt});r2-=rt;}
+        else if(r2>0){pW.push({w:allW[j],type:'half',amt:r2});r2=0;}
+        else{pW.push({w:allW[j],type:'abs',amt:0});}
+      }
+      vAmt+=lo;
+    }
+    var ce=pDay?new Date(pDay.getTime()):new Date(vEnd.getTime());
+    var cds=[], cd=new Date(cur.getTime());
+    while(cd<=ce){cds.push({d:new Date(cd.getTime()),hol:ISHOL(cd,h)});cd=NXT(cd);}
+    vs.push({cs:new Date(cur.getTime()),ce:ce,cds:cds,wd:take,amt:vAmt,pDay:pDay,pW:pW});
+    rem-=take; cur=SKIPHOL(NXT(ce),h);
+  }
+  return {vs:vs,mw:mw,lw:lw};
+}
+function BV(v,vno,workers,mr,lr,info,isLast){
+  var mw=[],lw=[];
+  for(var i=0;i<workers.length;i++){if(workers[i].post==='मिस्त्री')mw.push(workers[i]);else lw.push(workers[i]);}
+  var allW=mw.concat(lw), h1='', h2='';
+  for(var i=0;i<v.cds.length;i++){
+    var c=v.cds[i],cl=c.hol?' class="vcd VHL"':' class="vcd"';
+    h1+='<th'+cl+'>'+D(c.d.getDate())+'<\/th>';
+    h2+='<th'+cl+'>'+DN[c.d.getDay()]+'<\/th>';
+  }
+  var rows='';
+  for(var i=0;i<allW.length;i++){
+    var w=allW[i],rt=w.post==='मिस्त्री'?mr:lr;
+    var days=v.wd,calcAmt=days*rt,dstr=D(days);
+    if(isLast&&v.pW&&v.pW[i]){
+      var pw=v.pW[i];
+      if(pw.type==='full'){days=v.wd+1;calcAmt=days*rt;dstr=D(days);}
+      if(pw.type==='half'){calcAmt=v.wd*rt+pw.amt;dstr=D(v.wd)+'½';}
+    }
+    var paidAmt=(w.manualAmt!==null&&w.manualAmt!==undefined)?w.manualAmt:calcAmt;
+    var cells='';
+    for(var j=0;j<v.cds.length;j++){
+      var c=v.cds[j];
+      if(c.hol){cells+='<td class="VHL">-<\/td>';continue;}
+      var isP=v.pDay&&c.d.toDateString()===v.pDay.toDateString();
+      if(!isP){cells+='<td style="font-weight:700">P<\/td>';continue;}
+      if(!isLast||!v.pW||!v.pW[i]){cells+='<td>-<\/td>';continue;}
+      var pw2=v.pW[i];
+      if(pw2.type==='full')cells+='<td style="font-weight:700">P<\/td>';
+      else if(pw2.type==='half')cells+='<td style="font-weight:700">½<\/td>';
+      else cells+='<td style="color:#555">-<\/td>';
+    }
+    rows+='<tr><td>'+D(i+1)+'<\/td><td class="vcn">'+w.name+'<\/td><td class="vcp">'+w.post+'<\/td><td class="vcv">'+w.village+'<\/td>'+cells+'<td class="vct">'+dstr+'<\/td><td class="vcr">'+FM(rt)+'<\/td><td class="vca">'+FM(calcAmt)+'<\/td><td class="vcpa">'+FM(paidAmt)+'<\/td><td class="vcs"><\/td><\/tr>';
+  }
+  var nc=4+v.cds.length;
+  var note='';
+  if(isLast&&v.pDay&&v.pW){
+    var fp=[],hp=[],ap=[];
+    for(var i=0;i<v.pW.length;i++){
+      var pw=v.pW[i];
+      if(pw.type==='full')fp.push(pw.w.name);
+      else if(pw.type==='half')hp.push(pw.w.name+' (₹'+pw.amt+')');
+      else ap.push(pw.w.name);
+    }
+    var pts=[];
+    if(fp.length)pts.push(fp.join(', ')+' पूर्ण दिवस');
+    if(hp.length)pts.push(hp.join(', ')+' अर्धा दिवस');
+    if(ap.length)pts.push(ap.join(', ')+' अनुपस्थित');
+    if(pts.length)note='<div style="margin-top:4px;font-size:8pt;border:1px solid #000;padding:2px 7px;"><b>नोंद:<\/b> दि. '+FD(v.pDay)+' — '+pts.join('. ')+'.<\/div>';
+  }
+  var gpLine='कार्यालय ग्रामपंचायत : '+info.gp+(info.ps?' &nbsp;|&nbsp; पंचायत समिती : '+info.ps:'')+(info.dist?' &nbsp;|&nbsp; जि. '+info.dist:'');
+  return '<div class="vp"><div>'+
+    '<div class="vhd"><div class="vof">'+gpLine+'<\/div>'+
+    '<div class="vti">मजुरांच्या मजुरीबद्दलचे हप्तेवारी / पंधरवाडी गोषवारा<\/div>'+
+    '<div class="vwd"><b>कामाचा तपशील :<\/b> '+info.work+'<\/div><\/div>'+
+    '<div class="vvn">हप्ता क्र. : '+D(vno)+' &nbsp;&nbsp;&nbsp; कालावधी : '+FD(v.cs)+' ते '+FD(v.ce)+'<\/div>'+
+    '<table class="vt"><thead>'+
+    '<tr><th rowspan="2" style="width:22px">अनु.<br>क्र.<\/th><th rowspan="2" class="vcn">मजुरांचे नाव<\/th><th rowspan="2" class="vcp">पद<\/th><th rowspan="2" class="vcv">राहणार<\/th>'+h1+'<th class="vct">एकंदर<br>दिवस<\/th><th class="vcr">मजुरी<br>दर<\/th><th class="vca">एकूण<br>रुपये<\/th><th class="vcpa">दिलेली<br>रक्कम<\/th><th class="vcs">स्वाक्षरी<\/th><\/tr>'+
+    '<tr>'+h2+'<th colspan="5"><\/th><\/tr><\/thead><tbody>'+rows+
+    '<tr class="VTR"><td colspan="'+nc+'" style="text-align:right;padding-right:7px">एकूण रक्कम :<\/td><td colspan="2"><b>₹ '+FM(v.amt)+'<\/b><\/td><td><\/td><td><\/td><\/tr>'+
+    '<\/tbody><\/table>'+note+'<\/div>'+
+    '<div class="vft"><div class="vra">रक्कम अक्षरी : '+WORDS(v.amt)+'<\/div>'+
+    '<div class="vst">ग्रामपंचायत अधिकारी यांनी माझ्या समक्ष सदर मजुरांना रक्कम अदा केलेली आहे.<\/div>'+
+    '<div class="vsg"><div><div style="height:32px"><\/div><div class="vsl">ग्रामपंचायत अधिकारी'+(info.gram?'<br><small>'+info.gram+'<\/small>':'')+'<\/div><\/div>'+
+    '<div><div style="height:32px"><\/div><div class="vsl">सरपंच'+(info.sarp?'<br><small>'+info.sarp+'<\/small>':'')+'<\/div><\/div><\/div><\/div><\/div>';
+}
+function BG(vs,workers,info,total,startVN,mw,lw){
+  var rows='';
+  for(var i=0;i<vs.length;i++){
+    var v=vs[i];
+    rows+='<tr><td>'+D(i+startVN)+'<\/td><td>'+FD(v.cs)+' ते '+FD(v.ce)+'<\/td>'+
+    '<td>'+D(workers.length)+'<\/td>'+
+    '<td>'+(mw.length?D(mw.length)+' × '+D(v.wd)+' = '+D(mw.length*v.wd):'-')+'<\/td>'+
+    '<td>'+(lw.length?D(lw.length)+' × '+D(v.wd)+' = '+D(lw.length*v.wd):'-')+'<\/td>'+
+    '<td style="font-weight:700">₹ '+FM(v.amt)+'<\/td><\/tr>';
+  }
+  var gpLine='कार्यालय ग्रामपंचायत : '+info.gp+(info.ps?' &nbsp;|&nbsp; पंचायत समिती : '+info.ps:'')+(info.dist?' &nbsp;|&nbsp; जि. '+info.dist:'');
+  return '<div class="gp">'+
+    '<div class="vhd"><div class="vof">'+gpLine+'<\/div>'+
+    '<div class="vti" style="font-size:13pt;margin:5px 0">मजुरी बिल गोषवारा<\/div>'+
+    '<div class="vwd" style="font-size:10.5pt"><b>कामाचा तपशील :<\/b> '+info.work+'<\/div><\/div><br>'+
+    '<table class="vt" style="font-size:10.5pt"><thead><tr>'+
+    '<th style="width:46px">अनु.<br>क्र.<\/th><th style="width:200px">तारीख / कालावधी<\/th>'+
+    '<th style="width:80px">एकूण<br>मजूर<\/th><th style="width:110px">मिस्त्री<br>दिवस<\/th>'+
+    '<th style="width:110px">लेबर<br>दिवस<\/th><th style="width:120px">एकूण रक्कम (₹)<\/th><\/tr><\/thead>'+
+    '<tbody>'+rows+
+    '<tr style="background:#e0e0e0;font-weight:700;font-size:11pt;border-top:2px solid #000">'+
+    '<td colspan="5" style="text-align:right;padding-right:10px;border-top:2px solid #000">एकूण (Grand Total) :<\/td>'+
+    '<td style="font-size:12pt">₹ '+FM(total)+'<\/td><\/tr><\/tbody><\/table><br><br>'+
+    '<div style="text-align:center;font-size:10pt;font-weight:600">रक्कम अक्षरी : '+WORDS(total)+'<\/div><br>'+
+    '<table style="width:100%;border:none;font-size:10.5pt"><tr>'+
+    '<td style="border:none;text-align:center;width:50%"><div style="margin-top:45px;border-top:1px solid #000;padding-top:4px;display:inline-block;width:190px"><b>सरपंच<\/b>'+(info.sarp?'<br><small>'+info.sarp+'<\/small>':'')+'<br><small>ग्रामपंचायत '+info.gp+'<\/small><\/div><\/td>'+
+    '<td style="border:none;text-align:center;width:50%"><div style="margin-top:45px;border-top:1px solid #000;padding-top:4px;display:inline-block;width:190px"><b>ग्रामपंचायत अधिकारी<\/b>'+(info.gram?'<br><small>'+info.gram+'<\/small>':'')+'<br><small>ग्रामपंचायत '+info.gp+'<\/small><\/div><\/td>'+
+    '<\/tr><\/table><\/div>';
+}
+function GENERATE() {
+  var gpN=document.getElementById('GP_NAME').value.trim();
+  var gpP=document.getElementById('GP_PS').value.trim();
+  var gpD=document.getElementById('GP_DIST').value.trim();
+  var gpS=document.getElementById('GP_SARP').value.trim();
+  var gpG=document.getElementById('GP_GRAM').value.trim();
+  var hday=parseInt(document.getElementById('GP_HOL').value);
+  var work=document.getElementById('F_WORK').value.trim();
+  var dateV=document.getElementById('F_DATE').value;
+  var amt=parseInt(document.getElementById('F_AMT').value)||0;
+  var mr=parseInt(document.getElementById('F_MR').value)||800;
+  var lr=parseInt(document.getElementById('F_LR').value)||500;
+  var vno=parseInt(document.getElementById('F_VNO').value)||1;
+  var workers=GETW();
+  var eb=document.getElementById('ERRBOX');
+  eb.className='eb';
+  if(!gpN){eb.innerHTML='ग्रामपंचायत नाव टाका.';eb.className='eb on';return;}
+  if(!work){eb.innerHTML='कामाचा तपशील लिहा.';eb.className='eb on';return;}
+  if(!dateV){eb.innerHTML='सुरुवातीची तारीख निवडा.';eb.className='eb on';return;}
+  if(amt<=0){eb.innerHTML='एकूण रक्कम टाका.';eb.className='eb on';return;}
+  if(!workers.length){eb.innerHTML='कमीत कमी एक मजुराचे नाव टाका.';eb.className='eb on';return;}
+  document.getElementById('BTN_GEN').disabled=true;
+  document.getElementById('SPINBOX').className='spin-box on';
+  document.getElementById('RBAR').className='rbar';
+  document.getElementById('VOUT').className='';
+  document.getElementById('VOUT').innerHTML='';
+  setTimeout(function(){
+    try{
+      var p=dateV.split('-');
+      var sd=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]),0,0,0,0);
+      var res=CALC(sd,amt,workers,mr,lr,hday);
+      var vs=res.vs;
+      var info={gp:gpN,ps:gpP,dist:gpD,sarp:gpS,gram:gpG,work:work};
+      var html='';
+      for(var i=0;i<vs.length;i++){html+=BV(vs[i],i+vno,workers,mr,lr,info,i===vs.length-1);}
+      html+=BG(vs,workers,info,amt,vno,res.mw,res.lw);
+      document.getElementById('VOUT').innerHTML=html;
+      document.getElementById('VOUT').className='on';
+      document.getElementById('RBAR').className='rbar on';
+      document.getElementById('SPINBOX').className='spin-box';
+      document.getElementById('BTN_GEN').disabled=false;
+      document.getElementById('RBAR').scrollIntoView({behavior:'smooth'});
+      // Save metadata for history
+      var dateRange = vs.length > 0 ? (vs[0].cs.getDate()+'/'+(vs[0].cs.getMonth()+1)+'/'+vs[0].cs.getFullYear() + ' ते ' + vs[vs.length-1].ce.getDate()+'/'+(vs[vs.length-1].ce.getMonth()+1)+'/'+vs[vs.length-1].ce.getFullYear()) : '';
+      if(window.setLastVoucherData) {
+        window.setLastVoucherData({
+          gpName: gpN, ps: gpP, dist: gpD,
+          workName: work, amount: amt,
+          dateRange: dateRange, voucherCount: vs.length,
+          workers: workers.length
+        });
+      }
+      var btn = document.getElementById('BTN_SAVE');
+      if(btn){ btn.textContent = '💾 इतिहासात सेव करा'; btn.disabled = false; }
+    }catch(e){
+      document.getElementById('SPINBOX').className='spin-box';
+      document.getElementById('BTN_GEN').disabled=false;
+      document.getElementById('ERRBOX').innerHTML='त्रुटी: '+e.message;
+      document.getElementById('ERRBOX').className='eb on';
+    }
+  },80);
+}
+function PRINTIT() {
+  var style = document.getElementById('PRINT_STYLE');
+  if (!style) { style = document.createElement('style'); style.id = 'PRINT_STYLE'; document.head.appendChild(style); }
+  style.innerHTML = '@page{size:A4 landscape;margin:6mm 8mm;}';
+  window.print();
+}
+</script>
+</body>
+</html>
