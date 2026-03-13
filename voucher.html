@@ -303,11 +303,12 @@ function ADD_WORKER() {
   var tr = document.createElement('tr');
   tr.id = 'WR' + id;
   var isManual = (document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)');
+  var waDisplay = isManual ? '' : 'none';
   tr.innerHTML = '<td class="tdnum"><span class="wnum">' + id + '</span></td>' +
     '<td><input type="text" class="WN" placeholder="मजुराचे नाव"></td>' +
     '<td><select class="WP"><option value="लेबर">लेबर</option><option value="मिस्त्री">मिस्त्री</option></select></td>' +
     '<td><input type="text" class="WV" value="' + defV + '" placeholder="रिकामे=default"></td>' +
-    '<td class="WA_CELL" style="display:none;"><input type="number" class="WA" placeholder="रक्कम टाका" min="0" style="width:100%;padding:5px 6px;border:1px solid #D4C5A9;border-radius:4px;font-size:9pt;background:white;"></td>' +
+    '<td class="WA_CELL" style="display:' + waDisplay + ';"><input type="number" class="WA" placeholder="रक्कम टाका" min="0" style="width:100%;padding:5px 6px;border:1px solid #D4C5A9;border-radius:4px;font-size:9pt;background:white;"></td>' +
     '<td class="tddel"><button class="delbtn" onclick="DEL(' + id + ')">✕</button></td>';
   document.getElementById('WBODY').appendChild(tr);
   RENUM();
@@ -501,22 +502,57 @@ function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
     '<table class="vt"><thead>'+
     '<tr><th rowspan="2" style="width:22px">अनु.<br>क्र.<\/th><th rowspan="2" class="vcn">मजुरांचे नाव<\/th><th rowspan="2" class="vcp">पद<\/th><th rowspan="2" class="vcv">राहणार<\/th>'+h1+'<th class="vct">एकंदर<br>दिवस<\/th><th class="vcr">मजुरी<br>दर<\/th><th class="vca">एकूण<br>रुपये<\/th><th class="vcpa">दिलेली<br>रक्कम<\/th><th class="vcs">स्वाक्षरी<\/th><\/tr>'+
     '<tr>'+h2+'<th colspan="5"><\/th><\/tr><\/thead><tbody>'+rows+
-    '<tr class="VTR"><td colspan="'+nc+'" style="text-align:right;padding-right:7px">एकूण रक्कम :<\/td><td colspan="2"><b>₹ '+FM(v.amt)+'<\/b><\/td><td><\/td><td><\/td><\/tr>'+
-    '<\/tbody><\/table>'+note+'<\/div>'+
-    '<div class="vft"><div class="vra">रक्कम अक्षरी : '+WORDS(v.amt)+'<\/div>'+
+    (function(){
+      // manual mode: या voucher मधील सर्व workers च्या paidAmt ची बेरीज
+      var vTotalAmt=v.amt;
+      var anyManual=false;
+      for(var wi2=0;wi2<workers.length;wi2++){
+        if(workers[wi2]._perVoucherPaid){anyManual=true;break;}
+      }
+      if(anyManual){
+        vTotalAmt=0;
+        for(var wi2=0;wi2<workers.length;wi2++){
+          if(workers[wi2]._perVoucherPaid&&workers[wi2]._perVoucherPaid[vIdx]!==undefined){
+            vTotalAmt+=workers[wi2]._perVoucherPaid[vIdx];
+          } else if(!workers[wi2]._perVoucherPaid){
+            // auto worker असेल तर auto calcAmt
+            var rt3=workers[wi2].post==='मिस्त्री'?mr:lr;
+            vTotalAmt+=v.wd*rt3;
+          }
+        }
+      }
+      return '<tr class="VTR"><td colspan="'+nc+'" style="text-align:right;padding-right:7px">एकूण रक्कम :<\/td><td colspan="2"><b>₹ '+FM(vTotalAmt)+'<\/b><\/td><td><\/td><td><\/td><\/tr>'+
+        '<\/tbody><\/table>'+note+'<\/div>'+
+        '<div class="vft"><div class="vra">रक्कम अक्षरी : '+WORDS(vTotalAmt)+'<\/div>';
+    }())+
     '<div class="vst">ग्रामपंचायत अधिकारी यांनी माझ्या समक्ष सदर मजुरांना रक्कम अदा केलेली आहे.<\/div>'+
     '<div class="vsg"><div><div style="height:32px"><\/div><div class="vsl">ग्रामपंचायत अधिकारी'+(info.gram?'<br><small>'+info.gram+'<\/small>':'')+'<\/div><\/div>'+
     '<div><div style="height:32px"><\/div><div class="vsl">सरपंच'+(info.sarp?'<br><small>'+info.sarp+'<\/small>':'')+'<\/div><\/div><\/div><\/div><\/div>';
 }
-function BG(vs,workers,info,total,startVN,mw,lw){
+function BG(vs,workers,info,total,startVN,mw,lw,mr,lr){
   var rows='';
   for(var i=0;i<vs.length;i++){
     var v=vs[i];
+    // या voucher मधील खरी एकूण रक्कम = सर्व workers च्या _perVoucherPaid[i] ची बेरीज
+    var vRealAmt=0;
+    var anyManualBG=workers.some(function(wk){return wk._perVoucherPaid;});
+    if(anyManualBG){
+      for(var wi=0;wi<workers.length;wi++){
+        if(workers[wi]._perVoucherPaid&&workers[wi]._perVoucherPaid[i]!==undefined){
+          vRealAmt+=workers[wi]._perVoucherPaid[i];
+        } else {
+          var rt4=workers[wi].post==='मिस्त्री'?(mr||800):(lr||500);
+          vRealAmt+=v.wd*rt4;
+        }
+      }
+    } else {
+      vRealAmt=v.amt;
+    }
     rows+='<tr><td>'+D(i+startVN)+'<\/td><td>'+FD(v.cs)+' ते '+FD(v.ce)+'<\/td>'+
     '<td>'+D(workers.length)+'<\/td>'+
     '<td>'+(mw.length?D(mw.length)+' × '+D(v.wd)+' = '+D(mw.length*v.wd):'-')+'<\/td>'+
     '<td>'+(lw.length?D(lw.length)+' × '+D(v.wd)+' = '+D(lw.length*v.wd):'-')+'<\/td>'+
-    '<td style="font-weight:700">₹ '+FM(v.amt)+'<\/td><\/tr>';
+    '<td style="font-weight:700">₹ '+FM(vRealAmt)+'<\/td><\/tr>';
   }
   var gpLine='कार्यालय ग्रामपंचायत : '+info.gp+(info.ps?' &nbsp;|&nbsp; पंचायत समिती : '+info.ps:'')+(info.dist?' &nbsp;|&nbsp; जि. '+info.dist:'');
   return '<div class="gp">'+
@@ -530,8 +566,50 @@ function BG(vs,workers,info,total,startVN,mw,lw){
     '<tbody>'+rows+
     '<tr style="background:#e0e0e0;font-weight:700;font-size:11pt;border-top:2px solid #000">'+
     '<td colspan="5" style="text-align:right;padding-right:10px;border-top:2px solid #000">एकूण (Grand Total) :<\/td>'+
-    '<td style="font-size:12pt">₹ '+FM(total)+'<\/td><\/tr><\/tbody><\/table><br><br>'+
-    '<div style="text-align:center;font-size:10pt;font-weight:600">रक्कम अक्षरी : '+WORDS(total)+'<\/div><br>'+
+    '<td style="font-size:12pt">₹ '+FM(total)+'<\/td><\/tr><\/tbody><\/table>'+
+    // मजूर-wise summary table — workers array directly वापरा (order correct राहतो)
+    (function(){
+      var wRows='';
+      for(var wi=0;wi<workers.length;wi++){
+        var wk=workers[wi];
+        var rt=wk.post==='मिस्त्री'?(mr||800):(lr||500);
+        var totalAmt=0;
+        if(wk._perVoucherPaid && wk._perVoucherPaid.length>0){
+          // Manual mode: _perVoucherPaid ची बेरीज
+          totalAmt=wk._perVoucherPaid.reduce(function(s,x){return s+(x||0);},0);
+        } else {
+          // Auto mode: प्रत्येक voucher मधील दिवस * दर
+          // BV मध्ये workers array mw.concat(lw) order वापरतो — त्याच order ने index मिळवा
+          var allW2=mw.concat(lw);
+          var wiInAllW=allW2.indexOf(wk);
+          for(var vi=0;vi<vs.length;vi++){
+            var v2=vs[vi];
+            var vDays=v2.wd;
+            var vAmt=vDays*rt;
+            if(vi===vs.length-1&&v2.pW&&v2.pW[wiInAllW]){
+              var pw3=v2.pW[wiInAllW];
+              if(pw3.type==='full'){vDays+=1;vAmt=vDays*rt;}
+              else if(pw3.type==='half'){vAmt=v2.wd*rt+pw3.amt;}
+            }
+            totalAmt+=vAmt;
+          }
+        }
+        var fullDays=Math.floor(totalAmt/rt);
+        var remAmt=totalAmt%rt;
+        var dstr=(remAmt>0)?fullDays+'½':String(fullDays);
+        wRows+='<tr><td>'+D(wi+1)+'<\/td><td style="text-align:left;padding-left:6px">'+wk.name+'<\/td><td>'+wk.post+'<\/td>'+
+          '<td>'+FM(rt)+'<\/td><td>'+dstr+'<\/td><td style="font-weight:700">₹ '+FM(totalAmt)+'<\/td><\/tr>';
+      }
+      return '<br><table class="vt" style="font-size:10.5pt"><thead><tr>'+
+        '<th style="width:40px">क्र.<\/th><th style="text-align:left;padding-left:6px;width:160px">मजुराचे नाव<\/th>'+
+        '<th style="width:80px">पद<\/th><th style="width:90px">मजुरी दर<\/th>'+
+        '<th style="width:90px">एकूण दिवस<\/th><th style="width:120px">एकूण रुपये (₹)<\/th><\/tr><\/thead>'+
+        '<tbody>'+wRows+
+        '<tr style="background:#e0e0e0;font-weight:700;border-top:2px solid #000">'+
+        '<td colspan="5" style="text-align:right;padding-right:10px">एकूण :<\/td>'+
+        '<td>₹ '+FM(total)+'<\/td><\/tr><\/tbody><\/table>';
+    }())+
+    '<br><div style="text-align:center;font-size:10pt;font-weight:600">रक्कम अक्षरी : '+WORDS(total)+'<\/div><br>'+
     '<table style="width:100%;border:none;font-size:10.5pt"><tr>'+
     '<td style="border:none;text-align:center;width:50%"><div style="margin-top:45px;border-top:1px solid #000;padding-top:4px;display:inline-block;width:190px"><b>सरपंच<\/b>'+(info.sarp?'<br><small>'+info.sarp+'<\/small>':'')+'<br><small>ग्रामपंचायत '+info.gp+'<\/small><\/div><\/td>'+
     '<td style="border:none;text-align:center;width:50%"><div style="margin-top:45px;border-top:1px solid #000;padding-top:4px;display:inline-block;width:190px"><b>ग्रामपंचायत अधिकारी<\/b>'+(info.gram?'<br><small>'+info.gram+'<\/small>':'')+'<br><small>ग्रामपंचायत '+info.gp+'<\/small><\/div><\/td>'+
@@ -578,11 +656,38 @@ function GENERATE() {
     try{
       var p=dateV.split('-');
       var sd=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]),0,0,0,0);
-      var res=CALC(sd,amt,workers,mr,lr,hday);
+      // Manual mode मध्ये: सर्वात जास्त manualAmt असलेल्या मजुराच्या दिवसांनुसार vouchers बनवा
+      var isManualModeActive = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)';
+      var calcTotal = amt;
+      if(isManualModeActive){
+        // सर्वात जास्त दिवस असलेला मजूर शोधा (रक्कम नाही — दिवस!)
+        // दिवस = manualAmt / rate (मिस्त्री=mr, लेबर=lr)
+        var maxDays=0, maxWorker=null;
+        for(var wi=0;wi<workers.length;wi++){
+          var wk2=workers[wi];
+          var rt2=wk2.post==='मिस्त्री'?mr:lr;
+          var wDays=wk2.manualAmt/rt2;
+          if(wDays>maxDays){maxDays=wDays;maxWorker=wk2;}
+        }
+        // त्या मजुराची रक्कम CALC ला पाठवा — voucher structure त्यानुसार बनेल
+        calcTotal = maxWorker.manualAmt;
+        var tempWorkers=[maxWorker];
+        var res=CALC(sd,calcTotal,tempWorkers,mr,lr,hday);
+        res.mw=[];res.lw=[];
+        for(var wi=0;wi<workers.length;wi++){
+          if(workers[wi].post==='मिस्त्री') res.mw.push(workers[wi]);
+          else res.lw.push(workers[wi]);
+        }
+      } else {
+        var res=CALC(sd,amt,workers,mr,lr,hday);
+      }
       var vs=res.vs;
       var info={gp:gpN,ps:gpP,dist:gpD,sarp:gpS,gram:gpG,work:work};
       var html='';
       // Manual mode: प्रत्येक worker ची दिलेली रक्कम voucher-wise वाटा
+      // Manual mode CALC मध्ये single worker वापरला — v2.wd हे working days बरोबर आहेत
+      // प्रत्येक voucher मध्ये MAX working days = v2.wd
+      // त्या worker ला त्याच्या manualAmt नुसार किती दिवस काम होते ते calculate करा
       for(var wi=0;wi<workers.length;wi++){
         var wk=workers[wi];
         var rt2=wk.post==='मिस्त्री'?mr:lr;
@@ -591,13 +696,10 @@ function GENERATE() {
           wk._perVoucherPaid=[];
           for(var vi=0;vi<vs.length;vi++){
             var v2=vs[vi];
-            var vCalc=v2.wd*rt2;
-            if(vi===vs.length-1&&v2.pW&&v2.pW[wi]){
-              var pw3=v2.pW[wi];
-              if(pw3.type==='full') vCalc=(v2.wd+1)*rt2;
-              else if(pw3.type==='half') vCalc=v2.wd*rt2+pw3.amt;
-            }
-            var thisPaid=Math.min(vCalc,remaining);
+            // या voucher मध्ये जास्तीत जास्त किती रक्कम मिळू शकते = v2.wd * rt2
+            // (partial day असेल तरी v2.wd च वापरतो — simple & correct)
+            var maxThisVoucher=v2.wd*rt2;
+            var thisPaid=Math.min(maxThisVoucher,remaining);
             wk._perVoucherPaid.push(thisPaid);
             remaining=Math.max(0,remaining-thisPaid);
           }
@@ -606,7 +708,7 @@ function GENERATE() {
         }
       }
       for(var i=0;i<vs.length;i++){html+=BV(vs[i],i+vno,workers,mr,lr,info,i===vs.length-1,i);}
-      html+=BG(vs,workers,info,amt,vno,res.mw,res.lw);
+      if(vs.length>1){html+=BG(vs,workers,info,amt,vno,res.mw,res.lw,mr,lr);}
       document.getElementById('VOUT').innerHTML=html;
       document.getElementById('VOUT').className='on';
       document.getElementById('RBAR').className='rbar on';
