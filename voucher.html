@@ -182,7 +182,19 @@ nav{background:var(--navy);padding:0 24px;height:56px;display:flex;align-items:c
   <div class="card">
     <div class="ch">👷 मजुरांची माहिती</div>
     <div class="cb">
-      <div class="info-row">💡 <b>दिलेली रक्कम:</b> रिकामे सोडल्यास एकूण रुपये इतकीच रक्कम आपोआप भरेल. वेगळी रक्कम असल्यास manually टाका.</div>
+      <!-- MODE TOGGLE -->
+      <div style="display:flex;gap:0;border:2px solid #D4C5A9;border-radius:8px;overflow:hidden;margin-bottom:14px;">
+        <button id="MODE_AUTO" onclick="setMode('auto')"
+          style="flex:1;padding:10px;border:none;background:#1A2744;color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;">
+          ⚡ Auto — मजुरी आपोआप
+        </button>
+        <button id="MODE_MANUAL" onclick="setMode('manual')"
+          style="flex:1;padding:10px;border:none;background:#F5F0E8;color:#888;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;">
+          ✍️ Manual — वेगळी रक्कम
+        </button>
+      </div>
+      <div id="MODE_NOTE_AUTO" class="info-row">⚡ <b>Auto Mode:</b> सर्व मजुरांची मजुरी एकूण रक्कमेनुसार आपोआप calculate होईल.</div>
+      <div id="MODE_NOTE_MANUAL" class="info-row" style="display:none;background:#FFF8E6;border-color:#E8701A;color:#7A6A52;">✍️ <b>Manual Mode:</b> प्रत्येक मजुराला किती रक्कम द्यायची ते स्वतः टाका. सर्व रकमांची बेरीज एकूण रकमेइतकी असणे आवश्यक आहे.</div>
       <div class="sec-title">— मजुरांची यादी —</div>
       <div style="overflow-x:auto">
         <table class="wtable">
@@ -191,7 +203,7 @@ nav{background:var(--navy);padding:0 24px;height:56px;display:flex;align-items:c
             <th style="min-width:130px">मजुराचे नाव</th>
             <th style="min-width:80px">पद</th>
             <th style="min-width:90px">राहणार</th>
-            <th style="min-width:105px">दिलेली रक्कम (₹)<br><small style="font-weight:400;font-size:8pt">रिकामे = auto</small></th>
+            <th id="WA_HEAD" style="min-width:105px;display:none;">दिलेली रक्कम (₹)</th>
             <th class="tddel"></th>
           </tr></thead>
           <tbody id="WBODY"></tbody>
@@ -290,11 +302,12 @@ function ADD_WORKER() {
   var defV = document.getElementById('F_VLG').value.trim();
   var tr = document.createElement('tr');
   tr.id = 'WR' + id;
+  var isManual = (document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)');
   tr.innerHTML = '<td class="tdnum"><span class="wnum">' + id + '</span></td>' +
     '<td><input type="text" class="WN" placeholder="मजुराचे नाव"></td>' +
     '<td><select class="WP"><option value="लेबर">लेबर</option><option value="मिस्त्री">मिस्त्री</option></select></td>' +
     '<td><input type="text" class="WV" value="' + defV + '" placeholder="रिकामे=default"></td>' +
-    '<td><input type="number" class="WA" placeholder="auto" min="0"></td>' +
+    '<td class="WA_CELL" style="display:none;"><input type="number" class="WA" placeholder="रक्कम टाका" min="0" style="width:100%;padding:5px 6px;border:1px solid #D4C5A9;border-radius:4px;font-size:9pt;background:white;"></td>' +
     '<td class="tddel"><button class="delbtn" onclick="DEL(' + id + ')">✕</button></td>';
   document.getElementById('WBODY').appendChild(tr);
   RENUM();
@@ -307,11 +320,43 @@ function GETW() {
   for (var i = 0; i < rows.length; i++) {
     var nm = rows[i].getElementsByClassName('WN')[0].value.trim();
     if (!nm) continue;
-    var av = rows[i].getElementsByClassName('WA')[0].value.trim();
-    out.push({ name: nm, post: rows[i].getElementsByClassName('WP')[0].value, village: rows[i].getElementsByClassName('WV')[0].value.trim() || defV, manualAmt: av === '' ? null : parseInt(av) });
+    var waEl = rows[i].getElementsByClassName('WA');
+    var av = (waEl.length > 0) ? waEl[0].value.trim() : '';
+    var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)';
+    var manualAmt = (isManualMode && av !== '') ? parseInt(av) : null;
+    out.push({ name: nm, post: rows[i].getElementsByClassName('WP')[0].value, village: rows[i].getElementsByClassName('WV')[0].value.trim() || defV, manualAmt: manualAmt });
   }
   return out;
 }
+// MODE TOGGLE FUNCTION
+window.setMode = function(mode) {
+  var autoBtn = document.getElementById('MODE_AUTO');
+  var manualBtn = document.getElementById('MODE_MANUAL');
+  var waHead = document.getElementById('WA_HEAD');
+  var noteAuto = document.getElementById('MODE_NOTE_AUTO');
+  var noteManual = document.getElementById('MODE_NOTE_MANUAL');
+  var waCells = document.getElementsByClassName('WA_CELL');
+
+  if (mode === 'auto') {
+    autoBtn.style.background = '#1A2744'; autoBtn.style.color = 'white';
+    manualBtn.style.background = '#F5F0E8'; manualBtn.style.color = '#888';
+    waHead.style.display = 'none';
+    noteAuto.style.display = 'block'; noteManual.style.display = 'none';
+    for (var i = 0; i < waCells.length; i++) {
+      waCells[i].style.display = 'none';
+      waCells[i].getElementsByClassName('WA')[0].value = '';
+    }
+  } else {
+    manualBtn.style.background = '#1A2744'; manualBtn.style.color = 'white';
+    autoBtn.style.background = '#F5F0E8'; autoBtn.style.color = '#888';
+    waHead.style.display = '';
+    noteAuto.style.display = 'none'; noteManual.style.display = 'block';
+    for (var i = 0; i < waCells.length; i++) {
+      waCells[i].style.display = '';
+    }
+  }
+}
+
 document.getElementById('BTN_ADD').onclick = ADD_WORKER;
 document.getElementById('BTN_GEN').onclick = GENERATE;
 document.getElementById('BTN_PRT').onclick = PRINTIT;
@@ -367,7 +412,7 @@ function CALC(sd, total, workers, mr, lr, h) {
   }
   return {vs:vs,mw:mw,lw:lw};
 }
-function BV(v,vno,workers,mr,lr,info,isLast){
+function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
   var mw=[],lw=[];
   for(var i=0;i<workers.length;i++){if(workers[i].post==='मिस्त्री')mw.push(workers[i]);else lw.push(workers[i]);}
   var allW=mw.concat(lw), h1='', h2='';
@@ -379,17 +424,48 @@ function BV(v,vno,workers,mr,lr,info,isLast){
   var rows='';
   for(var i=0;i<allW.length;i++){
     var w=allW[i],rt=w.post==='मिस्त्री'?mr:lr;
-    var days=v.wd,calcAmt=days*rt,dstr=D(days);
-    if(isLast&&v.pW&&v.pW[i]){
+    var isManual=(w._perVoucherPaid!==null&&w._perVoucherPaid!==undefined);
+
+    // ── Auto mode: आधीसारखेच ──
+    var days=v.wd, calcAmt=days*rt, dstr=D(days);
+    if(!isManual && isLast&&v.pW&&v.pW[i]){
       var pw=v.pW[i];
       if(pw.type==='full'){days=v.wd+1;calcAmt=days*rt;dstr=D(days);}
       if(pw.type==='half'){calcAmt=v.wd*rt+pw.amt;dstr=D(v.wd)+'½';}
     }
-    var paidAmt=(w.manualAmt!==null&&w.manualAmt!==undefined)?w.manualAmt:calcAmt;
+
+    // ── Manual mode: या voucher साठी paidAmt = per-voucher वाटप ──
+    var paidAmt=calcAmt;
+    if(isManual && w._perVoucherPaid[vIdx]!==undefined){
+      paidAmt=w._perVoucherPaid[vIdx];
+      // एकूण रुपये = paidAmt (दिलेल्या रकमेनुसार दिवस)
+      calcAmt=paidAmt;
+      var fullDays=Math.floor(paidAmt/rt);
+      var remAmt=paidAmt%rt;
+      dstr=(remAmt>0)?D(fullDays)+'½':D(fullDays);
+    }
+
     var cells='';
     for(var j=0;j<v.cds.length;j++){
       var c=v.cds[j];
       if(c.hol){cells+='<td class="VHL">-<\/td>';continue;}
+      if(isManual){
+        // manual mode: paidAmt > 0 तोपर्यंत P, नंतर -
+        var daysWorked=Math.ceil(paidAmt/rt);
+        var workDayIdx=0;
+        // या voucher च्या working days मधील position मोजा
+        var wdCount=0;
+        var showP=false;
+        for(var k=0;k<=j;k++){if(!v.cds[k].hol)wdCount++;}
+        showP=(wdCount<=daysWorked&&paidAmt>0);
+        if(showP){
+          if(remAmt>0&&wdCount===daysWorked)cells+='<td style="font-weight:700">½<\/td>';
+          else cells+='<td style="font-weight:700">P<\/td>';
+        } else {
+          cells+='<td style="color:#555">-<\/td>';
+        }
+        continue;
+      }
       var isP=v.pDay&&c.d.toDateString()===v.pDay.toDateString();
       if(!isP){cells+='<td style="font-weight:700">P<\/td>';continue;}
       if(!isLast||!v.pW||!v.pW[i]){cells+='<td>-<\/td>';continue;}
@@ -482,6 +558,17 @@ function GENERATE() {
   if(!dateV){eb.innerHTML='सुरुवातीची तारीख निवडा.';eb.className='eb on';return;}
   if(amt<=0){eb.innerHTML='एकूण रक्कम टाका.';eb.className='eb on';return;}
   if(!workers.length){eb.innerHTML='कमीत कमी एक मजुराचे नाव टाका.';eb.className='eb on';return;}
+  // Manual mode validation
+  var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)';
+  if(isManualMode){
+    var anyBlank = workers.some(function(w){return w.manualAmt===null||isNaN(w.manualAmt);});
+    if(anyBlank){eb.innerHTML='⚠️ Manual mode मध्ये सर्व मजुरांची दिलेली रक्कम टाकणे आवश्यक आहे.';eb.className='eb on';return;}
+    var manualTotal = workers.reduce(function(s,w){return s+w.manualAmt;},0);
+    if(manualTotal!==amt){
+      eb.innerHTML='⚠️ सर्व मजुरांच्या रकमांची बेरीज ₹'+manualTotal.toLocaleString('en-IN')+' आहे, परंतु एकूण रक्कम ₹'+amt.toLocaleString('en-IN')+' आहे. कृपया जुळवून घ्या.';
+      eb.className='eb on';return;
+    }
+  }
   document.getElementById('BTN_GEN').disabled=true;
   document.getElementById('SPINBOX').className='spin-box on';
   document.getElementById('RBAR').className='rbar';
@@ -495,7 +582,30 @@ function GENERATE() {
       var vs=res.vs;
       var info={gp:gpN,ps:gpP,dist:gpD,sarp:gpS,gram:gpG,work:work};
       var html='';
-      for(var i=0;i<vs.length;i++){html+=BV(vs[i],i+vno,workers,mr,lr,info,i===vs.length-1);}
+      // Manual mode: प्रत्येक worker ची दिलेली रक्कम voucher-wise वाटा
+      for(var wi=0;wi<workers.length;wi++){
+        var wk=workers[wi];
+        var rt2=wk.post==='मिस्त्री'?mr:lr;
+        if(wk.manualAmt!==null&&wk.manualAmt!==undefined){
+          var remaining=wk.manualAmt;
+          wk._perVoucherPaid=[];
+          for(var vi=0;vi<vs.length;vi++){
+            var v2=vs[vi];
+            var vCalc=v2.wd*rt2;
+            if(vi===vs.length-1&&v2.pW&&v2.pW[wi]){
+              var pw3=v2.pW[wi];
+              if(pw3.type==='full') vCalc=(v2.wd+1)*rt2;
+              else if(pw3.type==='half') vCalc=v2.wd*rt2+pw3.amt;
+            }
+            var thisPaid=Math.min(vCalc,remaining);
+            wk._perVoucherPaid.push(thisPaid);
+            remaining=Math.max(0,remaining-thisPaid);
+          }
+        } else {
+          wk._perVoucherPaid=null;
+        }
+      }
+      for(var i=0;i<vs.length;i++){html+=BV(vs[i],i+vno,workers,mr,lr,info,i===vs.length-1,i);}
       html+=BG(vs,workers,info,amt,vno,res.mw,res.lw);
       document.getElementById('VOUT').innerHTML=html;
       document.getElementById('VOUT').className='on';
