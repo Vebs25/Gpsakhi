@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>नमुना ८ | GP Sakhi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── GP Sakhi Topbar ── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+:root{--navy:#1A2744;--orange:#E8701A;--green:#1A6E3C;--sand:#D4C5A9;--cream:#F5F0E8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Devanagari',Arial,sans-serif;background:var(--cream);color:#2C2416;min-height:100vh;}
+
+/* GP Sakhi nav */
+.gpnav{background:var(--navy);color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.gpnav-back{color:rgba(255,255,255,0.75);font-size:9.5pt;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;}
+.gpnav-back:hover{color:white;}
+.gpnav-title{font-size:13pt;font-weight:700;color:white;}
+.gpnav-user{font-size:8.5pt;color:rgba(255,255,255,0.6);}
+
+/* Profile autofill bar */
+.autofill-bar{background:#EAF5EE;border:1px solid #86EFAC;border-radius:6px;padding:9px 14px;font-size:9pt;color:#166534;margin:12px 14px 0;display:flex;align-items:center;gap:8px;}
+
+/* ── Namuna8 original styles below ── */
+:root{--n8navy:#0a1628;--n8blue:#1a3a6b;--n8saffron:#e8620a;--n8gold:#c9920a;--n8green:#166534;--n8muted:#6b7280;--n8bg:#f0f4ff;}
+
+.n8wrap{background:#dde3ef;min-height:calc(100vh - 55px);}
+
+.step-tabs{background:var(--n8navy);display:flex;border-top:1px solid rgba(255,255,255,.08);}
+.step-tab{flex:1;padding:9px 4px;background:none;border:none;color:rgba(255,255,255,.45);font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:11px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;font-weight:600;text-align:center;}
+.step-tab.active{color:#FF9933;border-bottom-color:#FF9933;background:rgba(255,153,51,.08);}
+.step-tab.done{color:#4ade80;border-bottom-color:#4ade80;}
+.sn{display:inline-block;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.15);font-size:9px;line-height:16px;text-align:center;margin-right:3px;}
+.step-tab.active .sn{background:#FF9933;color:#fff;}
+.step-tab.done .sn{background:#4ade80;color:#111;}
+
+.app-body{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 100px);}
+.sidebar{background:#fff;border-right:2px solid #e0e8f5;overflow-y:auto;max-height:calc(100vh - 100px);position:sticky;top:55px;}
+.step-panel{display:none;}
+.step-panel.active{display:block;}
+
+.sec-head{background:var(--n8blue);color:#fff;padding:8px 12px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.sec-sub{background:#f0f4ff;color:var(--n8blue);padding:6px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-left:4px solid var(--n8saffron);}
+.form-group{padding:5px 11px;}
+.form-group label{display:block;font-size:11.5px;color:var(--n8muted);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:1.5px solid #dde3ef;border-radius:5px;padding:6px 9px;font-size:13.5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;color:#111;background:#fafbfc;transition:all .2s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--n8blue);background:#fff;box-shadow:0 0 0 3px rgba(26,58,107,.1);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 11px 4px;}
+.form-row .form-group{padding:3px 0;}
+
+.rate-table-wrap{margin:5px 11px;}
+.rate-table{width:100%;border-collapse:collapse;font-size:12px;}
+.rate-table th{background:var(--n8navy);color:#fff;padding:6px 6px;text-align:center;font-size:11px;font-weight:700;}
+.rate-table th:first-child{text-align:left;}
+.rate-table td{border:1px solid #dde3ef;padding:4px 4px;vertical-align:middle;}
+.rate-table tr:nth-child(even) td{background:#f5f7ff;}
+.prop-label{font-size:12px;font-weight:600;color:var(--n8navy);}
+.prop-note{font-size:9.5px;color:var(--n8muted);}
+.rate-table input{width:100%;border:1.5px solid #dde3ef;border-radius:4px;padding:5px 4px;font-size:12.5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;text-align:right;background:#fff;}
+.rate-table input:focus{outline:none;border-color:var(--n8blue);}
+.col-h13{background:#1a5c3a!important;color:#fff!important;font-size:9px!important;}
+.col-h14{background:#1a3a6b!important;color:#fff!important;font-size:9px!important;}
+.col-htr{background:#7c2d12!important;color:#fff!important;font-size:9px!important;}
+.na-cell{background:#f0f0f0;text-align:center;color:#bbb;font-size:10px;}
+.rate-legend{background:#fff8f0;border:1px solid var(--n8gold);border-radius:6px;margin:4px 11px;padding:6px 10px;font-size:9px;color:#4a3800;line-height:1.7;}
+
+.prop-card{background:var(--n8bg);border:1.5px solid #c5d5f5;border-radius:8px;margin:5px 11px;padding:8px 10px;}
+.prop-card-head{font-size:11px;font-weight:700;color:var(--n8blue);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.prop-card-type{background:#1a3a6b;color:#fff;padding:2px 7px;border-radius:10px;font-size:9px;white-space:nowrap;}
+.btn-del{background:#fee2e2;border:none;color:#dc2626;border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;font-weight:700;}
+
+.water-grp{display:flex;gap:5px;padding:4px 0 5px;}
+.wb{flex:1;border:1.5px solid #dde3ef;border-radius:6px;padding:6px 3px;font-size:10px;font-weight:600;cursor:pointer;text-align:center;background:#fafbfc;color:#555;transition:all .2s;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+.wb.sel-none{border-color:#6b7280;background:#f0f0f0;color:#6b7280;}
+.wb.sel-sam{border-color:#0284c7;background:#e0f2fe;color:#0284c7;}
+.wb.sel-vis{border-color:#7c3aed;background:#ede9fe;color:#7c3aed;}
+
+.live-calc{background:linear-gradient(135deg,#0a1628,#1a3a6b);margin:6px 11px;border-radius:7px;padding:9px;}
+.lc-title{font-size:9.5px;font-weight:700;color:#FF9933;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.lc-row{display:flex;justify-content:space-between;padding:2.5px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:10px;}
+.lc-row:last-child{border-bottom:none;font-weight:700;font-size:12px;}
+.lc-label{color:rgba(255,255,255,.6);}
+.lc-val{color:#4ade80;font-weight:600;}
+.lc-row:last-child .lc-val{color:#FF9933;font-size:13px;}
+.lc-sep{height:1px;background:rgba(255,153,51,.3);margin:3px 0;}
+.lc-ph{color:#facc15;font-size:9.5px;font-weight:700;padding:3px 0 1px;}
+
+.nav-btns{display:flex;gap:5px;padding:8px 11px 3px;}
+.btn-next{flex:2;background:linear-gradient(135deg,var(--n8saffron),#c44e00);color:#fff;border:none;border-radius:6px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;transition:all .2s;}
+.btn-back{flex:1;background:var(--n8navy);color:#fff;border:none;border-radius:6px;padding:10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+.btn-gen{display:block;width:calc(100% - 22px);margin:7px 11px 3px;background:linear-gradient(135deg,var(--n8green),#14532d);color:#fff;border:none;border-radius:6px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;box-shadow:0 4px 14px rgba(22,101,52,.35);transition:all .2s;}
+.btn-print{display:block;width:calc(100% - 22px);margin:3px 11px;background:var(--n8navy);color:#fff;border:none;border-radius:6px;padding:8px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+.btn-reset{display:block;width:calc(100% - 22px);margin:3px 11px 11px;background:#fff;color:var(--n8muted);border:1.5px solid #dde3ef;border-radius:6px;padding:6px;font-size:10.5px;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+
+.preview-area{background:#cdd4e4;overflow-y:auto;padding:14px;}
+.preview-label{text-align:center;font-size:9.5px;color:#888;margin-bottom:9px;text-transform:uppercase;letter-spacing:1.5px;}
+
+/* ── NAMUNA 8 DOCUMENT ── */
+#doc{background:#fff;width:277mm;min-height:190mm;margin:0 auto;padding:6mm 6mm 8mm 6mm;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;box-shadow:0 4px 24px rgba(0,0,0,.18);border:1px solid #000;display:flex;flex-direction:column;}
+.doc-header{text-align:center;font-weight:bold;margin-bottom:4mm;line-height:1.5;}
+.doc-header .raj-line{font-size:8pt;color:#000;}
+.doc-header .namuna-line{font-size:13pt;font-weight:800;color:#000;}
+.doc-header .gp-line{font-size:11pt;font-weight:700;color:#000;margin-top:2px;}
+#doc table{width:100%;border-collapse:collapse;table-layout:fixed;}
+#doc th,#doc td{border:1px solid #000;padding:2px 2px;text-align:center;vertical-align:middle;line-height:1.3;word-break:break-word;color:#000;}
+#doc .sub-header th{font-size:7.5pt;font-weight:700;background:#fff;color:#000;height:10mm;padding:1px;border:1px solid #000;}
+#doc .col13-head{background:#fff!important;color:#000!important;font-weight:800!important;}
+#doc .col14-head{background:#fff!important;color:#000!important;font-weight:800!important;}
+#doc .col-num td{background:#f0f0f0;font-size:7.5pt;font-weight:700;color:#000;height:5mm;padding:1px;}
+#doc .bg-grey{background-color:#f0f0f0;}
+#doc .left-align{text-align:left;padding-left:3px;}
+#doc .data-td{font-size:9.5pt;height:9mm;color:#000;}
+#doc .total-row{background:#f0f0f0;font-weight:700;}
+#doc .amount{font-weight:700;color:#000;}
+#doc .grand{background:#fff!important;color:#000!important;font-weight:800!important;font-size:10pt!important;border:2px solid #000!important;}
+#doc .col13-cell{background:#fff!important;}
+#doc .col14-cell{background:#fff!important;}
+#doc .data-td:empty::after,#doc .empty-tr td:empty::after{content:'—';color:#999;font-size:8pt;}
+#doc .total-row td:empty::after{content:'';}
+#doc .amount:empty::after{content:'';}
+#tbl1 col.c1{width:5mm;}#tbl1 col.c2{width:5mm;}#tbl1 col.c3{width:7mm;}#tbl1 col.c4{width:38mm;}#tbl1 col.c5{width:22mm;}#tbl1 col.c6{width:20mm;}#tbl1 col.c7{width:14mm;}#tbl1 col.c8{width:11mm;}#tbl1 col.c9{width:9mm;}#tbl1 col.c10{width:9mm;}#tbl1 col.c11{width:14mm;}#tbl1 col.c12{width:14mm;}#tbl1 col.c13{width:15mm;}#tbl1 col.c14{width:15mm;}#tbl1 col.c15{width:10mm;}
+#tbl2 col.c16{width:18mm;}#tbl2 col.c17{width:9mm;}#tbl2 col.c18{width:18mm;}#tbl2 col.c19{width:9mm;}#tbl2 col.c20{width:14mm;}#tbl2 col.c21{width:13mm;}#tbl2 col.c22{width:13mm;}#tbl2 col.c23{width:13mm;}#tbl2 col.c24{width:13mm;}#tbl2 col.c25{width:14mm;}#tbl2 col.c26{width:13mm;}#tbl2 col.c27{width:13mm;}#tbl2 col.c28{width:13mm;}#tbl2 col.c29{width:13mm;}#tbl2 col.c30{width:13mm;}#tbl2 col.c31{width:24mm;}
+.doc-bottom{margin-top:auto;padding-top:4mm;display:flex;justify-content:space-between;align-items:flex-end;}
+.date-left{font-size:10pt;font-weight:700;color:#000;}
+.sig-right{text-align:center;}
+.sig-line{border-top:1.5px solid #000;padding-top:4px;min-width:55mm;font-size:10pt;font-weight:700;color:#000;line-height:1.8;}
+.tip-section{font-size:7.5pt;margin-top:3mm;padding:4px 8px;background:#fff;border:1px solid #000;border-radius:0;color:#000;line-height:1.5;}
+
+@media print{
+  @page{size:A4 landscape;margin:4mm 4mm;}
+  html,body{background:#fff!important;}
+  .gpnav,.autofill-bar,.step-tabs,.app-body>.sidebar,.preview-label{display:none!important;}
+  .app-body{display:block!important;}
+  .preview-area{background:#fff!important;padding:0!important;overflow:visible!important;}
+  #doc{box-shadow:none!important;border:none!important;width:289mm!important;min-height:0!important;padding:0!important;font-size:8.5pt!important;margin:0!important;display:block!important;}
+  #doc table{font-size:8.5pt!important;}
+  #doc .sub-header th{height:9mm!important;font-size:7pt!important;}
+  #doc .data-td{height:8mm!important;font-size:8.5pt!important;}
+  #doc .col-num td{height:3.5mm!important;font-size:7pt!important;}
+  #doc .amount{font-size:8.5pt!important;}
+  #doc .grand{font-size:8.5pt!important;background:#fff!important;color:#000!important;border:2px solid #000!important;}
+  #doc th,#doc td{padding:1px 1px!important;}
+  .doc-header .namuna-line{font-size:11pt!important;}
+  .doc-header .gp-line{font-size:9.5pt!important;}
+  .doc-header .raj-line{font-size:7.5pt!important;}
+  .doc-bottom{margin-top:4mm!important;}
+  .sig-line{font-size:9pt!important;}
+  .tip-section{font-size:7pt!important;}
+}
+@media(max-width:900px){
+  .app-body{grid-template-columns:1fr;}
+  .sidebar{max-height:none;position:static;}
+}
+</style>
+</head>
+<body>
+
+<!-- GP Sakhi Topbar -->
+<div class="gpnav">
+  <a href="dashboard.html" class="gpnav-back">← Dashboard</a>
+  <div class="gpnav-title">GP Sakhi</div>
+  <div class="gpnav-user" id="userEmail"></div>
+</div>
+
+<!-- Auto-fill bar -->
+<div class="autofill-bar" id="autofillBar" style="display:none;">
+  ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;margin-left:4px;">बदलायचे असेल तर येथे क्लिक करा</a>
+</div>
+
+<div class="n8wrap">
+<!-- Step Tabs -->
+<div class="step-tabs">
+  <button class="step-tab active" id="stab1" onclick="goStep(1)"><span class="sn">१</span>ग्रामपंचायत</button>
+  <button class="step-tab" id="stab2" onclick="goStep(2)"><span class="sn">२</span>मालमत्ता</button>
+  <button class="step-tab" id="stab3" onclick="goStep(3)"><span class="sn">३</span>तयार करा</button>
+</div>
+
+<div class="app-body">
+<div class="sidebar">
+
+<!-- STEP 1 — ग्रामपंचायत (profile मधून auto-fill) -->
+<div class="step-panel active" id="sp1">
+  <div class="sec-head">🏘️ ग्रामपंचायत माहिती</div>
+  <div class="form-group"><label>ग्रामपंचायत नाव</label><input type="text" id="gp" placeholder="तोंडली"></div>
+  <div class="form-row">
+    <div class="form-group"><label>तालुका</label><input type="text" id="taluka" placeholder="मौदा"></div>
+    <div class="form-group"><label>जिल्हा</label><input type="text" id="dist" placeholder="नागपूर"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>वर्ष (सुरुवात)</label><input type="number" id="yr_s" value="2025"></div>
+    <div class="form-group"><label>वर्ष (शेवट)</label><input type="number" id="yr_e" value="2029"></div>
+  </div>
+  <div class="form-group"><label>दिनांक</label><input type="date" id="din"></div>
+
+  <div class="sec-head">💡 इतर कर — ग्रामपंचायत निश्चित (रु.)</div>
+  <div class="rate-legend">⚠️ हे कर फक्त इमारतींवर लागतात — खाली जागेवर नाही</div>
+  <div class="form-row">
+    <div class="form-group"><label>दिवाबत्ती कर (रु.)</label><input type="number" id="div_kr" value="100" min="0" oninput="liveCalc()"></div>
+    <div class="form-group"><label>आरोग्य कर (रु.)</label><input type="number" id="aro_kr" value="100" min="0" oninput="liveCalc()"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>सामान्य पाणी कर (रु.)</label><input type="number" id="sam_kr" value="300" min="0" oninput="liveCalc()"></div>
+    <div class="form-group"><label>विशेष पाणी कर (रु.)</label><input type="number" id="vis_kr" value="1000" min="0" oninput="liveCalc()"></div>
+  </div>
+
+  <div class="sec-head">💰 रेडी रेकनर व कर दर — ५ प्रकार</div>
+  <div class="rate-legend">
+    <strong>Col १३</strong> = खाली जागेचा RR दर &nbsp;|&nbsp; <strong>Col १४</strong> = बांधकाम RR दर<br>
+    <strong>कर = (भां.मू. × कर दर रु.) ÷ १,०००</strong>
+  </div>
+  <div class="rate-table-wrap">
+    <table class="rate-table">
+      <thead>
+        <tr>
+          <th style="width:36%;text-align:left;">मालमत्ता प्रकार</th>
+          <th class="col-h13">Col १३<br>RR दर</th>
+          <th class="col-h14">Col १४<br>RR दर</th>
+          <th class="col-htr">कर दर<br>(रु./१०००)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="prop-label">🌳 खाली जागा</div><div class="prop-note">Col १३ | घरकर लागतो</div></td>
+          <td><input type="number" id="rr_jaga" value="1600" oninput="liveCalc()"></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="tr_jaga" value="2" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🏠 आर.सी.सी.</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_rcc" value="15000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_rcc" value="1.50" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🧱 दगड/विटा-सिमेंट</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_sem" value="12000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_sem" value="1.12" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🏚️ दगड/विटा-माती</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_mati" value="8000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_mati" value="0.90" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🛖 झोपडी/माती</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_jhop" value="4000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_jhop" value="0.52" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="nav-btns">
+    <button class="btn-next" onclick="goStep(2)">पुढे → मालमत्ता माहिती</button>
+  </div>
+  <div style="height:10px;"></div>
+</div>
+
+<!-- STEP 2 — मालमत्ता (unchanged) -->
+<div class="step-panel" id="sp2">
+  <div class="sec-head">👤 मालकाची माहिती</div>
+  <div class="form-row">
+    <div class="form-group"><label>अ.क्र.</label><input type="text" id="akr" value="१"></div>
+    <div class="form-group"><label>वार्ड क्र.</label><input type="text" id="ward" value="१"></div>
+  </div>
+  <div class="form-group"><label>मालमत्ता क्र.</label><input type="text" id="malmno" value="१"></div>
+  <div class="form-group"><label>मालकाचे नाव</label><input type="text" id="owner" placeholder="मालकाचे पूर्ण नाव"></div>
+  <div class="form-group"><label>भोगवटादाराचे नाव</label><input type="text" id="tenant" value="स्वतः"></div>
+
+  <div class="sec-head">💧 पाणी कर प्रकार (एकच निवडा)</div>
+  <div class="rate-legend" style="margin-top:4px;">
+    रक्कम Step १ मध्ये निश्चित केलेली वापरली जाईल<br>
+    सामान्य: ₹<span id="show_sam">0</span> &nbsp;|&nbsp; विशेष: ₹<span id="show_vis">0</span>
+  </div>
+  <div class="form-group" style="padding-top:5px;">
+    <div class="water-grp">
+      <button class="wb sel-none" id="wb_none" onclick="setWater('none')">🚫 नाही</button>
+      <button class="wb" id="wb_sam" onclick="setWater('sam')">💧 सामान्य</button>
+      <button class="wb" id="wb_vis" onclick="setWater('vis')">🔵 विशेष</button>
+    </div>
+  </div>
+
+  <div class="sec-head">🏠 मालमत्तेची यादी</div>
+  <div id="prop_list"></div>
+
+  <div class="sec-sub" style="margin-top:5px;">➕ नवीन मालमत्ता जोडा</div>
+  <div class="prop-card" style="margin-top:4px;">
+    <div class="form-group" style="padding:3px 0;">
+      <label>मालमत्तेचे वर्णन</label>
+      <select id="f_type" onchange="onFTypeChange()">
+        <option value="jaga">🌳 खाली जागा</option>
+        <option value="rcc" selected>🏠 आर.सी.सी.</option>
+        <option value="sem">🧱 दगड/विटा-सिमेंट</option>
+        <option value="mati">🏚️ दगड/विटा-माती</option>
+        <option value="jhop">🛖 झोपडी/माती</option>
+      </select>
+    </div>
+    <div id="f_build_fields">
+      <div class="form-group" style="padding:3px 0;">
+        <label>इमारतीचा वापर</label>
+        <select id="f_usage">
+          <option value="niv" selected>निवासी</option>
+          <option value="van">वाणिज्यिक</option>
+          <option value="aud">औद्योगिक</option>
+        </select>
+      </div>
+      <div class="form-row" style="padding:0;">
+        <div class="form-group" style="padding:3px 0;"><label>बांधकामाचे वर्ष</label><input type="number" id="f_yr" value="2000" min="1900" max="2025"></div>
+        <div class="form-group" style="padding:3px 0;"><label>मजले</label><input type="number" id="f_fl" value="1" min="1" max="20"></div>
+      </div>
+    </div>
+    <div class="form-row" style="padding:0;margin-top:3px;">
+      <div class="form-group" style="padding:3px 0;"><label id="f_l_lbl">लांबी (फूट)</label><input type="number" id="f_len" value="0" min="0"></div>
+      <div class="form-group" style="padding:3px 0;"><label id="f_w_lbl">रुंदी (फूट)</label><input type="number" id="f_wid" value="0" min="0"></div>
+    </div>
+    <button onclick="addProp()" style="width:100%;margin-top:6px;background:linear-gradient(135deg,#1a3a6b,#0a1628);color:#fff;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;">+ मालमत्ता जोडा</button>
+  </div>
+
+  <div class="live-calc">
+    <div class="lc-title">⚡ एकूण गणना</div>
+    <div id="lc_props"></div>
+    <div class="lc-sep"></div>
+    <div class="lc-row"><span class="lc-label">एकूण घरकर</span><span class="lc-val" id="lc_gharkr">—</span></div>
+    <div class="lc-row"><span class="lc-label">दिवाबत्ती + आरोग्य</span><span class="lc-val" id="lc_da">—</span></div>
+    <div class="lc-row"><span class="lc-label">पाणी कर</span><span class="lc-val" id="lc_pani">—</span></div>
+    <div class="lc-row"><span class="lc-label">🔶 एकूण देय कर</span><span class="lc-val" id="lc_total">—</span></div>
+  </div>
+
+  <div class="sec-sub" style="margin-top:5px;">📋 अपील फेरफार (रु.) — ऐच्छिक</div>
+  <div class="form-row" style="padding-top:4px;">
+    <div class="form-group"><label>घरकर</label><input type="number" id="ap_ghar" value="0" min="0"></div>
+    <div class="form-group"><label>दिवाबत्ती</label><input type="number" id="ap_div" value="0" min="0"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>आरोग्य</label><input type="number" id="ap_aro" value="0" min="0"></div>
+    <div class="form-group"><label>पाणी</label><input type="number" id="ap_pani" value="0" min="0"></div>
+  </div>
+  <div class="form-group"><label>नंतर वाढ/घट आदेश शेरा</label><textarea id="aadesh" rows="2" style="resize:vertical;" placeholder="आदेशाचे संदर्भात शेरा..."></textarea></div>
+
+  <div class="nav-btns">
+    <button class="btn-back" onclick="goStep(1)">← मागे</button>
+    <button class="btn-next" onclick="goStep(3)">पुढे → तयार करा</button>
+  </div>
+  <div style="height:10px;"></div>
+</div>
+
+<!-- STEP 3 — तयार करा -->
+<div class="step-panel" id="sp3">
+  <div class="sec-head">✅ नमुना ८ तयार करा</div>
+  <div style="padding:8px 11px;font-size:10.5px;color:#555;line-height:1.9;">
+    <strong>📐 सूत्र:</strong><br>
+    इमारत भां.मू. = (चौ.मी.×Col१४×घसारा%)×भारांक<br>
+    जागा भां.मू. = चौ.मी.×Col१३<br>
+    घरकर = (भां.मू. × कर दर रु.) ÷ १,०००<br><br>
+    <strong>⚠️ नियम:</strong> दिवाबत्ती/आरोग्य/पाणी फक्त इमारत row मध्ये<br>
+    <strong>🖨️ Print:</strong> A4 Landscape — पूर्ण पान भरतो
+  </div>
+  <button class="btn-gen" onclick="generateDoc()">✅ नमुना ८ तयार करा</button>
+  <button class="btn-print" onclick="window.print()">🖨️ A4 Landscape प्रिंट</button>
+  <div class="nav-btns" style="padding-top:4px;">
+    <button class="btn-back" onclick="goStep(2)" style="flex:1;">← मालमत्ता</button>
+    <button class="btn-back" onclick="goStep(1)" style="flex:1;background:#555;">← ग्रामपंचायत</button>
+  </div>
+  <button class="btn-reset" onclick="resetAll()">🔄 सर्व रीसेट</button>
+</div>
+
+</div><!-- sidebar -->
+
+<!-- PREVIEW -->
+<div class="preview-area">
+  <div class="preview-label">📄 नमुना ८ — A4 Landscape Full Page Preview</div>
+  <div id="doc">
+    <div class="doc-header">
+      <div class="raj-line">महाराष्ट्र शासन राजपत्र असाधारण चार-ब डिसेंबर २०१५/पौष १०, शके १९३७</div>
+      <div class="namuna-line">नमुना ८ — नियम ३२(१)</div>
+      <div class="gp-line" id="d_hdr">सन २०२५-२६ ते २०२८-२९ या वर्षांसाठी कर आकारणी नोंदवही ग्रामपंचायत तोंडली तालुका मौदा जिल्हा नागपूर</div>
+    </div>
+    <table id="tbl1">
+      <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9"><col class="c10"><col class="c11"><col class="c12"><col class="c13"><col class="c14"><col class="c15"></colgroup>
+      <thead>
+        <tr class="sub-header">
+          <th rowspan="2">अ.<br>क्र.</th><th rowspan="2">वार्ड<br>क्र.</th><th rowspan="2">माल<br>मत्ता<br>क्र.</th><th rowspan="2">मालकाचे नाव</th><th rowspan="2">भोगवटादाराचे नाव</th><th rowspan="2">मालमत्तेचे वर्णन</th><th rowspan="2">इमारतीचा वापर</th><th rowspan="2">बांध<br>कामाचे<br>वर्ष</th>
+          <th colspan="4">क्षेत्रफळ चौ. फु.</th>
+          <th class="col13-head" rowspan="2">Col १३<br>खाली<br>जागा<br>RR दर</th><th class="col14-head" rowspan="2">Col १४<br>बांधकाम<br>RR दर</th><th rowspan="2">घसारा<br>दर</th>
+        </tr>
+        <tr class="sub-header"><th>लांबी</th><th>रुंदी</th><th>एकुण<br>चौ.फु.</th><th>चौ.मी.</th></tr>
+      </thead>
+      <tbody id="tbody1">
+        <tr class="col-num"><td>१</td><td>२</td><td>३</td><td>४</td><td>५</td><td>६</td><td>७</td><td>८</td><td>९</td><td>१०</td><td>११</td><td>१२</td><td>१३</td><td>१४</td><td>१५</td></tr>
+      </tbody>
+    </table>
+    <table id="tbl2" style="margin-top:4px;">
+      <colgroup><col class="c16"><col class="c17"><col class="c18"><col class="c19"><col class="c20"><col class="c21"><col class="c22"><col class="c23"><col class="c24"><col class="c25"><col class="c26"><col class="c27"><col class="c28"><col class="c29"><col class="c30"><col class="c31"></colgroup>
+      <thead>
+        <tr class="sub-header">
+          <th rowspan="2">रेडी रेकनर<br>एकूण किंमत<br>(col १६)</th><th rowspan="2">भारांक<br>(col १७)</th><th rowspan="2">एकूण<br>भांडवली<br>मूल्य<br>(col १८)</th><th rowspan="2">कराचा<br>दर<br>(col १९)</th>
+          <th colspan="6">कराची रक्कम रुपये</th>
+          <th colspan="5">अपीलाचे निकाल व फेरफार (रुपये)</th>
+          <th rowspan="2">नंतर वाढ/घट<br>आदेश शेरा<br>(col ३१)</th>
+        </tr>
+        <tr class="sub-header"><th>घरकर<br>(२०)</th><th>दिवाबत्ती<br>कर<br>(२१)</th><th>आरोग्य<br>कर<br>(२२)</th><th>सामान्य<br>पाणी<br>(२३)</th><th>विशेष<br>पाणी<br>(२४)</th><th>एकुण<br>(२५)</th><th>घरकर<br>(२६)</th><th>दिवाबत्ती<br>(२७)</th><th>आरोग्य<br>(२८)</th><th>सामान्य<br>(२९)</th><th>विशेष<br>(३०)</th></tr>
+      </thead>
+      <tbody id="tbody2">
+        <tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३०</td><td>३१</td></tr>
+      </tbody>
+    </table>
+    <div class="doc-bottom">
+      <div class="date-left">दिनांक: <span id="d_date">—</span></div>
+      <div class="sig-right">
+        <div style="height:20px;"></div>
+        <div class="sig-line">ग्रामपंचायत अधिकारी<br>ग्रा.पं. <span id="d_sgp">तोंडली</span>, ता. <span id="d_sta">मौदा</span>, जि. <span id="d_sdist">नागपूर</span></div>
+      </div>
+    </div>
+    <div class="tip-section"><strong>टिप —</strong> शासन परिपत्रक क्रमांक ग्रापं-२०१५/प्र.क्र.२८३/पंरा-१४ दिनांक ३१ डिसेंबर २०१५ नुसार नमुना ८ म्हणजे इमारती व मोकळ्या जागेचे मालकी हक्क दर्शविणारा अभिलेख नसून हा केवळ ग्रामपंचायतीच्या कर आकारणीसाठी असलेला अभिलेख आहे. या उताऱ्यावरून खरेदी-विक्रीचे व्यवहार झाल्यास त्यास ग्रा.पं. जबाबदार राहणार नाही.</div>
+  </div>
+</div>
+</div><!-- app-body -->
+</div><!-- n8wrap -->
+
+<!-- Firebase Auth -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
+  authDomain:"gpsakhi-9685e.firebaseapp.com",
+  projectId:"gpsakhi-9685e",
+  storageBucket:"gpsakhi-9685e.firebasestorage.app",
+  messagingSenderId:"107629589245",
+  appId:"1:107629589245:web:7b288fda76b26aaadac494"
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  document.getElementById('userEmail').textContent = user.displayName || user.email || '';
+
+  // Profile मधून auto-fill
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+    if (snap.exists()) {
+      const d = snap.data();
+      // ग्रामपंचायत fields
+      if (d.gpName) document.getElementById('gp').value = d.gpName;
+      if (d.ps)     document.getElementById('taluka').value = d.ps;
+      if (d.dist)   document.getElementById('dist').value = d.dist;
+      // नमुना ८ specific fields
+      if (d.n8YrS)  document.getElementById('yr_s').value = d.n8YrS;
+      if (d.n8YrE)  document.getElementById('yr_e').value = d.n8YrE;
+      if (d.n8Din)  document.getElementById('din').value = d.n8Din;
+      if (d.n8DivKr !== undefined) document.getElementById('div_kr').value = d.n8DivKr;
+      if (d.n8AroKr !== undefined) document.getElementById('aro_kr').value = d.n8AroKr;
+      if (d.n8SamKr !== undefined) document.getElementById('sam_kr').value = d.n8SamKr;
+      if (d.n8VisKr !== undefined) document.getElementById('vis_kr').value = d.n8VisKr;
+      if (d.n8RrJaga !== undefined) document.getElementById('rr_jaga').value = d.n8RrJaga;
+      if (d.n8TrJaga !== undefined) document.getElementById('tr_jaga').value = d.n8TrJaga;
+      if (d.n8RrRcc  !== undefined) document.getElementById('rr_rcc').value  = d.n8RrRcc;
+      if (d.n8TrRcc  !== undefined) document.getElementById('tr_rcc').value  = d.n8TrRcc;
+      if (d.n8RrSem  !== undefined) document.getElementById('rr_sem').value  = d.n8RrSem;
+      if (d.n8TrSem  !== undefined) document.getElementById('tr_sem').value  = d.n8TrSem;
+      if (d.n8RrMati !== undefined) document.getElementById('rr_mati').value = d.n8RrMati;
+      if (d.n8TrMati !== undefined) document.getElementById('tr_mati').value = d.n8TrMati;
+      if (d.n8RrJhop !== undefined) document.getElementById('rr_jhop').value = d.n8RrJhop;
+      if (d.n8TrJhop !== undefined) document.getElementById('tr_jhop').value = d.n8TrJhop;
+
+      document.getElementById('autofillBar').style.display = 'flex';
+      // live calc update
+      if (typeof liveCalc === 'function') liveCalc();
+      if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
+    }
+  } catch(e) { console.log('Profile load error:', e); }
+});
+</script>
+
+<!-- Original Namuna 8 Logic — unchanged -->
+<script>
+const PROP_NAMES={jaga:'खाली जागा',rcc:'आर.सी.सी.',sem:'दगड/विटा-सिमेंट',mati:'दगड/विटा-माती',jhop:'झोपडी/माती'};
+const US_NAMES={niv:'निवासी',van:'वाणिज्यिक',aud:'औद्योगिक'};
+const WT={niv:1.00,van:1.25,aud:1.20};
+
+function getDep(age,isRCC){
+  const rcc=[[0,2,1],[2,5,.95],[5,10,.90],[10,20,.80],[20,30,.70],[30,40,.60],[40,50,.50],[50,60,.40],[60,999,.30]];
+  const old=[[0,2,1],[2,5,.95],[5,10,.85],[10,20,.75],[20,30,.60],[30,40,.45],[40,50,.30],[50,60,.20],[60,999,.15]];
+  for(const [a,b,p] of (isRCC?rcc:old)) if(age>=a&&age<b) return p;
+  return isRCC?.30:.15;
+}
+function sqm(f){return f/10.764;}
+function fmtN(n){return Math.round(n).toLocaleString('en-IN');}
+
+let props=[];
+let waterType='none';
+
+function setWater(t){
+  waterType=t;
+  ['none','sam','vis'].forEach(x=>{
+    document.getElementById('wb_'+x).className='wb'+(x===t?' sel-'+t:'');
+  });
+  liveCalc();
+}
+
+function updateWaterDisplay(){
+  const s=parseFloat(document.getElementById('sam_kr').value)||0;
+  const v=parseFloat(document.getElementById('vis_kr').value)||0;
+  document.getElementById('show_sam').textContent=fmtN(s);
+  document.getElementById('show_vis').textContent=fmtN(v);
+}
+
+function onFTypeChange(){
+  const isJ=document.getElementById('f_type').value==='jaga';
+  document.getElementById('f_build_fields').style.display=isJ?'none':'block';
+  document.getElementById('f_l_lbl').textContent=isJ?'जागा लांबी (फूट)':'इमारत लांबी (फूट)';
+  document.getElementById('f_w_lbl').textContent=isJ?'जागा रुंदी (फूट)':'इमारत रुंदी (फूट)';
+}
+
+function addProp(){
+  const type=document.getElementById('f_type').value;
+  const usage=document.getElementById('f_usage').value;
+  const yr=parseInt(document.getElementById('f_yr').value)||2000;
+  const fl=parseInt(document.getElementById('f_fl').value)||1;
+  const len=parseFloat(document.getElementById('f_len').value)||0;
+  const wid=parseFloat(document.getElementById('f_wid').value)||0;
+  if(len<=0||wid<=0){alert('लांबी व रुंदी भरा!');return;}
+  props.push({type,usage,yr,fl,len,wid});
+  renderPropList();liveCalc();
+  document.getElementById('f_len').value=0;
+  document.getElementById('f_wid').value=0;
+}
+
+function delProp(i){props.splice(i,1);renderPropList();liveCalc();}
+
+function renderPropList(){
+  const el=document.getElementById('prop_list');
+  if(!props.length){el.innerHTML='<div style="padding:8px 11px;font-size:10px;color:#aaa;">— अजून कोणती मालमत्ता नाही —</div>';return;}
+  el.innerHTML=props.map((p,i)=>{
+    const isJ=p.type==='jaga';
+    const sqft=isJ?p.len*p.wid:p.len*p.wid*p.fl;
+    return `<div class="prop-card">
+      <div class="prop-card-head">
+        <span>${i+1}. ${PROP_NAMES[p.type]}</span>
+        <span class="prop-card-type">${isJ?'जागा':US_NAMES[p.usage]}</span>
+        <button class="btn-del" onclick="delProp(${i})">✕</button>
+      </div>
+      <div style="font-size:9.5px;color:#555;line-height:1.6;">
+        ${isJ?'':`वर्ष:${p.yr} | `}${p.len}×${p.wid}${isJ?'':('×'+p.fl)} = <strong>${sqft.toFixed(0)} चौ.फु.</strong>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function calcOne(p){
+  const isJ=p.type==='jaga';
+  const isRCC=(p.type==='rcc'||p.type==='sem');
+  const sqft=isJ?p.len*p.wid:p.len*p.wid*p.fl;
+  const sqmtr=sqm(sqft);
+  const age=Math.max(0,2025-p.yr);
+  const dep=isJ?1:getDep(age,isRCC);
+  const wt=isJ?1:(WT[p.usage]||1);
+  const rr_jaga=parseFloat(document.getElementById('rr_jaga').value)||0;
+  const rr_prop=parseFloat(document.getElementById('rr_'+p.type)?.value||0);
+  const tr_prop=parseFloat(document.getElementById('tr_'+p.type)?.value||0);
+  let bv=0,rr_raw=0;
+  if(isJ){bv=sqmtr*rr_jaga;rr_raw=bv;}
+  else{rr_raw=sqmtr*rr_prop*dep;bv=rr_raw*wt;}
+  const gharkr=Math.round((bv*tr_prop)/1000);
+  return {isJ,sqft,sqmtr,age,dep,wt,rr_jaga,rr_prop,tr_prop,rr_raw,bv,gharkr};
+}
+
+function liveCalc(){
+  updateWaterDisplay();
+  if(!props.length){
+    ['lc_gharkr','lc_da','lc_pani','lc_total'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('lc_props').innerHTML='';
+    return;
+  }
+  let totalGhar=0,html='';
+  props.forEach((p,i)=>{
+    const c=calcOne(p);
+    totalGhar+=c.gharkr;
+    html+=`<div class="lc-ph">${i+1}. ${PROP_NAMES[p.type]}</div>
+    <div class="lc-row"><span class="lc-label">भां.मू.</span><span class="lc-val">₹${fmtN(c.bv)}</span></div>
+    <div class="lc-row"><span class="lc-label">घरकर</span><span class="lc-val">₹${fmtN(c.gharkr)}</span></div>`;
+  });
+  document.getElementById('lc_props').innerHTML=html;
+  const div_kr=parseFloat(document.getElementById('div_kr').value)||0;
+  const aro_kr=parseFloat(document.getElementById('aro_kr').value)||0;
+  const sam_kr=parseFloat(document.getElementById('sam_kr').value)||0;
+  const vis_kr=parseFloat(document.getElementById('vis_kr').value)||0;
+  const hasImarat=props.some(p=>p.type!=='jaga');
+  const daAmt=hasImarat?div_kr+aro_kr:0;
+  const paniAmt=(waterType==='none'||!hasImarat)?0:(waterType==='sam'?sam_kr:vis_kr);
+  const total=totalGhar+daAmt+paniAmt;
+  document.getElementById('lc_gharkr').textContent='₹'+fmtN(totalGhar);
+  document.getElementById('lc_da').textContent=hasImarat?'₹'+fmtN(daAmt):'लागत नाही';
+  document.getElementById('lc_pani').textContent=(waterType==='none'||!hasImarat)?'नाही':'₹'+fmtN(paniAmt);
+  document.getElementById('lc_total').textContent='₹'+fmtN(total);
+}
+
+function generateDoc(){
+  if(!props.length){alert('किमान एक मालमत्ता जोडा!');return;}
+  const gp=document.getElementById('gp').value||'—';
+  const ta=document.getElementById('taluka').value||'—';
+  const dist=document.getElementById('dist').value||'—';
+  const yrs=parseInt(document.getElementById('yr_s').value)||2025;
+  const yre=parseInt(document.getElementById('yr_e').value)||2029;
+  const din=document.getElementById('din').value;
+  const ward=document.getElementById('ward').value||'—';
+  const akr=document.getElementById('akr').value||'—';
+  const malmno=document.getElementById('malmno').value||'—';
+  const owner=document.getElementById('owner').value||'—';
+  const tenant=document.getElementById('tenant').value||'—';
+  const aadesh=document.getElementById('aadesh').value||'—';
+  const ap_ghar=parseFloat(document.getElementById('ap_ghar').value)||0;
+  const ap_div=parseFloat(document.getElementById('ap_div').value)||0;
+  const ap_aro=parseFloat(document.getElementById('ap_aro').value)||0;
+  const ap_pani=parseFloat(document.getElementById('ap_pani').value)||0;
+  const div_kr=parseFloat(document.getElementById('div_kr').value)||0;
+  const aro_kr=parseFloat(document.getElementById('aro_kr').value)||0;
+  const sam_kr=parseFloat(document.getElementById('sam_kr').value)||0;
+  const vis_kr=parseFloat(document.getElementById('vis_kr').value)||0;
+  const hasImarat=props.some(p=>p.type!=='jaga');
+  const paniAmt=(waterType==='none'||!hasImarat)?0:(waterType==='sam'?sam_kr:vis_kr);
+  const isSam=(waterType==='sam')&&hasImarat;
+  const isVis=(waterType==='vis')&&hasImarat;
+
+  document.getElementById('d_hdr').textContent=
+    `सन ${yrs}-${String(yrs+1).slice(2)} ते ${yre-1}-${String(yre).slice(2)} या वर्षांसाठी कर आकारणी नोंदवही ग्रामपंचायत ${gp} तालुका ${ta} जिल्हा ${dist}`;
+  const [y,m,d]=(din||'').split('-');
+  document.getElementById('d_date').textContent=din?`${d}/${m}/${y}`:'—';
+  document.getElementById('d_sgp').textContent=gp;
+  document.getElementById('d_sta').textContent=ta;
+  document.getElementById('d_sdist').textContent=dist;
+
+  const calcs=props.map(p=>calcOne(p));
+  let totalGhar=calcs.reduce((s,c)=>s+c.gharkr,0);
+  let totalBv=calcs.reduce((s,c)=>s+c.bv,0);
+  let totalSqft=calcs.reduce((s,c)=>s+c.sqft,0);
+  let totalSqm2=calcs.reduce((s,c)=>s+c.sqmtr,0);
+  const firstBuildIdx=props.findIndex(p=>p.type!=='jaga');
+  const rs=props.length+(props.length>1?1:0);
+
+  let t1='';
+  props.forEach((p,i)=>{
+    const c=calcs[i];
+    const col13=p.type==='jaga'?fmtN(c.rr_jaga):'—';
+    const col14=p.type==='jaga'?'—':fmtN(c.rr_prop);
+    const depTxt=p.type==='jaga'?'—':(c.dep*100).toFixed(0)+'%';
+    if(i===0){
+      t1+=`<tr><td class="data-td" rowspan="${rs}">${akr}</td><td class="data-td" rowspan="${rs}">${ward}</td><td class="data-td" rowspan="${rs}">${malmno}</td><td class="data-td left-align" rowspan="${rs}">${owner}</td><td class="data-td" rowspan="${rs}">${tenant}</td><td class="data-td left-align">${PROP_NAMES[p.type]}</td><td class="data-td">${p.type==='jaga'?'—':US_NAMES[p.usage]}</td><td class="data-td">${p.type==='jaga'?'—':p.yr}</td><td class="data-td">${p.len}</td><td class="data-td">${p.wid}</td><td class="data-td amount">${c.sqft.toFixed(0)}</td><td class="data-td amount">${c.sqmtr.toFixed(2)}</td><td class="data-td col13-cell amount">${col13}</td><td class="data-td col14-cell amount">${col14}</td><td class="data-td">${depTxt}</td></tr>`;
+    } else {
+      t1+=`<tr><td class="data-td left-align">${PROP_NAMES[p.type]}</td><td class="data-td">${p.type==='jaga'?'—':US_NAMES[p.usage]}</td><td class="data-td">${p.type==='jaga'?'—':p.yr}</td><td class="data-td">${p.len}</td><td class="data-td">${p.wid}</td><td class="data-td amount">${c.sqft.toFixed(0)}</td><td class="data-td amount">${c.sqmtr.toFixed(2)}</td><td class="data-td col13-cell amount">${col13}</td><td class="data-td col14-cell amount">${col14}</td><td class="data-td">${depTxt}</td></tr>`;
+    }
+  });
+  if(props.length>1){
+    t1+=`<tr class="bg-grey"><td colspan="5" style="text-align:right;font-weight:700;padding-right:6px;">एकूण</td><td class="amount">${totalSqft.toFixed(0)}</td><td class="amount">${totalSqm2.toFixed(2)}</td><td></td><td></td><td></td></tr>`;
+  }
+  document.getElementById('tbody1').innerHTML=
+    `<tr class="col-num"><td>१</td><td>२</td><td>३</td><td>४</td><td>५</td><td>६</td><td>७</td><td>८</td><td>९</td><td>१०</td><td>११</td><td>१२</td><td>१३</td><td>१४</td><td>१५</td></tr>${t1}`;
+
+  const aadeshRS=props.length+1;
+  const ekun_kr=totalGhar+(hasImarat?div_kr+aro_kr:0)+paniAmt;
+  let t2='';
+  props.forEach((p,i)=>{
+    const c=calcs[i];
+    const isFB=(i===firstBuildIdx);
+    const col16=p.type==='jaga'?fmtN(c.bv):fmtN(c.rr_raw);
+    const col17=p.type==='jaga'?'—':c.wt.toFixed(2);
+    const col18=fmtN(c.bv);
+    const divShow=isFB&&hasImarat?fmtN(div_kr):'';
+    const aroShow=isFB&&hasImarat?fmtN(aro_kr):'';
+    const samShow=isFB&&isSam?fmtN(paniAmt):'';
+    const visShow=isFB&&isVis?fmtN(paniAmt):'';
+    const ekunRow=isFB&&hasImarat?fmtN(c.gharkr+div_kr+aro_kr+paniAmt):fmtN(c.gharkr);
+    if(i===0){
+      t2+=`<tr><td class="data-td amount">${col16}</td><td class="data-td">${col17}</td><td class="data-td amount">${col18}</td><td class="data-td">${c.tr_prop}</td><td class="data-td amount">${fmtN(c.gharkr)}</td><td class="data-td">${divShow}</td><td class="data-td">${aroShow}</td><td class="data-td">${samShow}</td><td class="data-td">${visShow}</td><td class="data-td amount">${ekunRow}</td><td class="data-td"></td><td class="data-td"></td><td class="data-td"></td><td class="data-td"></td><td class="data-td"></td><td class="data-td" rowspan="${aadeshRS}" style="text-align:left;padding:3px 4px;font-size:9pt;vertical-align:top;">${aadesh}</td></tr>`;
+    } else {
+      t2+=`<tr><td class="data-td amount">${col16}</td><td class="data-td">${col17}</td><td class="data-td amount">${col18}</td><td class="data-td">${c.tr_prop}</td><td class="data-td amount">${fmtN(c.gharkr)}</td><td class="data-td">${divShow}</td><td class="data-td">${aroShow}</td><td class="data-td">${samShow}</td><td class="data-td">${visShow}</td><td class="data-td amount">${ekunRow}</td><td class="data-td"></td><td class="data-td"></td><td class="data-td"></td><td class="data-td"></td><td class="data-td"></td></tr>`;
+    }
+  });
+  t2+=`<tr class="bg-grey total-row"><td></td><td></td><td class="amount">${fmtN(totalBv)}</td><td>—</td><td class="amount">${fmtN(totalGhar)}</td><td class="amount">${hasImarat?fmtN(div_kr):''}</td><td class="amount">${hasImarat?fmtN(aro_kr):''}</td><td class="amount">${isSam?fmtN(paniAmt):''}</td><td class="amount">${isVis?fmtN(paniAmt):''}</td><td class="grand">${fmtN(ekun_kr)}</td><td>${fmtN(ap_ghar)}</td><td>${fmtN(ap_div)}</td><td>${fmtN(ap_aro)}</td><td>${fmtN(ap_pani)}</td><td>0</td></tr>`;
+  document.getElementById('tbody2').innerHTML=
+    `<tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३०</td><td>३१</td></tr>${t2}`;
+
+  const btn=document.querySelector('.btn-gen');
+  btn.textContent='✅ तयार झाले!';
+  btn.style.background='linear-gradient(135deg,#059669,#047857)';
+  setTimeout(()=>{btn.textContent='✅ नमुना ८ तयार करा';btn.style.background='';},2500);
+}
+
+function goStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('sp'+i).classList.toggle('active',i===n);
+    const t=document.getElementById('stab'+i);
+    t.classList.toggle('active',i===n);
+    t.classList.toggle('done',i<n);
+  });
+  if(n===2){renderPropList();liveCalc();}
+  if(n===3){generateDoc();}
+}
+
+function resetAll(){
+  if(!confirm('सर्व माहिती रीसेट करायची का?'))return;
+  props=[];waterType='none';setWater('none');
+  renderPropList();liveCalc();
+  ['owner','tenant','akr','malmno','ward','aadesh'].forEach(id=>document.getElementById(id).value='');
+  ['ap_ghar','ap_div','ap_aro','ap_pani'].forEach(id=>document.getElementById(id).value=0);
+  document.getElementById('tenant').value='स्वतः';
+  goStep(1);
+}
+
+window.onload=()=>{
+  onFTypeChange();
+  renderPropList();
+  setWater('none');
+  updateWaterDisplay();
+  ['sam_kr','vis_kr'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', updateWaterDisplay);
+  });
+};
+</script>
+</body>
+</html>

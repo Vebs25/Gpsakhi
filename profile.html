@@ -125,6 +125,71 @@ nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:c
     </div>
   </div>
 
+  <div class="card">
+    <div class="card-title">📋 नमुना ८ — कर आकारणी माहिती</div>
+    <div class="g2">
+      <div class="fld">
+        <label>वर्ष सुरुवात</label>
+        <input type="number" id="n8YrS" value="2025" placeholder="2025">
+        <small>कर आकारणी वर्ष (सुरुवात)</small>
+      </div>
+      <div class="fld">
+        <label>वर्ष शेवट</label>
+        <input type="number" id="n8YrE" value="2029" placeholder="2029">
+        <small>कर आकारणी वर्ष (शेवट)</small>
+      </div>
+    </div>
+    <div class="fld" style="margin-top:8px;">
+      <label>Default दिनांक</label>
+      <input type="date" id="n8Din">
+      <small>नमुना ८ वर दिसणारी तारीख</small>
+    </div>
+    <div style="margin-top:14px;font-size:10pt;font-weight:700;color:#1A2744;border-bottom:1px solid #D4C5A9;padding-bottom:6px;margin-bottom:10px;">💡 इतर कर (रु.)</div>
+    <div class="g2">
+      <div class="fld"><label>दिवाबत्ती कर (₹)</label><input type="number" id="n8DivKr" value="100" min="0"></div>
+      <div class="fld"><label>आरोग्य कर (₹)</label><input type="number" id="n8AroKr" value="100" min="0"></div>
+      <div class="fld"><label>सामान्य पाणी कर (₹)</label><input type="number" id="n8SamKr" value="300" min="0"></div>
+      <div class="fld"><label>विशेष पाणी कर (₹)</label><input type="number" id="n8VisKr" value="1000" min="0"></div>
+    </div>
+    <div style="margin-top:14px;font-size:10pt;font-weight:700;color:#1A2744;border-bottom:1px solid #D4C5A9;padding-bottom:6px;margin-bottom:10px;">🏗️ बांधकाम दर (रु./चौ.मी.) व कर दर (रु./हजार)</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:9.5pt;">
+        <thead><tr style="background:#1A2744;color:white;">
+          <th style="padding:7px 6px;text-align:left;">प्रकार</th>
+          <th style="padding:7px 6px;text-align:right;">दर (₹/चौ.मी.)</th>
+          <th style="padding:7px 6px;text-align:right;">कर दर (₹/हजार)</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #D4C5A9;">
+            <td style="padding:6px 6px;">खाली जागा</td>
+            <td style="padding:6px 4px;"><input type="number" id="n8RrJaga" value="1600" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+            <td style="padding:6px 4px;"><input type="number" id="n8TrJaga" value="2" step="0.01" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #D4C5A9;">
+            <td style="padding:6px 6px;">आर.सी.सी.</td>
+            <td style="padding:6px 4px;"><input type="number" id="n8RrRcc" value="15000" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+            <td style="padding:6px 4px;"><input type="number" id="n8TrRcc" value="1.50" step="0.01" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #D4C5A9;">
+            <td style="padding:6px 6px;">दगड/विटा-सिमेंट</td>
+            <td style="padding:6px 4px;"><input type="number" id="n8RrSem" value="12000" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+            <td style="padding:6px 4px;"><input type="number" id="n8TrSem" value="1.12" step="0.01" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #D4C5A9;">
+            <td style="padding:6px 6px;">दगड/विटा-माती</td>
+            <td style="padding:6px 4px;"><input type="number" id="n8RrMati" value="8000" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+            <td style="padding:6px 4px;"><input type="number" id="n8TrMati" value="0.90" step="0.01" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+          </tr>
+          <tr>
+            <td style="padding:6px 6px;">झोपडी/माती</td>
+            <td style="padding:6px 4px;"><input type="number" id="n8RrJhop" value="4000" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+            <td style="padding:6px 4px;"><input type="number" id="n8TrJhop" value="0.52" step="0.01" min="0" style="width:100%;padding:4px 6px;border:1.5px solid #D4C5A9;border-radius:4px;font-size:9pt;text-align:right;"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <button class="btn-save" id="saveBtn" onclick="saveProfile()">💾 माहिती सेव करा</button>
 </div>
 
@@ -167,6 +232,24 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('gpVillage').value = d.village || '';
     document.getElementById('gpMr').value = d.mr || '800';
     document.getElementById('gpLr').value = d.lr || '500';
+    // नमुना ८ fields load
+    if(d.n8YrS) document.getElementById('n8YrS').value = d.n8YrS;
+    if(d.n8YrE) document.getElementById('n8YrE').value = d.n8YrE;
+    if(d.n8Din) document.getElementById('n8Din').value = d.n8Din;
+    document.getElementById('n8DivKr').value = d.n8DivKr || 100;
+    document.getElementById('n8AroKr').value = d.n8AroKr || 100;
+    document.getElementById('n8SamKr').value = d.n8SamKr || 300;
+    document.getElementById('n8VisKr').value = d.n8VisKr || 1000;
+    document.getElementById('n8RrJaga').value = d.n8RrJaga || 1600;
+    document.getElementById('n8TrJaga').value = d.n8TrJaga || 2;
+    document.getElementById('n8RrRcc').value  = d.n8RrRcc  || 15000;
+    document.getElementById('n8TrRcc').value  = d.n8TrRcc  || 1.50;
+    document.getElementById('n8RrSem').value  = d.n8RrSem  || 12000;
+    document.getElementById('n8TrSem').value  = d.n8TrSem  || 1.12;
+    document.getElementById('n8RrMati').value = d.n8RrMati || 8000;
+    document.getElementById('n8TrMati').value = d.n8TrMati || 0.90;
+    document.getElementById('n8RrJhop').value = d.n8RrJhop || 4000;
+    document.getElementById('n8TrJhop').value = d.n8TrJhop || 0.52;
   }
 });
 
@@ -190,6 +273,24 @@ window.saveProfile = async function() {
       village: document.getElementById('gpVillage').value.trim(),
       mr: parseInt(document.getElementById('gpMr').value) || 800,
       lr: parseInt(document.getElementById('gpLr').value) || 500,
+      // नमुना ८ fields
+      n8YrS: parseInt(document.getElementById('n8YrS').value) || 2025,
+      n8YrE: parseInt(document.getElementById('n8YrE').value) || 2029,
+      n8Din: document.getElementById('n8Din').value || '',
+      n8DivKr: parseFloat(document.getElementById('n8DivKr').value) || 100,
+      n8AroKr: parseFloat(document.getElementById('n8AroKr').value) || 100,
+      n8SamKr: parseFloat(document.getElementById('n8SamKr').value) || 300,
+      n8VisKr: parseFloat(document.getElementById('n8VisKr').value) || 1000,
+      n8RrJaga: parseFloat(document.getElementById('n8RrJaga').value) || 1600,
+      n8TrJaga: parseFloat(document.getElementById('n8TrJaga').value) || 2,
+      n8RrRcc:  parseFloat(document.getElementById('n8RrRcc').value)  || 15000,
+      n8TrRcc:  parseFloat(document.getElementById('n8TrRcc').value)  || 1.50,
+      n8RrSem:  parseFloat(document.getElementById('n8RrSem').value)  || 12000,
+      n8TrSem:  parseFloat(document.getElementById('n8TrSem').value)  || 1.12,
+      n8RrMati: parseFloat(document.getElementById('n8RrMati').value) || 8000,
+      n8TrMati: parseFloat(document.getElementById('n8TrMati').value) || 0.90,
+      n8RrJhop: parseFloat(document.getElementById('n8RrJhop').value) || 4000,
+      n8TrJhop: parseFloat(document.getElementById('n8TrJhop').value) || 0.52,
       updatedAt: new Date()
     };
     
