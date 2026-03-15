@@ -329,6 +329,20 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
 .sig-line{border-top:1.5px solid #000;padding-top:4px;min-width:55mm;font-size:10pt;font-weight:700;color:#000;line-height:1.8;}
 .tip-section{font-size:7.5pt;margin-top:3mm;padding:4px 8px;background:#fff;border:1px solid #000;color:#000;line-height:1.5;}
 
+/* ── PRINT TIP POPUP ── */
+.print-tip-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;}
+.print-tip-box{background:white;border-radius:16px;max-width:400px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.print-tip-head{background:var(--n8navy);color:white;padding:16px 20px;font-size:13pt;font-weight:700;}
+.print-tip-body{padding:20px;}
+.print-tip-step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
+.print-step-num{width:28px;height:28px;border-radius:50%;background:var(--n8saffron);color:white;font-weight:800;font-size:10pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.print-step-text strong{font-size:10pt;color:var(--n8navy);display:block;margin-bottom:2px;}
+.print-step-text span{font-size:9pt;color:#9CA3AF;}
+.print-tip-hint{background:#EEF2FF;border-radius:10px;padding:10px 16px;margin:12px 0;border:1px solid #C7D2FE;font-size:9pt;color:#3730A3;font-weight:600;}
+.print-tip-btns{display:flex;gap:10px;margin-top:14px;}
+.print-btn-cancel{flex:1;padding:10px;border:1.5px solid #D4C5A9;border-radius:8px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;cursor:pointer;color:#666;}
+.print-btn-go{flex:2;padding:10px;border:none;border-radius:8px;background:var(--n8saffron);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;}
+
 @media print{
   @page{size:A4 landscape;margin:4mm 4mm;}
   html,body{background:#fff!important;}
@@ -567,7 +581,7 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
     <strong>🖨️ Print:</strong> A4 Landscape — पूर्ण पान भरतो
   </div>
   <button class="btn-gen" onclick="generateDoc()">✅ नमुना ८ तयार करा</button>
-  <button class="btn-print" onclick="window.print()">🖨️ A4 Landscape प्रिंट</button>
+  <button class="btn-print" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Landscape प्रिंट</button>
   <div class="nav-btns" style="padding-top:4px;">
     <button class="btn-back" onclick="goStep(2)" style="flex:1;">← मालमत्ता</button>
     <button class="btn-back" onclick="goStep(1)" style="flex:1;background:#555;">← ग्रामपंचायत</button>
@@ -627,6 +641,41 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
 </div>
 </div><!-- app-body -->
 </div><!-- n8wrap -->
+
+<!-- PRINT TIP POPUP -->
+<div id="printTipOverlay" class="print-tip-overlay">
+  <div class="print-tip-box">
+    <div class="print-tip-head">🖨️ Print करण्यापूर्वी</div>
+    <div class="print-tip-body">
+      <div class="print-tip-step">
+        <div class="print-step-num">१</div>
+        <div class="print-step-text">
+          <strong>Print dialog उघडेल</strong>
+          <span>More options / ▼ वर click करा</span>
+        </div>
+      </div>
+      <div class="print-tip-step">
+        <div class="print-step-num">२</div>
+        <div class="print-step-text">
+          <strong>Orientation → Landscape निवडा</strong>
+          <span>Paper size: A4 असेल याची खात्री करा</span>
+        </div>
+      </div>
+      <div class="print-tip-step">
+        <div class="print-step-num">३</div>
+        <div class="print-step-text">
+          <strong>Save as PDF करा</strong>
+          <span>सर्व माहिती एका page मध्ये येईल</span>
+        </div>
+      </div>
+      <div class="print-tip-hint">📄↔️ Orientation: <strong>Landscape</strong> &nbsp;|&nbsp; Paper: <strong>A4</strong></div>
+      <div class="print-tip-btns">
+        <button class="print-btn-cancel" onclick="document.getElementById('printTipOverlay').style.display='none';">रद्द करा</button>
+        <button class="print-btn-go" onclick="document.getElementById('printTipOverlay').style.display='none';window.print();">🖨️ Print उघडा →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Firebase Auth -->
 <script type="module">
