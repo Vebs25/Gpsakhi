@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>पत्र जनरेटर — GP Sakhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--cream:#FAF7F2;--sand:#EDE8DF;--text:#1C1410;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
+.nav-logo small{font-size:8pt;color:rgba(255,255,255,0.5);display:block;margin-top:-4px;}
+.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:10pt;}
+.main-wrap{display:grid;grid-template-columns:420px 1fr;min-height:calc(100vh - 60px);}
+.form-panel{background:white;border-right:1px solid var(--sand);padding:20px 20px 80px;overflow-y:auto;max-height:calc(100vh - 60px);position:sticky;top:60px;}
+.preview-panel{padding:20px;background:var(--cream);}
+.form-title{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:var(--navy);margin-bottom:4px;}
+.form-sub{font-size:9pt;color:#9CA3AF;margin-bottom:14px;}
+
+/* FORM */
+.section{margin-bottom:16px;}
+.sec-title{font-size:10pt;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid var(--sand);}
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.fld label{font-size:9pt;font-weight:700;color:var(--navy);}
+.fld input,.fld textarea{padding:8px 10px;border:1.5px solid var(--sand);border-radius:7px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;background:#FAFAF7;width:100%;}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--saffron);background:white;}
+.fld textarea{resize:vertical;min-height:80px;line-height:1.7;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.req{color:var(--saffron);}
+.gptw{display:flex;gap:8px;}
+.gptb{flex:1;padding:9px 6px;text-align:center;border:1.5px solid var(--sand);border-radius:8px;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;font-size:9.5pt;color:var(--navy);transition:all 0.2s;}
+.gptb.on{border-color:var(--saffron);background:#FFF5EE;color:var(--saffron);font-weight:700;}
+.ref-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
+.ref-row input{flex:1;padding:7px 10px;border:1.5px solid var(--sand);border-radius:7px;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;background:#FAFAF7;}
+.rn{width:24px;height:24px;background:var(--navy);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;flex-shrink:0;}
+.dref{background:none;border:none;color:#EF4444;font-size:16pt;cursor:pointer;line-height:1;flex-shrink:0;}
+.aref{background:transparent;border:1.5px dashed var(--sand);border-radius:7px;color:#9CA3AF;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;padding:6px;width:100%;}
+.aref:hover{border-color:var(--saffron);color:var(--saffron);}
+.bprint{display:block;width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;cursor:pointer;margin-top:6px;}
+/* AI */
+.ai-wrap{display:none;}.ai-wrap.on{display:block;}
+
+/* PREVIEW */
+.ptit{font-size:11pt;font-weight:700;color:var(--navy);margin-bottom:12px;}
+.lout{background:white;box-shadow:0 4px 20px rgba(0,0,0,0.10);border-radius:4px;max-width:700px;}
+#lp{padding:16px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:13px;line-height:1.6;color:#000;}
+#lp .hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}
+#lp .hdr h1{margin:0;font-size:20px;font-weight:bold;}
+#lp .hdr h2{margin:5px 0;font-size:14px;font-weight:normal;}
+#lp .offs{display:flex;justify-content:space-between;margin-top:12px;font-size:12px;font-weight:bold;}
+#lp .ob{text-align:center;width:30%;}
+#lp .meta{display:flex;justify-content:space-between;margin-top:18px;font-weight:bold;font-size:13px;}
+#lp .prati{margin-top:24px;margin-bottom:16px;font-size:13px;line-height:1.8;}
+#lp .subref{margin-top:16px;font-size:13px;}
+#lp .subref p{margin:4px 0;font-weight:bold;}
+#lp .cont{margin-top:24px;text-align:justify;font-size:13px;line-height:1.8;}
+#lp .cont p{margin:5px 0;}
+#lp .sign{margin-top:60px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:12px;line-height:1.9;}
+@media(max-width:760px){.main-wrap{grid-template-columns:1fr;}.form-panel{max-height:none;position:static;}.preview-panel{padding:16px;}.g3{grid-template-columns:1fr;}}
+@media print{nav,.form-panel,.ptit{display:none!important;}.main-wrap{display:block;}.preview-panel{padding:0;}.lout{box-shadow:none;}body{background:white;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="index.html" class="nav-logo"><div><span>GP Sakhi</span><small>ग्रामपंचायत सखी</small></div></a>
+  <span style="width:80px;"></span>
+</nav>
+
+<div class="main-wrap">
+ <div class="form-panel">
+  <div class="form-title">✉️ पत्र जनरेटर</div>
+  <div class="form-sub">शासकीय पत्र मराठीत तयार करा</div>
+
+  <!-- ══ COMMON FIELDS ══ -->
+  <div class="section">
+    <div class="sec-title">🏛️ ग्रामपंचायत माहिती</div>
+    <div class="fld"><label>प्रकार <span class="req">*</span></label>
+      <div class="gptw">
+        <div class="gptb on" id="gp0" onclick="sgpt(0)">ग्रामपंचायत</div>
+        <div class="gptb"    id="gp1" onclick="sgpt(1)">गट ग्रामपंचायत</div>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="तोंडली" oninput="rp()"></div>
+      <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="मौदा" oninput="rp()"></div>
+      <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="नागपूर" oninput="rp()"></div>
+    </div>
+    <div class="g2">
+      <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="सौ. दर्शना बागडे" oninput="rp()"></div>
+      <div class="fld"><label>उप सरपंच</label><input type="text" id="usarp" placeholder="श्री. रामपाल धांडे" oninput="rp()"></div>
+    </div>
+    <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="श्री. वैभव बावनकर" oninput="rp()"></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">📝 पत्र तपशील</div>
+    <div class="g2">
+      <div class="fld"><label>जावक क्र.</label><input type="text" id="jno" placeholder="423/2025-26" oninput="rp()"></div>
+      <div class="fld"><label>दिनांक</label><input type="date" id="din" onchange="rp()"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">📮 प्रती (To)</div>
+    <div class="fld"><label>पद / हुद्दा</label><input type="text" id="pp" placeholder="उदा. गटविकास अधिकारी" oninput="rp()"></div>
+    <div class="fld"><label>कार्यालय</label><input type="text" id="po" placeholder="उदा. पंचायत समिती मौदा" oninput="rp()"></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">📌 विषय व संदर्भ</div>
+    <div class="fld"><label>विषय <span class="req">*</span></label><input type="text" id="vis" placeholder="विषय येथे लिहा" oninput="rp()"></div>
+    <div id="rc"></div>
+    <button class="aref" onclick="addRef()">+ संदर्भ जोडा</button>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">📄 पत्र मजकूर</div>
+    <div class="fld"><label>मुख्य मजकूर <span class="req">*</span></label>
+      <textarea id="bod" rows="7" placeholder="पत्राचा मुख्य मजकूर येथे लिहा..." oninput="rp()"></textarea></div>
+    <div class="fld"><label>शेवटचे वाक्य</label>
+      <input type="text" id="cl" value="करिता माहितीस सविनय सादर." oninput="rp()"></div>
+  </div>
+
+  <button class="bprint" onclick="doPrint()">🖨️ Print / PDF</button>
+ </div>
+
+ <div class="preview-panel">
+  <div class="ptit">👁️ पत्राचे Preview</div>
+  <div class="lout"><div id="lp"></div></div>
+ </div>
+</div>
+
+<script>
+var RC=0, GPT=0;
+
+function g(id){return document.getElementById(id);}
+function gv(id){var e=g(id);return e?e.value.trim():'';}
+
+/* Mode switch */
+
+
+/* GP Type */
+function sgpt(t){
+  GPT=t;
+  g('gp0').classList.toggle('on',t===0);
+  g('gp1').classList.toggle('on',t===1);
+  rp();
+}
+function getON(){return (GPT===1?'गट ग्रामपंचायत कार्यालय ':'ग्रामपंचायत कार्यालय ')+(gv('gpn')||'_____');}
+function getOA(){var p=[];var t=gv('gpt'),d=gv('gpd');if(t)p.push('पं. स. '+t);if(d)p.push('जि. प. '+d);return p.join(', ');}
+
+/* Templates */
+var T=[
+  {v:'मृत्यूप्रमाणपत्राची पडताळणी करण्याबाबत.',pp:'',po:'',refs:[],
+   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, आपण संदर्भाकित पत्रात नमूद केलेल्या मृतक\n१) _____ यांचा मृत्यू दिनांक _____ व नोंदणी क्रमांक - _____\n\nयांच्या मृत्यू दाखल्याची नोंद ग्रामपंचायत रेकॉर्डला उपलब्ध असून सदर दाखला सत्य आहे.',cl:'करिता माहितीस सविनय सादर.'},
+  {v:'पाणीपुरवठा योजना दुरुस्तीबाबत.',pp:'',po:'',refs:[],
+   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, ग्रामपंचायत _____ येथील पाणीपुरवठा योजनेची मुख्य पाईपलाईन दिनांक _____ पासून बंद असून गावातील नागरिकांना पाण्याची तीव्र टंचाई जाणवत आहे.\n\nसदर पाईपलाईन तातडीने दुरुस्त करण्यासाठी आवश्यक निधी उपलब्ध करून द्यावा ही विनंती.',cl:'आपला विश्वासू,'},
+  {v:'ग्रामीण रस्ता दुरुस्तीकामी अनुदान मागणीबाबत.',pp:'',po:'',refs:[],
+   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, ग्रामपंचायत हद्दीतील _____ ते _____ हा सुमारे _____ किलोमीटरचा रस्ता पावसाळ्यात पूर्णपणे खराब झाला असून नागरिकांना ये-जा करण्यास अडचणी येत आहेत.\n\nसदर रस्ता दुरुस्तीसाठी रुपये _____ एवढे अनुदान मंजूर करण्यात यावे ही नम्र विनंती.',cl:'करिता सविनय अर्ज असे.'},
+  {v:'लोकसंख्येची माहिती सादर करण्याबाबत.',
+   pp:'गटविकास अधिकारी',po:'पंचायत समिती मौदा',refs:[],
+   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, ग्रामपंचायत तोंडली, पं. स. मौदा, जि. नागपूर या ग्रामपंचायतीची सद्यस्थितीतील एकूण लोकसंख्या खालीलप्रमाणे आहे.\n\nएकूण लोकसंख्या : १०४७\n\nसदर माहिती ग्रामपंचायत रेकॉर्डनुसार असून योग्य ती कार्यवाही करावी ही विनंती.',
+   cl:'करिता माहितीस सविनय सादर.'}
+];
+
+function fmtD(s){if(!s)return'';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function getRefs(){var r=[];document.querySelectorAll('#rc input').forEach(function(e){if(e.value.trim())r.push(e.value.trim());});return r;}
+
+function addRef(v){
+  v=v||'';RC++;var n=RC,row=document.createElement('div');
+  row.className='ref-row';row.id='rr'+n;
+  row.innerHTML='<div class="rn">'+n+'</div>'
+    +'<input type="text" id="rf'+n+'" value="'+v.replace(/"/g,'&quot;')+'" placeholder="संदर्भ '+n+'" oninput="rp()">'
+    +'<button class="dref" onclick="dlRef('+n+')">&times;</button>';
+  g('rc').appendChild(row);rp();
+}
+function dlRef(n){var r=g('rr'+n);if(r){r.remove();rp();}}
+
+
+
+/* Letter HTML builder */
+function buildH(){
+  var on=getON(),oa=getOA();
+  var sarp=gv('sarp'),us=gv('usarp'),gr=gv('gram');
+  var jno=gv('jno')||'____/____-____',din=fmtD(g('din').value)||'__/__/____';
+  var pp=gv('pp'),po=gv('po'),vis=gv('vis')||'____________________';
+  var bod=g('bod').value||'',cl=gv('cl'),refs=getRefs();
+
+  var bh='';
+  bod.split('\n').forEach(function(l){
+    if(!l.trim()){bh+='<p style="margin:0;height:8px;"></p>';return;}
+    var n=/^[१२३४५\d][\)\.]/.test(l.trim());
+    bh+='<p style="text-indent:'+(n?'0':'50px')+';">'+l+'</p>';
+  });
+  if(!bh)bh='<p style="color:#bbb;text-indent:50px;">मजकूर येथे दिसेल...</p>';
+
+  var off='';
+  if(sarp||us||gr)off='<div class="offs">'
+    +'<div class="ob">सरपंच<br><strong>'+(sarp||'')+'</strong></div>'
+    +'<div class="ob">उपसरपंच<br><strong>'+(us||'')+'</strong></div>'
+    +'<div class="ob">ग्रामपंचायत अधिकारी<br><strong>'+(gr||'')+'</strong></div>'
+    +'</div>';
+
+  var rh='';
+  if(refs.length)rh='<p><strong>संदर्भ : '+refs.map(function(r,i){return (i+1)+') '+r;}).join('<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')+'</strong></p>';
+
+  var ss=sarp.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'')||'सरपंच';
+  var gs=gr.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'')||'ग्रामपंचायत अधिकारी';
+  var a2=oa?'<br>'+oa:'';
+
+  return '<div class="hdr"><h1>'+on+'</h1>'+(oa?'<h2>'+oa+'</h2>':'')+off+'</div>'
+    +'<div class="meta"><div>जावक क्र : '+jno+'</div><div>दिनांक : '+din+'</div></div>'
+    +'<div class="prati">प्रति,<br>'+(pp?'<strong>'+pp+',</strong><br>':'')+(po?'<strong>'+po+'</strong>':'')+'</div>'
+    +'<div class="subref"><p><strong>विषय : '+vis+'</strong></p>'+rh+'</div>'
+    +'<div class="cont">महोदय,'+bh+'<p style="text-indent:80px;">'+cl+'</p></div>'
+    +'<div class="sign"><div>('+ss+')<br>सरपंच<br>'+on+a2+'</div><div>('+gs+')<br>ग्रामपंचायत अधिकारी<br>'+on+a2+'</div></div>';
+}
+
+function rp(){var e=g('lp');if(e)e.innerHTML=buildH();}
+
+var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:#f0f0f0;}.a4{width:210mm;min-height:297mm;padding:20mm;margin:10mm auto;background:white;box-shadow:0 0 10px rgba(0,0,0,.1);box-sizing:border-box;line-height:1.6;font-size:14px;color:#000;}.hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}.hdr h1{margin:0;font-size:22px;font-weight:bold;}.hdr h2{margin:5px 0;font-size:16px;font-weight:normal;}.offs{display:flex;justify-content:space-between;margin-top:15px;font-weight:bold;font-size:14px;}.ob{text-align:center;width:30%;}.meta{display:flex;justify-content:space-between;margin-top:20px;font-weight:bold;font-size:14px;}.prati{margin-top:30px;margin-bottom:20px;font-size:14px;line-height:1.8;}.subref{margin-top:20px;font-size:14px;}.subref p{margin:5px 0;}.cont{margin-top:30px;text-align:justify;font-size:14px;line-height:1.8;}.cont p{margin:5px 0;}.sign{margin-top:80px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:14px;line-height:1.9;}@page{size:A4;margin:0;}@media print{body{background:none;}.a4{margin:0;box-shadow:none;}}';
+
+function doPrint(){
+  var c=buildH(),w=window.open('','_blank');
+  if(!w){alert('Popup blocked! Browser मध्ये popup allow करा.');return;}
+  w.document.write('<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
+    +'<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">'
+    +'<style>'+PCSS+'</style></head><body><div class="a4">'+c+'</div>'
+    +'<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>');
+  w.document.close();
+}
+
+/* ── Init ── */
+g('din').value = new Date().toISOString().split('T')[0];
+g('cl').value  = 'करिता माहितीस सविनय सादर.';
+g('rc').innerHTML = ''; RC = 0;
+rp();
+</script>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            'AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw',
+  authDomain:        'gpsakhi-9685e.firebaseapp.com',
+  projectId:         'gpsakhi-9685e',
+  storageBucket:     'gpsakhi-9685e.firebasestorage.app',
+  messagingSenderId: '107629589245',
+  appId:             '1:107629589245:web:7b288fda76b26aaadac494'
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+    if (!snap.exists()) {
+      /* Profile नाही — profile.html वर पाठवा */
+      if (confirm('GP Profile सेट केलेली नाही. आत्ता सेट करायची आहे का?')) {
+        window.location.href = 'profile.html';
+      }
+      return;
+    }
+    const d = snap.data();
+
+    /* GP Type — profile मध्ये gpType field नाही, gpName वरून ठरवतो */
+    /* Default: गट ग्रामपंचायत (1) — user form मध्ये बदलू शकतो */
+    sgpt(1);
+
+    /* Fields fill करा */
+    document.getElementById('gpn').value   = d.gpName  || '';
+    document.getElementById('gpt').value   = d.ps      || '';
+    document.getElementById('gpd').value   = d.dist    || '';
+    document.getElementById('sarp').value  = d.sarp    || '';
+    document.getElementById('usarp').value = d.usSarp  || '';
+    document.getElementById('gram').value  = d.gram    || '';
+
+    rp();
+  } catch(e) {
+    console.log('Profile fetch error:', e);
+  }
+});
+</script>
+</body>
+</html>

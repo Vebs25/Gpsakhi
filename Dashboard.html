@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — GP Sakhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--gold:#C49A22;--cream:#FAF7F2;--sand:#EDE8DF;--text:#1C1410;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
+.nav-logo small{font-size:8pt;color:rgba(255,255,255,0.5);display:block;margin-top:-4px;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-user-name{color:rgba(255,255,255,0.8);font-size:10pt;}
+.nav-user-img{width:34px;height:34px;border-radius:50%;border:2px solid var(--saffron);}
+.nav-logout{background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);border-radius:5px;padding:5px 12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;}
+
+/* CONTENT */
+.page{max-width:1000px;margin:0 auto;padding:32px 20px 60px;}
+
+/* WELCOME BANNER */
+.welcome{background:linear-gradient(135deg,var(--navy),#1A3A22);border-radius:16px;padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.welcome h1{font-family:'Tiro Devanagari Marathi',serif;font-size:20pt;color:white;margin-bottom:4px;}
+.welcome p{font-size:10pt;color:rgba(255,255,255,0.6);}
+.gp-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:12px 20px;text-align:right;}
+.gp-badge .gp-name{font-size:14pt;font-weight:700;color:var(--saffron);}
+.gp-badge .gp-sub{font-size:9pt;color:rgba(255,255,255,0.5);}
+.setup-banner{background:linear-gradient(135deg,#7C3D00,var(--saffron));border-radius:12px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.setup-banner p{color:white;font-size:10.5pt;font-weight:600;}
+.setup-banner button{background:white;color:var(--saffron);border:none;border-radius:7px;padding:9px 18px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:700;cursor:pointer;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;}
+.stat-card{background:white;border:1px solid var(--sand);border-radius:12px;padding:20px;text-align:center;}
+.stat-num{font-size:28pt;font-weight:800;color:var(--navy);}
+.stat-label{font-size:9pt;color:#9CA3AF;margin-top:4px;}
+
+/* TOOLS GRID */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.section-head h2{font-size:14pt;font-weight:700;color:var(--navy);}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:32px;}
+.tool-tile{background:white;border:1.5px solid var(--sand);border-radius:14px;padding:24px;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;position:relative;}
+.tool-tile:hover{border-color:var(--saffron);box-shadow:0 4px 20px rgba(232,112,26,0.12);transform:translateY(-2px);}
+.tool-tile.disabled{opacity:0.5;cursor:not-allowed;}
+.tool-tile.disabled:hover{border-color:var(--sand);box-shadow:none;transform:none;}
+.tool-emoji{font-size:36px;margin-bottom:14px;display:block;}
+.tool-name{font-size:12pt;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.tool-desc{font-size:9pt;color:#9CA3AF;}
+.tool-status{position:absolute;top:12px;right:12px;font-size:7.5pt;font-weight:700;padding:3px 8px;border-radius:10px;}
+.status-live{background:#DCFCE7;color:#166534;}
+.status-soon{background:#F3F4F6;color:#9CA3AF;}
+
+/* RECENT VOUCHERS */
+.recent-section{background:white;border:1px solid var(--sand);border-radius:14px;overflow:hidden;margin-bottom:28px;}
+.recent-head{padding:16px 20px;border-bottom:1px solid var(--sand);display:flex;align-items:center;justify-content:space-between;}
+.recent-head h3{font-size:12pt;font-weight:700;color:var(--navy);}
+.recent-head a{font-size:9.5pt;color:var(--saffron);text-decoration:none;font-weight:600;}
+.recent-empty{padding:40px;text-align:center;color:#9CA3AF;font-size:10.5pt;}
+.recent-empty p{margin-top:8px;font-size:9pt;}
+.voucher-row{padding:14px 20px;border-bottom:1px solid var(--sand);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.voucher-row:last-child{border-bottom:none;}
+.v-info h4{font-size:10.5pt;font-weight:700;color:var(--navy);}
+.v-info p{font-size:9pt;color:#9CA3AF;}
+.v-meta{text-align:right;}
+.v-amt{font-size:11pt;font-weight:700;color:var(--green);}
+.v-date{font-size:8.5pt;color:#9CA3AF;}
+.v-actions{display:flex;gap:8px;margin-top:6px;justify-content:flex-end;}
+.btn-sm{border:1px solid var(--sand);background:white;border-radius:6px;padding:4px 12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:8.5pt;cursor:pointer;color:var(--navy);transition:all 0.15s;}
+.btn-sm:hover{border-color:var(--saffron);color:var(--saffron);}
+
+/* AD */
+.ad-box{background:#F9F9F9;border:1px dashed #DDD;border-radius:8px;padding:20px;text-align:center;color:#CCC;font-size:9pt;margin-bottom:24px;}
+
+@media(max-width:500px){
+  .welcome{flex-direction:column;}
+  .gp-badge{text-align:left;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div>
+      <span>GP Sakhi</span>
+      <small>ग्रामपंचायत सखी</small>
+    </div>
+  </a>
+  <div class="nav-right">
+    <span class="nav-user-name" id="navName"></span>
+    <img class="nav-user-img" id="navImg" src="" alt="">
+    <button class="nav-logout" onclick="handleLogout()">बाहेर पडा</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- Welcome Banner -->
+  <div class="welcome" id="welcomeBanner">
+    <div>
+      <h1>नमस्कार, <span id="firstName">...</span>! 🙏</h1>
+      <p>GP Sakhi मध्ये आपले स्वागत आहे</p>
+    </div>
+    <div class="gp-badge" id="gpBadge" style="display:none;">
+      <div class="gp-name" id="gpNameBadge">—</div>
+      <div class="gp-sub" id="gpSubBadge">ग्रामपंचायत</div>
+    </div>
+  </div>
+
+  <!-- Setup Banner (shown if GP profile not set) -->
+  <div class="setup-banner" id="setupBanner" style="display:none;">
+    <p>⚠️ तुम्ही अजून ग्रामपंचायत माहिती सेव केली नाही. Tools वापरण्यापूर्वी एकदा सेट करा.</p>
+    <button onclick="window.location.href='profile.html'">माहिती सेट करा →</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="statVouchers">0</div>
+      <div class="stat-label">एकूण Vouchers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statAmt">₹0</div>
+      <div class="stat-label">एकूण रक्कम</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2</div>
+      <div class="stat-label">उपलब्ध Tools</div>
+    </div>
+  </div>
+
+  <!-- Ad -->
+  <div class="ad-box" id="adBox">Advertisement</div>
+
+  <!-- Tools -->
+  <div class="section-head">
+    <h2>🛠️ उपलब्ध साधने</h2>
+  </div>
+  <div class="tools-grid">
+    <a href="voucher.html" class="tool-tile">
+      <span class="tool-status status-live">✓ उपलब्ध</span>
+      <span class="tool-emoji">📋</span>
+      <div class="tool-name">मजुरी बिल जनरेटर</div>
+      <div class="tool-desc">हप्तेवारी व गोषवारा तयार करा</div>
+    </a>
+    <a href="namuna8.html" class="tool-tile">
+      <span class="tool-status status-live">✓ उपलब्ध</span>
+      <span class="tool-emoji">🏠</span>
+      <div class="tool-name">नमुना ८ जनरेटर</div>
+      <div class="tool-desc">कर आकारणी नोंदवही तयार करा</div>
+    </a>
+    <a href="letter.html" class="tool-tile">
+      <span class="tool-status status-live">✓ उपलब्ध</span>
+      <span class="tool-emoji">📝</span>
+      <div class="tool-name">पत्र तयार करणे</div>
+      <div class="tool-desc">शासकीय पत्रव्यवहार</div>
+    </a>
+    <div class="tool-tile disabled">
+      <span class="tool-status status-soon">लवकरच</span>
+      <span class="tool-emoji">📜</span>
+      <div class="tool-name">ठराव तयार करणे</div>
+      <div class="tool-desc">ग्रामसभा ठराव</div>
+    </div>
+    <div class="tool-tile disabled">
+      <span class="tool-status status-soon">लवकरच</span>
+      <span class="tool-emoji">📄</span>
+      <div class="tool-name">नमुना / प्रमाणपत्र</div>
+      <div class="tool-desc">विविध सरकारी नमुने</div>
+    </div>
+    <a href="profile.html" class="tool-tile">
+      <span class="tool-emoji">⚙️</span>
+      <div class="tool-name">GP प्रोफाईल</div>
+      <div class="tool-desc">ग्रामपंचायत माहिती सेट करा</div>
+    </a>
+    <a href="history.html" class="tool-tile">
+      <span class="tool-emoji">📂</span>
+      <div class="tool-name">Voucher इतिहास</div>
+      <div class="tool-desc">मागचे सर्व vouchers पाहा</div>
+    </a>
+  </div>
+
+  <!-- Recent Vouchers -->
+  <div class="recent-section">
+    <div class="recent-head">
+      <h3>📂 अलीकडचे Vouchers</h3>
+      <a href="history.html">सर्व पाहा →</a>
+    </div>
+    <div id="recentList">
+      <div class="recent-empty">
+        <div style="font-size:36px;">📋</div>
+        <div style="margin-top:8px;font-weight:700;color:var(--navy);">अजून कोणताही voucher नाही</div>
+        <p>मजुरी बिल जनरेटर वापरा आणि पहिला voucher तयार करा.</p>
+        <a href="voucher.html" style="display:inline-block;margin-top:14px;background:var(--saffron);color:white;padding:9px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:10pt;">+ नवीन Voucher तयार करा</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ══ FIREBASE CONFIG — तुमची config येथे टाका ══
+const firebaseConfig = {
+  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
+  authDomain: "gpsakhi-9685e.firebaseapp.com",
+  projectId: "gpsakhi-9685e",
+  storageBucket: "gpsakhi-9685e.firebasestorage.app",
+  messagingSenderId: "107629589245",
+  appId: "1:107629589245:web:7b288fda76b26aaadac494"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+  
+  // Set nav
+  document.getElementById('navName').textContent = user.displayName ? user.displayName.split(' ')[0] : '';
+  document.getElementById('navImg').src = user.photoURL || '';
+  document.getElementById('firstName').textContent = user.displayName ? user.displayName.split(' ')[0] : 'मित्र';
+  
+  // Load GP profile
+  const gpRef = doc(db, 'users', user.uid, 'profile', 'gp');
+  const gpSnap = await getDoc(gpRef);
+  if (gpSnap.exists()) {
+    const gp = gpSnap.data();
+    document.getElementById('gpBadge').style.display = 'block';
+    document.getElementById('gpNameBadge').textContent = 'ग्रामपंचायत ' + (gp.gpName || '');
+    document.getElementById('gpSubBadge').textContent = (gp.ps || '') + ' • ' + (gp.dist || '');
+  } else {
+    document.getElementById('setupBanner').style.display = 'flex';
+  }
+  
+  // Load recent vouchers
+  try {
+    const vRef = collection(db, 'users', user.uid, 'vouchers');
+    const q = query(vRef, orderBy('createdAt', 'desc'), limit(5));
+    const snap = await getDocs(q);
+    
+    if (!snap.empty) {
+      let html = '';
+      let totalAmt = 0;
+      snap.forEach(d => {
+        const v = d.data();
+        totalAmt += v.amount || 0;
+        const date = v.createdAt ? new Date(v.createdAt.seconds * 1000).toLocaleDateString('mr-IN') : '';
+        html += `
+          <div class="voucher-row">
+            <div class="v-info">
+              <h4>${v.workName || 'Voucher'}</h4>
+              <p>${v.gpName || ''} • ${v.dateRange || ''}</p>
+            </div>
+            <div class="v-meta">
+              <div class="v-amt">₹${Number(v.amount).toLocaleString('en-IN')}</div>
+              <div class="v-date">${date}</div>
+              <div class="v-actions">
+                <button class="btn-sm" onclick="window.location.href='voucher.html?id=${d.id}'">🖨️ Print</button>
+              </div>
+            </div>
+          </div>`;
+      });
+      document.getElementById('recentList').innerHTML = html;
+      document.getElementById('statVouchers').textContent = snap.size;
+      document.getElementById('statAmt').textContent = '₹' + totalAmt.toLocaleString('en-IN');
+    }
+    
+    // Get total count
+    const allSnap = await getDocs(collection(db, 'users', user.uid, 'vouchers'));
+    document.getElementById('statVouchers').textContent = allSnap.size;
+    let tot = 0;
+    allSnap.forEach(d => { tot += d.data().amount || 0; });
+    document.getElementById('statAmt').textContent = '₹' + tot.toLocaleString('en-IN');
+    
+  } catch(e) { console.log(e); }
+});
+
+window.handleLogout = async () => {
+  await signOut(auth);
+  window.location.href = 'index.html';
+};
+</script>
+</body>
+</html>
