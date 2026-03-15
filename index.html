@@ -496,19 +496,17 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // आधीच login आहे — dashboard वर redirect करा
+    window.location.href = 'dashboard.html';
+    return;
+  }
+  // Login नाही — loading screen hide करा
   document.getElementById('loadingScreen').classList.add('hide');
   setTimeout(() => { document.getElementById('loadingScreen').style.display='none'; }, 600);
-  if (user) {
-    document.getElementById('navLoginBtn').style.display = 'none';
-    document.getElementById('navUser').classList.add('show');
-    document.getElementById('navUserImg').src = user.photoURL || '';
-    document.getElementById('navUserName').textContent = user.displayName ? user.displayName.split(' ')[0] : '';
-    sessionStorage.setItem('gpUser', JSON.stringify({uid:user.uid,name:user.displayName,email:user.email,photo:user.photoURL}));
-  } else {
-    document.getElementById('navLoginBtn').style.display = 'block';
-    document.getElementById('navUser').classList.remove('show');
-    sessionStorage.removeItem('gpUser');
-  }
+  document.getElementById('navLoginBtn').style.display = 'block';
+  document.getElementById('navUser').classList.remove('show');
+  sessionStorage.removeItem('gpUser');
 });
 
 window.handleGoogleLogin = async function() {
