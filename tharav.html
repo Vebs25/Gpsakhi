@@ -328,7 +328,7 @@ var PCSS='*{margin:0;padding:0;box-sizing:border-box;}'
   +'.tharav-block{margin:14px 0;}'
   +'.tharav-block .t-title{font-weight:bold;font-size:13px;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;}'
   +'.tharav-block .t-khulasa-wrap{border:1px solid #000;margin-top:8px;}'
-  +'.tharav-block .t-khulasa-head{background:#000;color:#fff;font-weight:bold;font-size:12px;padding:4px 10px;}'
+  +'.tharav-block .t-khulasa-head{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-weight:bold;font-size:12px;padding:4px 10px;}'
   +'.tharav-block .t-khulasa{font-size:13px;line-height:1.8;padding:8px 10px;text-align:justify;}'
   +'.tharav-block .t-khulasa .last-line{text-align:center;font-weight:bold;display:block;margin-top:6px;}'
   +'.suchak-row{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;font-weight:bold;line-height:1.9;}'
@@ -338,7 +338,8 @@ var PCSS='*{margin:0;padding:0;box-sizing:border-box;}'
   +'.sign .sign-left{text-align:left;}'
   +'.sign .sign-right{text-align:right;}'
   +'@page{size:A4 portrait;margin:0;}'
-  +'@media print{body{background:white;}}';
+  +'@media print{body{background:white;}-webkit-print-color-adjust:exact;print-color-adjust:exact;}'
+  +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}';
 
 function doPrint(){
   var w=window.open('','_blank');
