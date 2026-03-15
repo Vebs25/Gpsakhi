@@ -157,15 +157,6 @@ body{font-family:'Noto Sans Devanagari',Arial,sans-serif;background:var(--cream)
 </head>
 <body>
 
-<!-- Auth Loading Overlay -->
-<div id="authLoader" style="position:fixed;inset:0;background:#1A2744;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
-  <div style="font-size:48px;margin-bottom:16px;">🏛️</div>
-  <div style="font-family:'Noto Sans Devanagari',sans-serif;font-size:18px;color:white;font-weight:700;margin-bottom:8px;">GP Sakhi</div>
-  <div style="font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:24px;">लोड होत आहे...</div>
-  <div style="width:36px;height:36px;border:3px solid rgba(255,255,255,0.2);border-top:3px solid #E8701A;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-  <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
-</div>
-
 <!-- GP Sakhi Topbar -->
 <div class="gpnav">
   <a href="dashboard.html" class="gpnav-back">← Dashboard</a>
@@ -294,4 +285,22 @@ body{font-family:'Noto Sans Devanagari',Arial,sans-serif;background:var(--cream)
   </div>
 
   <div class="sec-head">🏠 मालमत्तेची यादी</div>
-  
+  <div id="prop_list"></div>
+
+  <div class="sec-sub" style="margin-top:5px;">➕ नवीन मालमत्ता जोडा</div>
+  <div class="prop-card" style="margin-top:4px;">
+    <div class="form-group" style="padding:3px 0;">
+      <label>मालमत्तेचे वर्णन</label>
+      <select id="f_type" onchange="onFTypeChange()">
+        <option value="jaga">🌳 खाली जागा</option>
+        <option value="rcc" selected>🏠 आर.सी.सी.</option>
+        <option value="sem">🧱 दगड/विटा-सिमेंट</option>
+        <option value="mati">🏚️ दगड/विटा-माती</option>
+        <option value="jhop">🛖 झोपडी/माती</option>
+      </select>
+    </div>
+    <div id="f_build_fields">
+      <div class="form-group" style="padding:3px 0;">
+        <label>इमारतीचा वापर</label>
+        <select id="f_usage">
+          <option value="n
