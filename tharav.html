@@ -2,7 +2,6 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<!-- v5 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ठराव जनरेटर — GP Sakhi</title>
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -344,8 +343,7 @@ var PCSS='*{margin:0;padding:0;box-sizing:border-box;}'
 function doPrint(){
   var w=window.open('','_blank');
   if(!w){alert('Popup blocked!');return;}
-  w.document.write('<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">
-<!-- v5 -->'
+  w.document.write('<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
     +'<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">'
     +'<style>'+PCSS+'</style></head><body><div class="a4">'+buildHTML()+'</div>'
     +'<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>');
@@ -353,7 +351,7 @@ function doPrint(){
 }
 window.doPrint=doPrint;
 
-/* ── Auto-sync adhyaksha from sarp if user hasn't manually edited adhyaksha ── */
+/* Auto-sync adhyaksha from sarp if not manually edited */
 var adhyakshaEdited=false;
 function syncAdhyaksha(){
   if(!adhyakshaEdited){
@@ -381,7 +379,96 @@ if(document.readyState==='loading'){
 }
 </script>
 
-<!-- ══ FIREBASE ══ -->
+<!-- Firebase -->
 <script type="module">
 import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            'AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw',
+  authDomain:        'gpsakhi-9685e.firebaseapp.com',
+  projectId:         'gpsakhi-9685e',
+  storageBucket:     'gpsakhi-9685e.firebasestorage.app',
+  messagingSenderId: '107629589245',
+  appId:             '1:107629589245:web:7b288fda76b26aaadac494'
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+let currentUser = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+    if (!snap.exists()) {
+      document.getElementById('noProfileBar').style.display = 'block';
+      return;
+    }
+    const d = snap.data();
+
+    document.getElementById('gpn').value   = d.gpName || '';
+    document.getElementById('gpt').value   = d.ps     || '';
+    document.getElementById('gpd').value   = d.dist   || '';
+    document.getElementById('sarp').value  = d.sarp   || '';
+    document.getElementById('usarp').value = d.usSarp || '';
+    document.getElementById('gram').value  = d.gram   || '';
+
+    const sthalEl = document.getElementById('sthal');
+    if (sthalEl && !sthalEl.value.trim()) {
+      sthalEl.value = 'ग्रामपंचायत कार्यालय' + (d.gpName ? ', ' + d.gpName : '');
+    }
+    if (!window.adhyakshaEdited) {
+      document.getElementById('adhyaksha').value = d.sarp || '';
+    }
+
+    const dinEl = document.getElementById('din');
+    const velEl = document.getElementById('vel');
+    if (dinEl && !dinEl.value) dinEl.value = new Date().toISOString().split('T')[0];
+    if (velEl && !velEl.value) velEl.value = '11:00';
+
+    document.getElementById('autoFillBar').style.display = 'flex';
+    window.rp();
+  } catch(e) {
+    console.log('Profile fetch error:', e);
+  }
+});
+
+window.doSave = async function() {
+  if (!currentUser) { alert('Login करा.'); return; }
+  const gpn = document.getElementById('gpn').value.trim();
+  if (!gpn) { alert('GP नाव भरा.'); return; }
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '⏳ Saving...'; btn.disabled = true;
+  try {
+    const showS = document.getElementById('suchakChk').checked;
+    await addDoc(collection(db, 'users', currentUser.uid, 'tharav'), {
+      gpName:    gpn,
+      ps:        document.getElementById('gpt').value.trim(),
+      dist:      document.getElementById('gpd').value.trim(),
+      sabhaType: (document.getElementById('visheshChk').checked ? 'विशेष ' : '') + ['मासिक सभा','ग्रामसभा','महिला सभा','वार्ड सभा'][window.SABHA || 0],
+      date:      document.getElementById('din').value,
+      time:      document.getElementById('vel').value,
+      sthal:     document.getElementById('sthal').value.trim(),
+      adhyaksha: document.getElementById('adhyaksha').value.trim(),
+      tharavNo:  document.getElementById('thno').value.trim(),
+      vishay:    document.getElementById('vishay').value.trim(),
+      khulasa:   document.getElementById('khulasa').value.trim(),
+      suchak:    showS ? document.getElementById('suchak').value.trim() : '',
+      anumodik:  showS ? document.getElementById('anumodik').value.trim() : '',
+      createdAt: serverTimestamp()
+    });
+    btn.textContent = '✅ Saved!'; btn.style.background = '#1A6E3C';
+    setTimeout(function(){ btn.textContent='💾 Firebase मध्ये Save करा'; btn.style.background=''; btn.disabled=false; }, 2500);
+  } catch(e) {
+    alert('त्रुटी: ' + e.message);
+    btn.textContent = '💾 Firebase मध्ये Save करा'; btn.disabled = false;
+  }
+};
+</script>
+</body>
+</html>
