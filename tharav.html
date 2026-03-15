@@ -194,11 +194,6 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
 </div>
 
 <script>
-function dbg(msg){
-  var el=document.getElementById('debugBar');
-  if(el){ el.innerHTML += msg + '<br>'; }
-}
-window.dbg = dbg;
 var SABHA=0, VISHESH=false;
 var SABHA_NAMES=['मासिक सभा','ग्रामसभा','महिला सभा','वार्ड सभा'];
 
@@ -376,11 +371,17 @@ document.addEventListener('DOMContentLoaded',function(){
 function prefillTest(){
   g('din').value = new Date().toISOString().split('T')[0];
   g('vel').value = '11:00';
-  dbg('📅 Page init — online:'+navigator.onLine+' — '+new Date().toLocaleTimeString());
   rp();
 }
 // Date/time set करा — Firebase वर dependent नाही
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded', prefillTest);
 } else {
-  prefillTest
+  prefillTest();
+}
+</script>
+
+<!-- ══ FIREBASE ══ -->
+<script type="module">
+import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://
