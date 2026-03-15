@@ -197,6 +197,7 @@ function dbg(msg){
   var el=document.getElementById('debugBar');
   if(el){ el.innerHTML += msg + '<br>'; }
 }
+window.dbg = dbg;
 var SABHA=0, VISHESH=false;
 var SABHA_NAMES=['मासिक सभा','ग्रामसभा','महिला सभा','वार्ड सभा'];
 
@@ -376,5 +377,4 @@ function prefillTest(){
   dbg('📅 Page init — online:'+navigator.onLine+' — '+new Date().toLocaleTimeString());
   rp();
 }
-// Date/time set करा — Firebase वर dependent नाही
-if(docume
+// Date/time set करा — Firebase वर depend
