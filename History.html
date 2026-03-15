@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>इतिहास — ग्रामपंचायत डिजिटल सेवा</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, orderBy, query, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAAyO70OcDmly_c5OzGckcMH4wvQW6biWg",
+    authDomain: "gpsakhi-17e18.firebaseapp.com",
+    projectId: "gpsakhi-17e18",
+    storageBucket: "gpsakhi-17e18.firebasestorage.app",
+    messagingSenderId: "616483787626",
+    appId: "1:616483787626:web:2c2af1f86126a5e36b8b13"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = 'index.html'; return; }
+    window.__db = db;
+    window.__userId = user.uid;
+    loadHistory(user.uid);
+  });
+
+  async function loadHistory(uid) {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('historyList').innerHTML = '';
+    try {
+      const q = query(collection(db, 'users', uid, 'vouchers'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+
+      document.getElementById('loading').style.display = 'none';
+
+      if (snap.empty) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+      }
+
+      snap.forEach((docSnap) => {
+        const d = docSnap.data();
+        const dt = new Date(d.createdAt);
+        const dateStr = dt.toLocaleDateString('mr-IN', {day:'numeric',month:'long',year:'numeric'});
+        const timeStr = dt.toLocaleTimeString('mr-IN', {hour:'2-digit',minute:'2-digit'});
+
+        const card = document.createElement('div');
+        card.className = 'hist-card';
+        card.innerHTML = `
+          <div class="hist-top">
+            <div>
+              <div class="hist-title">${d.work || 'कामाचा तपशील'}</div>
+              <div class="hist-meta">📍 ${d.gpName || 'ग्रामपंचायत'} &nbsp;·&nbsp; 📅 ${dateStr} ${timeStr}</div>
+            </div>
+            <div class="hist-amount">₹ ${Number(d.amount || 0).toLocaleString('en-IN')}</div>
+          </div>
+          <div class="hist-actions">
+            <button class="btn-view" onclick="viewVoucher('${docSnap.id}')">👁️ पाहा</button>
+            <button class="btn-print" onclick="printVoucher('${docSnap.id}')">🖨️ Print</button>
+            <button class="btn-delete" onclick="deleteVoucher('${docSnap.id}', this)">🗑️ काढा</button>
+          </div>
+          <div class="hist-preview" id="prev-${docSnap.id}" style="display:none"></div>
+        `;
+
+        // Store HTML snapshot in memory
+        card.dataset.html = d.htmlSnapshot || '';
+        document.getElementById('historyList').appendChild(card);
+      });
+    } catch(e) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('historyList').innerHTML = `<p style="color:red;padding:20px">त्रुटी: ${e.message}</p>`;
+    }
+  }
+
+  window.viewVoucher = function(id) {
+    const prev = document.getElementById('prev-' + id);
+    const card = prev.closest('.hist-card');
+    if (prev.style.display === 'none') {
+      prev.innerHTML = card.dataset.html || '<p style="padding:20px;color:#888">HTML snapshot उपलब्ध नाही</p>';
+      prev.style.display = 'block';
+    } else {
+      prev.style.display = 'none';
+    }
+  };
+
+  window.printVoucher = function(id) {
+    const card = document.getElementById('prev-' + id).closest('.hist-card');
+    const html = card.dataset.html;
+    if (!html) { alert('HTML snapshot उपलब्ध नाही'); return; }
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+      <style>
+        body{font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+        .vp{width:277mm;min-height:185mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:space-between;}
+        .gp{width:277mm;background:white;margin:0 auto 14px;padding:8mm 10mm;border:1px solid #888;}
+        .vhd{text-align:center;margin-bottom:3px;} .vof{font-size:13pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:2px;margin-bottom:3px;}
+        .vti{font-size:11pt;font-weight:700;margin-bottom:2px;} .vwd{font-size:10pt;font-weight:600;margin-bottom:2px;}
+        .vvn{text-align:right;font-size:10pt;font-weight:700;margin-bottom:3px;border-bottom:1px solid #000;padding-bottom:2px;}
+        .vt{width:100%;border-collapse:collapse;font-size:9pt;} .vt th,.vt td{border:1px solid #000;text-align:center;padding:4px 1px;line-height:1.3;height:24px;}
+        .vt th{background:#e0e0e0;font-weight:700;font-size:8pt;} .vcn{text-align:left!important;padding-left:5px!important;width:120px;}
+        .vcp{width:54px;} .vcv{width:50px;} .vcd{width:20px;font-size:8pt!important;padding:5px 1px!important;}
+        .vct{width:44px;} .vcr{width:42px;} .vca{width:56px;} .vcpa{width:62px;} .vcs{width:68px;}
+        .VHL{background:#c8c8c8!important;font-weight:700;} .vt tr:nth-child(even) td{background:#f5f5f5;}
+        .VTR td{background:#e8e8e8!important;font-weight:700;font-size:9.5pt;border-top:2px solid #000;}
+        .vft{margin-top:5px;border-top:1px solid #000;padding-top:5px;} .vra{text-align:center;font-size:9pt;font-weight:700;margin-bottom:2px;}
+        .vst{text-align:center;font-size:8.5pt;border:1px solid #000;padding:2px 6px;margin:2px auto;width:78%;}
+        .vsg{display:flex;justify-content:space-around;margin-top:14px;font-size:9pt;font-weight:700;}
+        .vsg div{text-align:center;width:120px;} .vsl{border-top:1px solid #000;padding-top:3px;}
+        @page{size:A4 landscape;margin:6mm 8mm;}
+        *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+      </style></head><body>${html}</body></html>`);
+    w.document.close();
+    setTimeout(() => w.print(), 800);
+  };
+
+  window.deleteVoucher = async function(id, btn) {
+    if (!confirm('हा वाउचर काढायचा आहे का?')) return;
+    try {
+      await deleteDoc(doc(window.__db, 'users', window.__userId, 'vouchers', id));
+      btn.closest('.hist-card').remove();
+    } catch(e) { alert('काढता आले नाही: ' + e.message); }
+  };
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--saffron:#E8701A;--navy:#1A2744;--bg:#F5F0E8;--card:#FFFFFF;--text:#1C1C1C;--muted:#5A5A5A;--border:#E2D9CC;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.topbar{background:var(--navy);color:white;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.back-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
+.topbar h1{font-size:15px;font-weight:700;}
+.container{max-width:800px;margin:0 auto;padding:20px 16px;}
+.page-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.new-btn{background:var(--saffron);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.new-btn:hover{background:#D4610F;}
+#loading{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+#emptyState{display:none;text-align:center;padding:60px 20px;color:var(--muted);}
+#emptyState .empty-icon{font-size:56px;display:block;margin-bottom:12px;}
+#emptyState p{font-size:15px;margin-bottom:16px;}
+.hist-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;}
+.hist-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.hist-title{font-size:14px;font-weight:700;color:var(--navy);line-height:1.4;}
+.hist-meta{font-size:12px;color:var(--muted);margin-top:4px;}
+.hist-amount{font-size:18px;font-weight:700;color:var(--saffron);white-space:nowrap;}
+.hist-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-view,.btn-print,.btn-delete{border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid;}
+.btn-view{background:#E8F4FD;color:#1A5276;border-color:#B5D4F4;}
+.btn-view:hover{background:#D4E8F5;}
+.btn-print{background:#EAF5EE;color:#1A6E3C;border-color:#9FE1CB;}
+.btn-print:hover{background:#D4EFE0;}
+.btn-delete{background:#FEE2E2;color:#C0392B;border-color:#FECACA;}
+.btn-delete:hover{background:#FCD0D0;}
+.hist-preview{margin-top:12px;border-top:1px solid var(--border);padding-top:12px;overflow-x:auto;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+/* Voucher styles inside preview */
+.hist-preview .vp,.hist-preview .gp{width:100% !important;box-shadow:none;margin-bottom:10px;border:1px solid #ccc;padding:8px;}
+.hist-preview .vt{width:100%;border-collapse:collapse;font-size:8pt;}
+.hist-preview .vt th,.hist-preview .vt td{border:1px solid #000;padding:3px;text-align:center;}
+.hist-preview .vt th{background:#e0e0e0;font-weight:700;}
+.hist-preview .VHL{background:#c8c8c8!important;}
+.hist-preview .VTR td{background:#e8e8e8!important;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back-btn" onclick="history.back()">← Dashboard</button>
+  <h1>📂 वाउचर इतिहास</h1>
+</div>
+
+<div class="container">
+  <div class="page-title">
+    <span>सर्व वाउचर</span>
+    <button class="new-btn" onclick="window.location.href='voucher.html'">+ नवीन वाउचर</button>
+  </div>
+
+  <div id="loading">⏳ इतिहास लोड होत आहे...</div>
+  <div id="historyList"></div>
+  <div id="emptyState">
+    <span class="empty-icon">📋</span>
+    <p>अजून कोणताही वाउचर तयार केला नाही.</p>
+    <button class="new-btn" onclick="window.location.href='voucher.html'">पहिला वाउचर तयार करा</button>
+  </div>
+</div>
+
+</body>
+</html>
