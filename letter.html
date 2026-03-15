@@ -6,47 +6,99 @@
 <title>पत्र जनरेटर — GP Sakhi</title>
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--cream:#FAF7F2;--sand:#EDE8DF;--text:#1C1410;}
+:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--gold:#C49A22;--cream:#FAF7F2;--sand:#E0D5C0;--text:#1C1410;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
-nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
-.nav-logo small{font-size:8pt;color:rgba(255,255,255,0.5);display:block;margin-top:-4px;}
-.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:10pt;}
-.main-wrap{display:grid;grid-template-columns:420px 1fr;min-height:calc(100vh - 60px);}
-.form-panel{background:white;border-right:1px solid var(--sand);padding:20px 20px 80px;overflow-y:auto;max-height:calc(100vh - 60px);position:sticky;top:60px;}
-.preview-panel{padding:20px;background:var(--cream);}
-.form-title{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:var(--navy);margin-bottom:4px;}
-.form-sub{font-size:9pt;color:#9CA3AF;margin-bottom:14px;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:#EDEAD4;color:var(--text);min-height:100vh;}
 
-/* FORM */
-.section{margin-bottom:16px;}
-.sec-title{font-size:10pt;font-weight:700;color:var(--navy);margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid var(--sand);}
-.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
-.fld label{font-size:9pt;font-weight:700;color:var(--navy);}
-.fld input,.fld textarea{padding:8px 10px;border:1.5px solid var(--sand);border-radius:7px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;background:#FAFAF7;width:100%;}
-.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--saffron);background:white;}
+/* ── NAV ── */
+nav{
+  background:var(--navy);padding:0 22px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  border-bottom:3px solid transparent;
+  border-image:linear-gradient(90deg,#FF9933 33%,#fff 33%,#fff 66%,#138808 66%) 1;
+  box-shadow:0 2px 16px rgba(0,0,0,0.25);
+}
+.back-btn{color:rgba(255,255,255,0.65);text-decoration:none;font-size:10pt;display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;transition:all 0.2s;}
+.back-btn:hover{color:white;background:rgba(255,255,255,0.08);}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.nav-emblem{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 2px 10px rgba(232,112,26,0.4);}
+.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
+.nav-logo small{font-size:7.5pt;color:rgba(255,255,255,0.45);display:block;margin-top:-3px;letter-spacing:0.5px;}
+.nav-right{width:80px;}
+
+/* ── AUTOFILL BAR ── */
+.autofill-bar{background:linear-gradient(135deg,#EAF5EE,#D4EDDA);border-bottom:2px solid #86EFAC;padding:9px 22px;font-size:9pt;color:#166534;display:none;align-items:center;gap:8px;animation:slideDown 0.5s ease;}
+.autofill-bar.show{display:flex;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:translateY(0);}}
+
+/* ── LAYOUT ── */
+.main-wrap{display:grid;grid-template-columns:420px 1fr;min-height:calc(100vh - 64px);}
+.form-panel{
+  background:white;border-right:1px solid var(--sand);
+  padding:20px 18px 80px;overflow-y:auto;
+  max-height:calc(100vh - 64px);position:sticky;top:64px;
+}
+.preview-panel{padding:20px;background:#EDEAD4;}
+
+/* ── FORM HEADER ── */
+.form-title{font-family:'Tiro Devanagari Marathi',serif;font-size:17pt;color:var(--navy);margin-bottom:3px;}
+.form-sub{font-size:9pt;color:#9CA3AF;margin-bottom:18px;}
+
+/* ── SECTIONS ── */
+.section{margin-bottom:18px;border-radius:12px;overflow:hidden;border:1px solid #F0EDE8;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
+.sec-title{font-size:10pt;font-weight:700;color:white;background:linear-gradient(135deg,var(--navy),#2a3f6e);padding:9px 14px;display:flex;align-items:center;gap:7px;}
+.sec-body{padding:12px 14px;}
+
+/* ── FORM FIELDS ── */
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+.fld:last-child{margin-bottom:0;}
+.fld label{font-size:8.5pt;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;}
+.fld input,.fld textarea{padding:8px 11px;border:1.5px solid var(--sand);border-radius:8px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;background:#FAFAF7;width:100%;transition:all 0.2s;}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--saffron);background:white;box-shadow:0 0 0 3px rgba(232,112,26,0.1);transform:translateY(-1px);}
 .fld textarea{resize:vertical;min-height:80px;line-height:1.7;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 .req{color:var(--saffron);}
-.gptw{display:flex;gap:8px;}
-.gptb{flex:1;padding:9px 6px;text-align:center;border:1.5px solid var(--sand);border-radius:8px;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;font-size:9.5pt;color:var(--navy);transition:all 0.2s;}
-.gptb.on{border-color:var(--saffron);background:#FFF5EE;color:var(--saffron);font-weight:700;}
-.ref-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;}
-.ref-row input{flex:1;padding:7px 10px;border:1.5px solid var(--sand);border-radius:7px;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;background:#FAFAF7;}
-.rn{width:24px;height:24px;background:var(--navy);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;flex-shrink:0;}
-.dref{background:none;border:none;color:#EF4444;font-size:16pt;cursor:pointer;line-height:1;flex-shrink:0;}
-.aref{background:transparent;border:1.5px dashed var(--sand);border-radius:7px;color:#9CA3AF;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;padding:6px;width:100%;}
-.aref:hover{border-color:var(--saffron);color:var(--saffron);}
-.bprint{display:block;width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;cursor:pointer;margin-top:6px;}
-/* AI */
-.ai-wrap{display:none;}.ai-wrap.on{display:block;}
 
-/* PREVIEW */
-.ptit{font-size:11pt;font-weight:700;color:var(--navy);margin-bottom:12px;}
-.lout{background:white;box-shadow:0 4px 20px rgba(0,0,0,0.10);border-radius:4px;max-width:700px;}
+/* ── GP TYPE TOGGLE ── */
+.gptw{display:flex;gap:6px;}
+.gptb{
+  flex:1;padding:10px 6px;text-align:center;
+  border:1.5px solid var(--sand);border-radius:9px;
+  cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;
+  font-size:9.5pt;color:#6B7280;transition:all 0.25s ease;
+  font-weight:600;
+}
+.gptb:hover{border-color:var(--saffron);color:var(--saffron);}
+.gptb.on{border-color:var(--saffron);background:linear-gradient(135deg,#FFF5EE,#FFE8D6);color:var(--saffron);font-weight:700;box-shadow:0 2px 10px rgba(232,112,26,0.15);}
+
+/* ── REFS ── */
+.ref-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;animation:slideIn 0.3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
+.ref-row input{flex:1;padding:7px 10px;border:1.5px solid var(--sand);border-radius:7px;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;background:#FAFAF7;transition:all 0.2s;}
+.ref-row input:focus{outline:none;border-color:var(--saffron);background:white;}
+.rn{width:24px;height:24px;background:var(--navy);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;flex-shrink:0;}
+.dref{background:none;border:none;color:#EF4444;font-size:16pt;cursor:pointer;line-height:1;flex-shrink:0;transition:transform 0.15s;}
+.dref:hover{transform:scale(1.2);}
+.aref{background:transparent;border:1.5px dashed var(--sand);border-radius:7px;color:#9CA3AF;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;padding:7px;width:100%;transition:all 0.2s;}
+.aref:hover{border-color:var(--saffron);color:var(--saffron);background:#FFF8F3;}
+
+/* ── PRINT BUTTON ── */
+.bprint{
+  display:block;width:100%;
+  background:linear-gradient(135deg,var(--navy),#2a3f6e);
+  color:white;border:none;border-radius:10px;padding:14px;
+  font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;
+  cursor:pointer;margin-top:8px;
+  box-shadow:0 4px 16px rgba(26,39,68,0.3);transition:all 0.25s;
+}
+.bprint:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,39,68,0.4);}
+.bprint:active{transform:translateY(0);}
+
+/* ── PREVIEW ── */
+.ptit{font-size:10.5pt;font-weight:700;color:#6B7280;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:0.5px;text-transform:uppercase;font-size:8.5pt;}
+.lout{background:white;box-shadow:0 4px 24px rgba(0,0,0,0.12);border-radius:6px;overflow:hidden;}
 #lp{padding:16px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:13px;line-height:1.6;color:#000;}
 #lp .hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}
 #lp .hdr h1{margin:0;font-size:20px;font-weight:bold;}
@@ -60,16 +112,34 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
 #lp .cont{margin-top:24px;text-align:justify;font-size:13px;line-height:1.8;}
 #lp .cont p{margin:5px 0;}
 #lp .sign{margin-top:60px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:12px;line-height:1.9;}
-@media(max-width:760px){.main-wrap{grid-template-columns:1fr;}.form-panel{max-height:none;position:static;}.preview-panel{padding:16px;}.g3{grid-template-columns:1fr;}}
-@media print{nav,.form-panel,.ptit{display:none!important;}.main-wrap{display:block;}.preview-panel{padding:0;}.lout{box-shadow:none;}body{background:white;}}
+
+@media(max-width:760px){
+  .main-wrap{grid-template-columns:1fr;}
+  .form-panel{max-height:none;position:static;}
+  .preview-panel{padding:14px;}
+  .g3{grid-template-columns:1fr;}
+}
+@media print{
+  nav,.form-panel,.autofill-bar,.ptit{display:none!important;}
+  .main-wrap{display:block;}
+  .preview-panel{padding:0;}
+  .lout{box-shadow:none;}
+  body{background:white;}
+}
 </style>
 </head>
 <body>
 <nav>
   <a href="dashboard.html" class="back-btn">← Dashboard</a>
-  <a href="index.html" class="nav-logo"><div><span>GP Sakhi</span><small>ग्रामपंचायत सखी</small></div></a>
-  <span style="width:80px;"></span>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-emblem">🏛️</div>
+    <div><span>GP Sakhi</span><small>ग्रामपंचायत सखी</small></div>
+  </a>
+  <div class="nav-right"></div>
 </nav>
+<div class="autofill-bar" id="autofillBar">
+  ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;margin-left:4px;">बदलायचे असेल तर येथे क्लिक करा</a>
+</div>
 
 <div class="main-wrap">
  <div class="form-panel">
@@ -79,58 +149,68 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
   <!-- ══ COMMON FIELDS ══ -->
   <div class="section">
     <div class="sec-title">🏛️ ग्रामपंचायत माहिती</div>
-    <div class="fld"><label>प्रकार <span class="req">*</span></label>
-      <div class="gptw">
-        <div class="gptb on" id="gp0" onclick="sgpt(0)">ग्रामपंचायत</div>
-        <div class="gptb"    id="gp1" onclick="sgpt(1)">गट ग्रामपंचायत</div>
+    <div class="sec-body">
+      <div class="fld"><label>प्रकार <span class="req">*</span></label>
+        <div class="gptw">
+          <div class="gptb on" id="gp0" onclick="sgpt(0)">ग्रामपंचायत</div>
+          <div class="gptb"    id="gp1" onclick="sgpt(1)">गट ग्रामपंचायत</div>
+        </div>
       </div>
+      <div class="g3">
+        <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="तोंडली" oninput="rp()"></div>
+        <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="मौदा" oninput="rp()"></div>
+        <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="नागपूर" oninput="rp()"></div>
+      </div>
+      <div class="g2">
+        <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="सौ. दर्शना बागडे" oninput="rp()"></div>
+        <div class="fld"><label>उप सरपंच</label><input type="text" id="usarp" placeholder="श्री. रामपाल धांडे" oninput="rp()"></div>
+      </div>
+      <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="श्री. वैभव बावनकर" oninput="rp()"></div>
     </div>
-    <div class="g3">
-      <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="तोंडली" oninput="rp()"></div>
-      <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="मौदा" oninput="rp()"></div>
-      <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="नागपूर" oninput="rp()"></div>
-    </div>
-    <div class="g2">
-      <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="सौ. दर्शना बागडे" oninput="rp()"></div>
-      <div class="fld"><label>उप सरपंच</label><input type="text" id="usarp" placeholder="श्री. रामपाल धांडे" oninput="rp()"></div>
-    </div>
-    <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="श्री. वैभव बावनकर" oninput="rp()"></div>
   </div>
 
   <div class="section">
     <div class="sec-title">📝 पत्र तपशील</div>
-    <div class="g2">
-      <div class="fld"><label>जावक क्र.</label><input type="text" id="jno" placeholder="423/2025-26" oninput="rp()"></div>
-      <div class="fld"><label>दिनांक</label><input type="date" id="din" onchange="rp()"></div>
+    <div class="sec-body">
+      <div class="g2">
+        <div class="fld"><label>जावक क्र.</label><input type="text" id="jno" placeholder="423/2025-26" oninput="rp()"></div>
+        <div class="fld"><label>दिनांक</label><input type="date" id="din" onchange="rp()"></div>
+      </div>
     </div>
   </div>
 
   <div class="section">
     <div class="sec-title">📮 प्रती (To)</div>
-    <div class="fld"><label>पद / हुद्दा</label><input type="text" id="pp" placeholder="उदा. गटविकास अधिकारी" oninput="rp()"></div>
-    <div class="fld"><label>कार्यालय</label><input type="text" id="po" placeholder="उदा. पंचायत समिती मौदा" oninput="rp()"></div>
+    <div class="sec-body">
+      <div class="fld"><label>पद / हुद्दा</label><input type="text" id="pp" placeholder="उदा. गटविकास अधिकारी" oninput="rp()"></div>
+      <div class="fld"><label>कार्यालय</label><input type="text" id="po" placeholder="उदा. पंचायत समिती मौदा" oninput="rp()"></div>
+    </div>
   </div>
 
   <div class="section">
     <div class="sec-title">📌 विषय व संदर्भ</div>
-    <div class="fld"><label>विषय <span class="req">*</span></label><input type="text" id="vis" placeholder="विषय येथे लिहा" oninput="rp()"></div>
-    <div id="rc"></div>
-    <button class="aref" onclick="addRef()">+ संदर्भ जोडा</button>
+    <div class="sec-body">
+      <div class="fld"><label>विषय <span class="req">*</span></label><input type="text" id="vis" placeholder="विषय येथे लिहा" oninput="rp()"></div>
+      <div id="rc"></div>
+      <button class="aref" onclick="addRef()">+ संदर्भ जोडा</button>
+    </div>
   </div>
 
   <div class="section">
     <div class="sec-title">📄 पत्र मजकूर</div>
-    <div class="fld"><label>मुख्य मजकूर <span class="req">*</span></label>
-      <textarea id="bod" rows="7" placeholder="पत्राचा मुख्य मजकूर येथे लिहा..." oninput="rp()"></textarea></div>
-    <div class="fld"><label>शेवटचे वाक्य</label>
-      <input type="text" id="cl" value="करिता माहितीस सविनय सादर." oninput="rp()"></div>
+    <div class="sec-body">
+      <div class="fld"><label>मुख्य मजकूर <span class="req">*</span></label>
+        <textarea id="bod" rows="7" placeholder="पत्राचा मुख्य मजकूर येथे लिहा..." oninput="rp()"></textarea></div>
+      <div class="fld"><label>शेवटचे वाक्य</label>
+        <input type="text" id="cl" value="करिता माहितीस सविनय सादर." oninput="rp()"></div>
+    </div>
   </div>
 
   <button class="bprint" onclick="doPrint()">🖨️ Print / PDF</button>
  </div>
 
  <div class="preview-panel">
-  <div class="ptit">👁️ पत्राचे Preview</div>
+  <div class="ptit">👁️ पत्राचे Live Preview</div>
   <div class="lout"><div id="lp"></div></div>
  </div>
 </div>
@@ -277,8 +357,9 @@ onAuthStateChanged(auth, async (user) => {
     }
     const d = snap.data();
 
-    /* GP Type default: गट ग्रामपंचायत */
-    window.sgpt(1);
+    /* GP Type — profile मधून fetch करा */
+    var gpType = d.gpType || 'gat'; // 'gram' किंवा 'gat'
+    window.sgpt(gpType === 'gram' ? 0 : 1);
 
     /* Fields fill करा */
     document.getElementById('gpn').value   = d.gpName || '';
@@ -287,6 +368,10 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('sarp').value  = d.sarp   || '';
     document.getElementById('usarp').value = d.usSarp || '';
     document.getElementById('gram').value  = d.gram   || '';
+
+    /* Autofill bar दाखवा */
+    var bar = document.getElementById('autofillBar');
+    if(bar) bar.classList.add('show');
 
     window.rp();
   } catch(e) {
