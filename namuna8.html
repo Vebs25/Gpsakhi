@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>नमुना ८ | GP Sakhi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── GP Sakhi Topbar ── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+:root{--navy:#1A2744;--orange:#E8701A;--green:#1A6E3C;--sand:#D4C5A9;--cream:#F5F0E8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans Devanagari',Arial,sans-serif;background:var(--cream);color:#2C2416;min-height:100vh;}
+
+/* GP Sakhi nav */
+.gpnav{background:var(--navy);color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.gpnav-back{color:rgba(255,255,255,0.75);font-size:9.5pt;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;}
+.gpnav-back:hover{color:white;}
+.gpnav-title{font-size:13pt;font-weight:700;color:white;}
+.gpnav-user{font-size:8.5pt;color:rgba(255,255,255,0.6);}
+
+/* Profile autofill bar */
+.autofill-bar{background:#EAF5EE;border:1px solid #86EFAC;border-radius:6px;padding:9px 14px;font-size:9pt;color:#166534;margin:12px 14px 0;display:flex;align-items:center;gap:8px;}
+
+/* ── Namuna8 original styles below ── */
+:root{--n8navy:#0a1628;--n8blue:#1a3a6b;--n8saffron:#e8620a;--n8gold:#c9920a;--n8green:#166534;--n8muted:#6b7280;--n8bg:#f0f4ff;}
+
+.n8wrap{background:#dde3ef;min-height:calc(100vh - 55px);}
+
+.step-tabs{background:var(--n8navy);display:flex;border-top:1px solid rgba(255,255,255,.08);}
+.step-tab{flex:1;padding:9px 4px;background:none;border:none;color:rgba(255,255,255,.45);font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:11px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;font-weight:600;text-align:center;}
+.step-tab.active{color:#FF9933;border-bottom-color:#FF9933;background:rgba(255,153,51,.08);}
+.step-tab.done{color:#4ade80;border-bottom-color:#4ade80;}
+.sn{display:inline-block;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.15);font-size:9px;line-height:16px;text-align:center;margin-right:3px;}
+.step-tab.active .sn{background:#FF9933;color:#fff;}
+.step-tab.done .sn{background:#4ade80;color:#111;}
+
+.app-body{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 100px);}
+.sidebar{background:#fff;border-right:2px solid #e0e8f5;overflow-y:auto;max-height:calc(100vh - 100px);position:sticky;top:55px;}
+.step-panel{display:none;}
+.step-panel.active{display:block;}
+
+.sec-head{background:var(--n8blue);color:#fff;padding:8px 12px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.sec-sub{background:#f0f4ff;color:var(--n8blue);padding:6px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-left:4px solid var(--n8saffron);}
+.form-group{padding:5px 11px;}
+.form-group label{display:block;font-size:11.5px;color:var(--n8muted);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;border:1.5px solid #dde3ef;border-radius:5px;padding:6px 9px;font-size:13.5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;color:#111;background:#fafbfc;transition:all .2s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--n8blue);background:#fff;box-shadow:0 0 0 3px rgba(26,58,107,.1);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:0 11px 4px;}
+.form-row .form-group{padding:3px 0;}
+
+.rate-table-wrap{margin:5px 11px;}
+.rate-table{width:100%;border-collapse:collapse;font-size:12px;}
+.rate-table th{background:var(--n8navy);color:#fff;padding:6px 6px;text-align:center;font-size:11px;font-weight:700;}
+.rate-table th:first-child{text-align:left;}
+.rate-table td{border:1px solid #dde3ef;padding:4px 4px;vertical-align:middle;}
+.rate-table tr:nth-child(even) td{background:#f5f7ff;}
+.prop-label{font-size:12px;font-weight:600;color:var(--n8navy);}
+.prop-note{font-size:9.5px;color:var(--n8muted);}
+.rate-table input{width:100%;border:1.5px solid #dde3ef;border-radius:4px;padding:5px 4px;font-size:12.5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;text-align:right;background:#fff;}
+.rate-table input:focus{outline:none;border-color:var(--n8blue);}
+.col-h13{background:#1a5c3a!important;color:#fff!important;font-size:9px!important;}
+.col-h14{background:#1a3a6b!important;color:#fff!important;font-size:9px!important;}
+.col-htr{background:#7c2d12!important;color:#fff!important;font-size:9px!important;}
+.na-cell{background:#f0f0f0;text-align:center;color:#bbb;font-size:10px;}
+.rate-legend{background:#fff8f0;border:1px solid var(--n8gold);border-radius:6px;margin:4px 11px;padding:6px 10px;font-size:9px;color:#4a3800;line-height:1.7;}
+
+.prop-card{background:var(--n8bg);border:1.5px solid #c5d5f5;border-radius:8px;margin:5px 11px;padding:8px 10px;}
+.prop-card-head{font-size:11px;font-weight:700;color:var(--n8blue);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.prop-card-type{background:#1a3a6b;color:#fff;padding:2px 7px;border-radius:10px;font-size:9px;white-space:nowrap;}
+.btn-del{background:#fee2e2;border:none;color:#dc2626;border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;font-weight:700;}
+
+.water-grp{display:flex;gap:5px;padding:4px 0 5px;}
+.wb{flex:1;border:1.5px solid #dde3ef;border-radius:6px;padding:6px 3px;font-size:10px;font-weight:600;cursor:pointer;text-align:center;background:#fafbfc;color:#555;transition:all .2s;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+.wb.sel-none{border-color:#6b7280;background:#f0f0f0;color:#6b7280;}
+.wb.sel-sam{border-color:#0284c7;background:#e0f2fe;color:#0284c7;}
+.wb.sel-vis{border-color:#7c3aed;background:#ede9fe;color:#7c3aed;}
+
+.live-calc{background:linear-gradient(135deg,#0a1628,#1a3a6b);margin:6px 11px;border-radius:7px;padding:9px;}
+.lc-title{font-size:9.5px;font-weight:700;color:#FF9933;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.lc-row{display:flex;justify-content:space-between;padding:2.5px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:10px;}
+.lc-row:last-child{border-bottom:none;font-weight:700;font-size:12px;}
+.lc-label{color:rgba(255,255,255,.6);}
+.lc-val{color:#4ade80;font-weight:600;}
+.lc-row:last-child .lc-val{color:#FF9933;font-size:13px;}
+.lc-sep{height:1px;background:rgba(255,153,51,.3);margin:3px 0;}
+.lc-ph{color:#facc15;font-size:9.5px;font-weight:700;padding:3px 0 1px;}
+
+.nav-btns{display:flex;gap:5px;padding:8px 11px 3px;}
+.btn-next{flex:2;background:linear-gradient(135deg,var(--n8saffron),#c44e00);color:#fff;border:none;border-radius:6px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;transition:all .2s;}
+.btn-back{flex:1;background:var(--n8navy);color:#fff;border:none;border-radius:6px;padding:10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+.btn-gen{display:block;width:calc(100% - 22px);margin:7px 11px 3px;background:linear-gradient(135deg,var(--n8green),#14532d);color:#fff;border:none;border-radius:6px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;box-shadow:0 4px 14px rgba(22,101,52,.35);transition:all .2s;}
+.btn-print{display:block;width:calc(100% - 22px);margin:3px 11px;background:var(--n8navy);color:#fff;border:none;border-radius:6px;padding:8px;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+.btn-reset{display:block;width:calc(100% - 22px);margin:3px 11px 11px;background:#fff;color:var(--n8muted);border:1.5px solid #dde3ef;border-radius:6px;padding:6px;font-size:10.5px;cursor:pointer;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
+
+.preview-area{background:#cdd4e4;overflow-y:auto;padding:14px;}
+.preview-label{text-align:center;font-size:9.5px;color:#888;margin-bottom:9px;text-transform:uppercase;letter-spacing:1.5px;}
+
+/* ── NAMUNA 8 DOCUMENT ── */
+#doc{background:#fff;width:277mm;min-height:190mm;margin:0 auto;padding:6mm 6mm 8mm 6mm;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;box-shadow:0 4px 24px rgba(0,0,0,.18);border:1px solid #000;display:flex;flex-direction:column;}
+.doc-header{text-align:center;font-weight:bold;margin-bottom:4mm;line-height:1.5;}
+.doc-header .raj-line{font-size:8pt;color:#000;}
+.doc-header .namuna-line{font-size:13pt;font-weight:800;color:#000;}
+.doc-header .gp-line{font-size:11pt;font-weight:700;color:#000;margin-top:2px;}
+#doc table{width:100%;border-collapse:collapse;table-layout:fixed;}
+#doc th,#doc td{border:1px solid #000;padding:2px 2px;text-align:center;vertical-align:middle;line-height:1.3;word-break:break-word;color:#000;}
+#doc .sub-header th{font-size:7.5pt;font-weight:700;background:#fff;color:#000;height:10mm;padding:1px;border:1px solid #000;}
+#doc .col13-head{background:#fff!important;color:#000!important;font-weight:800!important;}
+#doc .col14-head{background:#fff!important;color:#000!important;font-weight:800!important;}
+#doc .col-num td{background:#f0f0f0;font-size:7.5pt;font-weight:700;color:#000;height:5mm;padding:1px;}
+#doc .bg-grey{background-color:#f0f0f0;}
+#doc .left-align{text-align:left;padding-left:3px;}
+#doc .data-td{font-size:9.5pt;height:9mm;color:#000;}
+#doc .total-row{background:#f0f0f0;font-weight:700;}
+#doc .amount{font-weight:700;color:#000;}
+#doc .grand{background:#fff!important;color:#000!important;font-weight:800!important;font-size:10pt!important;border:2px solid #000!important;}
+#doc .col13-cell{background:#fff!important;}
+#doc .col14-cell{background:#fff!important;}
+#doc .data-td:empty::after,#doc .empty-tr td:empty::after{content:'—';color:#999;font-size:8pt;}
+#doc .total-row td:empty::after{content:'';}
+#doc .amount:empty::after{content:'';}
+#tbl1 col.c1{width:5mm;}#tbl1 col.c2{width:5mm;}#tbl1 col.c3{width:7mm;}#tbl1 col.c4{width:38mm;}#tbl1 col.c5{width:22mm;}#tbl1 col.c6{width:20mm;}#tbl1 col.c7{width:14mm;}#tbl1 col.c8{width:11mm;}#tbl1 col.c9{width:9mm;}#tbl1 col.c10{width:9mm;}#tbl1 col.c11{width:14mm;}#tbl1 col.c12{width:14mm;}#tbl1 col.c13{width:15mm;}#tbl1 col.c14{width:15mm;}#tbl1 col.c15{width:10mm;}
+#tbl2 col.c16{width:18mm;}#tbl2 col.c17{width:9mm;}#tbl2 col.c18{width:18mm;}#tbl2 col.c19{width:9mm;}#tbl2 col.c20{width:14mm;}#tbl2 col.c21{width:13mm;}#tbl2 col.c22{width:13mm;}#tbl2 col.c23{width:13mm;}#tbl2 col.c24{width:13mm;}#tbl2 col.c25{width:14mm;}#tbl2 col.c26{width:13mm;}#tbl2 col.c27{width:13mm;}#tbl2 col.c28{width:13mm;}#tbl2 col.c29{width:13mm;}#tbl2 col.c30{width:13mm;}#tbl2 col.c31{width:24mm;}
+.doc-bottom{margin-top:auto;padding-top:4mm;display:flex;justify-content:space-between;align-items:flex-end;}
+.date-left{font-size:10pt;font-weight:700;color:#000;}
+.sig-right{text-align:center;}
+.sig-line{border-top:1.5px solid #000;padding-top:4px;min-width:55mm;font-size:10pt;font-weight:700;color:#000;line-height:1.8;}
+.tip-section{font-size:7.5pt;margin-top:3mm;padding:4px 8px;background:#fff;border:1px solid #000;border-radius:0;color:#000;line-height:1.5;}
+
+@media print{
+  @page{size:A4 landscape;margin:4mm 4mm;}
+  html,body{background:#fff!important;}
+  .gpnav,.autofill-bar,.step-tabs,.app-body>.sidebar,.preview-label{display:none!important;}
+  .app-body{display:block!important;}
+  .preview-area{background:#fff!important;padding:0!important;overflow:visible!important;}
+  #doc{box-shadow:none!important;border:none!important;width:289mm!important;min-height:0!important;padding:0!important;font-size:8.5pt!important;margin:0!important;display:block!important;}
+  #doc table{font-size:8.5pt!important;}
+  #doc .sub-header th{height:9mm!important;font-size:7pt!important;}
+  #doc .data-td{height:8mm!important;font-size:8.5pt!important;}
+  #doc .col-num td{height:3.5mm!important;font-size:7pt!important;}
+  #doc .amount{font-size:8.5pt!important;}
+  #doc .grand{font-size:8.5pt!important;background:#fff!important;color:#000!important;border:2px solid #000!important;}
+  #doc th,#doc td{padding:1px 1px!important;}
+  .doc-header .namuna-line{font-size:11pt!important;}
+  .doc-header .gp-line{font-size:9.5pt!important;}
+  .doc-header .raj-line{font-size:7.5pt!important;}
+  .doc-bottom{margin-top:4mm!important;}
+  .sig-line{font-size:9pt!important;}
+  .tip-section{font-size:7pt!important;}
+}
+@media(max-width:900px){
+  .app-body{grid-template-columns:1fr;}
+  .sidebar{max-height:none;position:static;}
+}
+</style>
+</head>
+<body>
+
+<!-- Auth Loading Overlay -->
+<div id="authLoader" style="position:fixed;inset:0;background:#1A2744;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
+  <div style="font-size:48px;margin-bottom:16px;">🏛️</div>
+  <div style="font-family:'Noto Sans Devanagari',sans-serif;font-size:18px;color:white;font-weight:700;margin-bottom:8px;">GP Sakhi</div>
+  <div style="font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:24px;">लोड होत आहे...</div>
+  <div style="width:36px;height:36px;border:3px solid rgba(255,255,255,0.2);border-top:3px solid #E8701A;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+  <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+</div>
+
+<!-- GP Sakhi Topbar -->
+<div class="gpnav">
+  <a href="dashboard.html" class="gpnav-back">← Dashboard</a>
+  <div class="gpnav-title">GP Sakhi</div>
+  <div class="gpnav-user" id="userEmail"></div>
+</div>
+
+<!-- Auto-fill bar -->
+<div class="autofill-bar" id="autofillBar" style="display:none;">
+  ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;margin-left:4px;">बदलायचे असेल तर येथे क्लिक करा</a>
+</div>
+
+<div class="n8wrap">
+<!-- Step Tabs -->
+<div class="step-tabs">
+  <button class="step-tab active" id="stab1" onclick="goStep(1)"><span class="sn">१</span>ग्रामपंचायत</button>
+  <button class="step-tab" id="stab2" onclick="goStep(2)"><span class="sn">२</span>मालमत्ता</button>
+  <button class="step-tab" id="stab3" onclick="goStep(3)"><span class="sn">३</span>तयार करा</button>
+</div>
+
+<div class="app-body">
+<div class="sidebar">
+
+<!-- STEP 1 — ग्रामपंचायत (profile मधून auto-fill) -->
+<div class="step-panel active" id="sp1">
+  <div class="sec-head">🏘️ ग्रामपंचायत माहिती</div>
+  <div class="form-group"><label>ग्रामपंचायत नाव</label><input type="text" id="gp" placeholder="तोंडली"></div>
+  <div class="form-row">
+    <div class="form-group"><label>तालुका</label><input type="text" id="taluka" placeholder="मौदा"></div>
+    <div class="form-group"><label>जिल्हा</label><input type="text" id="dist" placeholder="नागपूर"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>वर्ष (सुरुवात)</label><input type="number" id="yr_s" value="2025"></div>
+    <div class="form-group"><label>वर्ष (शेवट)</label><input type="number" id="yr_e" value="2029"></div>
+  </div>
+  <div class="form-group"><label>दिनांक</label><input type="date" id="din"></div>
+
+  <div class="sec-head">💡 इतर कर — ग्रामपंचायत निश्चित (रु.)</div>
+  <div class="rate-legend">⚠️ हे कर फक्त इमारतींवर लागतात — खाली जागेवर नाही</div>
+  <div class="form-row">
+    <div class="form-group"><label>दिवाबत्ती कर (रु.)</label><input type="number" id="div_kr" value="100" min="0" oninput="liveCalc()"></div>
+    <div class="form-group"><label>आरोग्य कर (रु.)</label><input type="number" id="aro_kr" value="100" min="0" oninput="liveCalc()"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>सामान्य पाणी कर (रु.)</label><input type="number" id="sam_kr" value="300" min="0" oninput="liveCalc()"></div>
+    <div class="form-group"><label>विशेष पाणी कर (रु.)</label><input type="number" id="vis_kr" value="1000" min="0" oninput="liveCalc()"></div>
+  </div>
+
+  <div class="sec-head">💰 रेडी रेकनर व कर दर — ५ प्रकार</div>
+  <div class="rate-legend">
+    <strong>Col १३</strong> = खाली जागेचा RR दर &nbsp;|&nbsp; <strong>Col १४</strong> = बांधकाम RR दर<br>
+    <strong>कर = (भां.मू. × कर दर रु.) ÷ १,०००</strong>
+  </div>
+  <div class="rate-table-wrap">
+    <table class="rate-table">
+      <thead>
+        <tr>
+          <th style="width:36%;text-align:left;">मालमत्ता प्रकार</th>
+          <th class="col-h13">Col १३<br>RR दर</th>
+          <th class="col-h14">Col १४<br>RR दर</th>
+          <th class="col-htr">कर दर<br>(रु./१०००)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="prop-label">🌳 खाली जागा</div><div class="prop-note">Col १३ | घरकर लागतो</div></td>
+          <td><input type="number" id="rr_jaga" value="1600" oninput="liveCalc()"></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="tr_jaga" value="2" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🏠 आर.सी.सी.</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_rcc" value="15000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_rcc" value="1.50" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🧱 दगड/विटा-सिमेंट</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_sem" value="12000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_sem" value="1.12" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🏚️ दगड/विटा-माती</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_mati" value="8000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_mati" value="0.90" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+        <tr>
+          <td><div class="prop-label">🛖 झोपडी/माती</div><div class="prop-note">Col १४</div></td>
+          <td class="na-cell">—</td>
+          <td><input type="number" id="rr_jhop" value="4000" oninput="liveCalc()"></td>
+          <td><input type="number" id="tr_jhop" value="0.52" step="0.01" oninput="liveCalc()"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="nav-btns">
+    <button class="btn-next" onclick="goStep(2)">पुढे → मालमत्ता माहिती</button>
+  </div>
+  <div style="height:10px;"></div>
+</div>
+
+<!-- STEP 2 — मालमत्ता (unchanged) -->
+<div class="step-panel" id="sp2">
+  <div class="sec-head">👤 मालकाची माहिती</div>
+  <div class="form-row">
+    <div class="form-group"><label>अ.क्र.</label><input type="text" id="akr" value="१"></div>
+    <div class="form-group"><label>वार्ड क्र.</label><input type="text" id="ward" value="१"></div>
+  </div>
+  <div class="form-group"><label>मालमत्ता क्र.</label><input type="text" id="malmno" value="१"></div>
+  <div class="form-group"><label>मालकाचे नाव</label><input type="text" id="owner" placeholder="मालकाचे पूर्ण नाव"></div>
+  <div class="form-group"><label>भोगवटादाराचे नाव</label><input type="text" id="tenant" value="स्वतः"></div>
+
+  <div class="sec-head">💧 पाणी कर प्रकार (एकच निवडा)</div>
+  <div class="rate-legend" style="margin-top:4px;">
+    रक्कम Step १ मध्ये निश्चित केलेली वापरली जाईल<br>
+    सामान्य: ₹<span id="show_sam">0</span> &nbsp;|&nbsp; विशेष: ₹<span id="show_vis">0</span>
+  </div>
+  <div class="form-group" style="padding-top:5px;">
+    <div class="water-grp">
+      <button class="wb sel-none" id="wb_none" onclick="setWater('none')">🚫 नाही</button>
+      <button class="wb" id="wb_sam" onclick="setWater('sam')">💧 सामान्य</button>
+      <button class="wb" id="wb_vis" onclick="setWater('vis')">🔵 विशेष</button>
+    </div>
+  </div>
+
+  <div class="sec-head">🏠 मालमत्तेची यादी</div>
+  
