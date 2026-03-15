@@ -2,6 +2,7 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
+<!-- v5 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ठराव जनरेटर — GP Sakhi</title>
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -348,7 +349,8 @@ var PCSS='*{margin:0;padding:0;box-sizing:border-box;}'
 function doPrint(){
   var w=window.open('','_blank');
   if(!w){alert('Popup blocked!');return;}
-  w.document.write('<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
+  w.document.write('<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">
+<!-- v5 -->'
     +'<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">'
     +'<style>'+PCSS+'</style></head><body><div class="a4">'+buildHTML()+'</div>'
     +'<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>');
@@ -381,8 +383,4 @@ function prefillTest(){
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded', prefillTest);
 } else {
-  prefillTest();
-}
-</script>
-
-<!-- ══
+  prefillTest
