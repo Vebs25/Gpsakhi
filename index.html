@@ -12,7 +12,7 @@
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyAAyO70OcDmly_c5OzGckcMH4wvQW6biWg",
@@ -25,25 +25,27 @@ const app = initializeApp({
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-try {
-  const result = await getRedirectResult(auth);
-  if (result) window.location.href = 'dashboard.html';
-} catch(e) { console.error(e); }
+/* आधीच login असेल तर dashboard वर पाठवा */
+onAuthStateChanged(auth, (user) => {
+  if (user) window.location.href = 'dashboard.html';
+});
 
+/* Login button */
 window.__signIn = async function() {
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
   btn.innerHTML = '<span class="spin-sm"></span> लॉगिन होत आहे...';
-  try { await signInWithRedirect(auth, provider); }
-  catch(e) {
+  try {
+    await signInWithPopup(auth, provider);
+    window.location.href = 'dashboard.html';
+  } catch(e) {
     btn.disabled = false;
     btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google ने लॉगिन करा';
+    if (e.code !== 'auth/popup-closed-by-user') {
+      alert('लॉगिन अयशस्वी: ' + e.message);
+    }
   }
 };
-
-onAuthStateChanged(auth, (user) => {
-  if (user) window.location.href = 'dashboard.html';
-});
 </script>
 
 <style>
