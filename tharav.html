@@ -103,6 +103,7 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
   <div class="form-sub">सभेचा एक ठराव मराठीत तयार करा</div>
   <div class="gp-autofill" id="autoFillBar" style="display:none;">✅ GP Profile मधून auto-fill झाली.</div>
   <div class="info-box"    id="noProfileBar" style="display:none;">⚠️ GP Profile नाही. <a href="profile.html" style="color:var(--saffron);font-weight:700;">सेट करा →</a></div>
+  <div id="debugBar" style="background:#1C1410;color:#4ADE80;border-radius:6px;padding:8px 12px;font-size:8.5pt;margin-bottom:10px;display:block;font-family:monospace;line-height:1.7;"></div>
 
   <!-- सभेचा प्रकार -->
   <div class="section">
@@ -192,6 +193,10 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
 </div>
 
 <script>
+function dbg(msg){
+  var el=document.getElementById('debugBar');
+  if(el){ el.innerHTML += msg + '<br>'; }
+}
 var SABHA=0, VISHESH=false;
 var SABHA_NAMES=['मासिक सभा','ग्रामसभा','महिला सभा','वार्ड सभा'];
 
@@ -368,18 +373,9 @@ document.addEventListener('DOMContentLoaded',function(){
 function prefillTest(){
   g('din').value = new Date().toISOString().split('T')[0];
   g('vel').value = '11:00';
+  dbg('📅 Page init done — online: '+navigator.onLine);
   rp();
 }
 // Date/time set करा — Firebase वर dependent नाही
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded', prefillTest);
-} else {
-  prefillTest();
-}
-</script>
-
-<!-- ══ FIREBASE ══ -->
-<script type="module">
-import { initializeApp }               from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { get
+  document.addEv
