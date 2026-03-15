@@ -9,12 +9,11 @@
 :root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--cream:#FAF7F2;--sand:#EDE8DF;--text:#1C1410;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
-nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
 .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:17px;color:white;}
-.nav-logo small{font-size:9px;color:rgba(255,255,255,0.5);display:block;margin-top:-2px;}
-.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;}
-.back-btn:hover{color:white;}
+.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
+.nav-logo small{font-size:8pt;color:rgba(255,255,255,0.5);display:block;margin-top:-4px;}
+.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:10pt;}
 .main-wrap{display:grid;grid-template-columns:420px 1fr;min-height:calc(100vh - 60px);}
 .form-panel{background:white;border-right:1px solid var(--sand);padding:20px 20px 80px;overflow-y:auto;max-height:calc(100vh - 60px);position:sticky;top:60px;}
 .preview-panel{padding:20px;background:var(--cream);}
@@ -41,8 +40,7 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
 .dref{background:none;border:none;color:#EF4444;font-size:16pt;cursor:pointer;line-height:1;flex-shrink:0;}
 .aref{background:transparent;border:1.5px dashed var(--sand);border-radius:7px;color:#9CA3AF;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;padding:6px;width:100%;}
 .aref:hover{border-color:var(--saffron);color:var(--saffron);}
-.bprint{display:block;width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;cursor:pointer;margin-top:6px;transition:all 0.2s;}
-.bprint:hover{background:#0F1B34;transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,39,68,0.3);}
+.bprint{display:block;width:100%;background:var(--navy);color:white;border:none;border-radius:10px;padding:13px;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;cursor:pointer;margin-top:6px;}
 /* AI */
 .ai-wrap{display:none;}.ai-wrap.on{display:block;}
 
@@ -129,10 +127,6 @@ nav{background:var(--navy);padding:0 20px;height:60px;display:flex;align-items:c
   </div>
 
   <button class="bprint" onclick="doPrint()">🖨️ Print / PDF</button>
-
-  <div style="background:#F9F9F9;border:1px dashed #DDD;border-radius:8px;padding:10px;text-align:center;color:#CCC;font-size:11px;margin-top:12px;">
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  </div>
  </div>
 
  <div class="preview-panel">

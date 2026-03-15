@@ -3,192 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>इतिहास — ग्रामपंचायत डिजिटल सेवा</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, getDocs, orderBy, query, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAAyO70OcDmly_c5OzGckcMH4wvQW6biWg",
-    authDomain: "gpsakhi-17e18.firebaseapp.com",
-    projectId: "gpsakhi-17e18",
-    storageBucket: "gpsakhi-17e18.firebasestorage.app",
-    messagingSenderId: "616483787626",
-    appId: "1:616483787626:web:2c2af1f86126a5e36b8b13"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) { window.location.href = 'index.html'; return; }
-    window.__db = db;
-    window.__userId = user.uid;
-    loadHistory(user.uid);
-  });
-
-  async function loadHistory(uid) {
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('historyList').innerHTML = '';
-    try {
-      const q = query(collection(db, 'users', uid, 'vouchers'), orderBy('createdAt', 'desc'));
-      const snap = await getDocs(q);
-
-      document.getElementById('loading').style.display = 'none';
-
-      if (snap.empty) {
-        document.getElementById('emptyState').style.display = 'block';
-        return;
-      }
-
-      snap.forEach((docSnap) => {
-        const d = docSnap.data();
-        const dt = new Date(d.createdAt);
-        const dateStr = dt.toLocaleDateString('mr-IN', {day:'numeric',month:'long',year:'numeric'});
-        const timeStr = dt.toLocaleTimeString('mr-IN', {hour:'2-digit',minute:'2-digit'});
-
-        const card = document.createElement('div');
-        card.className = 'hist-card';
-        card.innerHTML = `
-          <div class="hist-top">
-            <div>
-              <div class="hist-title">${d.work || 'कामाचा तपशील'}</div>
-              <div class="hist-meta">📍 ${d.gpName || 'ग्रामपंचायत'} &nbsp;·&nbsp; 📅 ${dateStr} ${timeStr}</div>
-            </div>
-            <div class="hist-amount">₹ ${Number(d.amount || 0).toLocaleString('en-IN')}</div>
-          </div>
-          <div class="hist-actions">
-            <button class="btn-view" onclick="viewVoucher('${docSnap.id}')">👁️ पाहा</button>
-            <button class="btn-print" onclick="printVoucher('${docSnap.id}')">🖨️ Print</button>
-            <button class="btn-delete" onclick="deleteVoucher('${docSnap.id}', this)">🗑️ काढा</button>
-          </div>
-          <div class="hist-preview" id="prev-${docSnap.id}" style="display:none"></div>
-        `;
-
-        // Store HTML snapshot in memory
-        card.dataset.html = d.htmlSnapshot || '';
-        document.getElementById('historyList').appendChild(card);
-      });
-    } catch(e) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('historyList').innerHTML = `<p style="color:red;padding:20px">त्रुटी: ${e.message}</p>`;
-    }
-  }
-
-  window.viewVoucher = function(id) {
-    const prev = document.getElementById('prev-' + id);
-    const card = prev.closest('.hist-card');
-    if (prev.style.display === 'none') {
-      prev.innerHTML = card.dataset.html || '<p style="padding:20px;color:#888">HTML snapshot उपलब्ध नाही</p>';
-      prev.style.display = 'block';
-    } else {
-      prev.style.display = 'none';
-    }
-  };
-
-  window.printVoucher = function(id) {
-    const card = document.getElementById('prev-' + id).closest('.hist-card');
-    const html = card.dataset.html;
-    if (!html) { alert('HTML snapshot उपलब्ध नाही'); return; }
-    const w = window.open('', '_blank');
-    w.document.write(`<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">
-      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
-      <style>
-        body{font-family:'Noto Sans Devanagari',Arial,sans-serif;}
-        .vp{width:277mm;min-height:185mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:space-between;}
-        .gp{width:277mm;background:white;margin:0 auto 14px;padding:8mm 10mm;border:1px solid #888;}
-        .vhd{text-align:center;margin-bottom:3px;} .vof{font-size:13pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:2px;margin-bottom:3px;}
-        .vti{font-size:11pt;font-weight:700;margin-bottom:2px;} .vwd{font-size:10pt;font-weight:600;margin-bottom:2px;}
-        .vvn{text-align:right;font-size:10pt;font-weight:700;margin-bottom:3px;border-bottom:1px solid #000;padding-bottom:2px;}
-        .vt{width:100%;border-collapse:collapse;font-size:9pt;} .vt th,.vt td{border:1px solid #000;text-align:center;padding:4px 1px;line-height:1.3;height:24px;}
-        .vt th{background:#e0e0e0;font-weight:700;font-size:8pt;} .vcn{text-align:left!important;padding-left:5px!important;width:120px;}
-        .vcp{width:54px;} .vcv{width:50px;} .vcd{width:20px;font-size:8pt!important;padding:5px 1px!important;}
-        .vct{width:44px;} .vcr{width:42px;} .vca{width:56px;} .vcpa{width:62px;} .vcs{width:68px;}
-        .VHL{background:#c8c8c8!important;font-weight:700;} .vt tr:nth-child(even) td{background:#f5f5f5;}
-        .VTR td{background:#e8e8e8!important;font-weight:700;font-size:9.5pt;border-top:2px solid #000;}
-        .vft{margin-top:5px;border-top:1px solid #000;padding-top:5px;} .vra{text-align:center;font-size:9pt;font-weight:700;margin-bottom:2px;}
-        .vst{text-align:center;font-size:8.5pt;border:1px solid #000;padding:2px 6px;margin:2px auto;width:78%;}
-        .vsg{display:flex;justify-content:space-around;margin-top:14px;font-size:9pt;font-weight:700;}
-        .vsg div{text-align:center;width:120px;} .vsl{border-top:1px solid #000;padding-top:3px;}
-        @page{size:A4 landscape;margin:6mm 8mm;}
-        *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-      </style></head><body>${html}</body></html>`);
-    w.document.close();
-    setTimeout(() => w.print(), 800);
-  };
-
-  window.deleteVoucher = async function(id, btn) {
-    if (!confirm('हा वाउचर काढायचा आहे का?')) return;
-    try {
-      await deleteDoc(doc(window.__db, 'users', window.__userId, 'vouchers', id));
-      btn.closest('.hist-card').remove();
-    } catch(e) { alert('काढता आले नाही: ' + e.message); }
-  };
-</script>
-
+<title>Voucher इतिहास — GP Sakhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--sand:#EDE8DF;--cream:#FAF7F2;}
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--saffron:#E8701A;--navy:#1A2744;--bg:#F5F0E8;--card:#FFFFFF;--text:#1C1C1C;--muted:#5A5A5A;--border:#E2D9CC;}
-body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-.topbar{background:var(--navy);color:white;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
-.back-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;}
-.topbar h1{font-size:15px;font-weight:700;}
-.container{max-width:800px;margin:0 auto;padding:20px 16px;}
-.page-title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
-.new-btn{background:var(--saffron);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-.new-btn:hover{background:#D4610F;}
-#loading{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
-#emptyState{display:none;text-align:center;padding:60px 20px;color:var(--muted);}
-#emptyState .empty-icon{font-size:56px;display:block;margin-bottom:12px;}
-#emptyState p{font-size:15px;margin-bottom:16px;}
-.hist-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:12px;}
-.hist-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
-.hist-title{font-size:14px;font-weight:700;color:var(--navy);line-height:1.4;}
-.hist-meta{font-size:12px;color:var(--muted);margin-top:4px;}
-.hist-amount{font-size:18px;font-weight:700;color:var(--saffron);white-space:nowrap;}
-.hist-actions{display:flex;gap:8px;flex-wrap:wrap;}
-.btn-view,.btn-print,.btn-delete{border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid;}
-.btn-view{background:#E8F4FD;color:#1A5276;border-color:#B5D4F4;}
-.btn-view:hover{background:#D4E8F5;}
-.btn-print{background:#EAF5EE;color:#1A6E3C;border-color:#9FE1CB;}
-.btn-print:hover{background:#D4EFE0;}
-.btn-delete{background:#FEE2E2;color:#C0392B;border-color:#FECACA;}
-.btn-delete:hover{background:#FCD0D0;}
-.hist-preview{margin-top:12px;border-top:1px solid var(--border);padding-top:12px;overflow-x:auto;font-family:'Noto Sans Devanagari',Arial,sans-serif;}
-/* Voucher styles inside preview */
-.hist-preview .vp,.hist-preview .gp{width:100% !important;box-shadow:none;margin-bottom:10px;border:1px solid #ccc;padding:8px;}
-.hist-preview .vt{width:100%;border-collapse:collapse;font-size:8pt;}
-.hist-preview .vt th,.hist-preview .vt td{border:1px solid #000;padding:3px;text-align:center;}
-.hist-preview .vt th{background:#e0e0e0;font-weight:700;}
-.hist-preview .VHL{background:#c8c8c8!important;}
-.hist-preview .VTR td{background:#e8e8e8!important;font-weight:700;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:var(--cream);color:#1C1410;}
+nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.nav-logo{font-family:serif;font-size:16pt;color:white;text-decoration:none;}
+.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:10pt;}
+.page{max-width:860px;margin:0 auto;padding:32px 20px 60px;}
+.page-title{font-family:'Tiro Devanagari Marathi',serif;font-size:22pt;color:var(--navy);margin-bottom:6px;}
+.page-sub{font-size:10pt;color:#9CA3AF;margin-bottom:24px;}
+.filter-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.filter-bar input{flex:1;min-width:200px;padding:9px 14px;border:1.5px solid var(--sand);border-radius:8px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;background:white;}
+.filter-bar input:focus{outline:none;border-color:var(--saffron);}
+.new-btn{background:var(--saffron);color:white;border:none;border-radius:8px;padding:9px 18px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:700;cursor:pointer;white-space:nowrap;}
+.new-btn:hover{background:#d4620f;}
+.voucher-list{background:white;border:1px solid var(--sand);border-radius:14px;overflow:hidden;}
+.list-head{padding:16px 20px;border-bottom:1px solid var(--sand);display:flex;justify-content:space-between;align-items:center;}
+.list-head h3{font-size:12pt;font-weight:700;color:var(--navy);}
+.count-badge{background:#F3F4F6;color:#6B7280;padding:4px 10px;border-radius:12px;font-size:9pt;font-weight:600;}
+.v-row{padding:16px 20px;border-bottom:1px solid var(--sand);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;transition:background 0.15s;}
+.v-row:hover{background:#FAFAF7;}
+.v-row:last-child{border-bottom:none;}
+.v-icon{width:42px;height:42px;background:#FFF3E8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.v-main{flex:1;}
+.v-main h4{font-size:11pt;font-weight:700;color:var(--navy);}
+.v-main p{font-size:9pt;color:#9CA3AF;margin-top:2px;}
+.v-right{text-align:right;}
+.v-amt{font-size:12pt;font-weight:700;color:var(--green);}
+.v-date{font-size:8.5pt;color:#9CA3AF;}
+.v-actions{display:flex;gap:6px;margin-top:6px;justify-content:flex-end;}
+.btn-sm{border:1px solid var(--sand);background:white;border-radius:6px;padding:5px 12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:8.5pt;cursor:pointer;color:var(--navy);transition:all 0.15s;}
+.btn-sm:hover{border-color:var(--saffron);color:var(--saffron);background:#FFF8F3;}
+.btn-del{color:#EF4444;}
+.btn-del:hover{border-color:#EF4444;background:#FEF2F2;}
+.empty-state{padding:60px 20px;text-align:center;}
+.empty-state .icon{font-size:48px;margin-bottom:16px;}
+.empty-state h3{font-size:14pt;color:var(--navy);margin-bottom:8px;}
+.empty-state p{font-size:10pt;color:#9CA3AF;margin-bottom:20px;}
+.loading{padding:40px;text-align:center;color:#9CA3AF;}
+.spin{width:30px;height:30px;border:3px solid #E5E7EB;border-top-color:var(--saffron);border-radius:50%;animation:sp 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.stat{background:white;border:1px solid var(--sand);border-radius:10px;padding:16px;text-align:center;}
+.stat-n{font-size:22pt;font-weight:800;color:var(--navy);}
+.stat-l{font-size:9pt;color:#9CA3AF;margin-top:2px;}
+.ad-box{background:#F9F9F9;border:1px dashed #CCC;border-radius:8px;padding:16px;text-align:center;color:#CCC;font-size:9pt;margin-bottom:16px;}
 </style>
 </head>
 <body>
-
-<div class="topbar" style="background:#1A2744;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
-  <button class="back-btn" onclick="history.back()">← Dashboard</button>
-  <h1>📂 वाउचर इतिहास</h1>
-</div>
-
-<div class="container">
-  <div class="page-title">
-    <span>सर्व वाउचर</span>
-    <button class="new-btn" onclick="window.location.href='voucher.html'">+ नवीन वाउचर</button>
+<nav>
+  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="index.html" class="nav-logo">GP Sakhi</a>
+  <span></span>
+</nav>
+<div class="page">
+  <div class="page-title">📂 Voucher इतिहास</div>
+  <div class="page-sub">तुमच्या सर्व तयार केलेल्या मजुरी बिलांची यादी</div>
+  
+  <div class="stats-bar" id="statsBar">
+    <div class="stat"><div class="stat-n" id="sTot">—</div><div class="stat-l">एकूण Vouchers</div></div>
+    <div class="stat"><div class="stat-n" id="sAmt">—</div><div class="stat-l">एकूण रक्कम</div></div>
   </div>
 
-  <div id="loading">⏳ इतिहास लोड होत आहे...</div>
-  <div id="historyList"></div>
-  <div id="emptyState">
-    <span class="empty-icon">📋</span>
-    <p>अजून कोणताही वाउचर तयार केला नाही.</p>
-    <button class="new-btn" onclick="window.location.href='voucher.html'">पहिला वाउचर तयार करा</button>
+  <div class="ad-box">Advertisement</div>
+  
+  <div class="filter-bar">
+    <input type="text" id="searchBox" placeholder="🔍 कामाचे नाव किंवा ग्रामपंचायत शोधा..." oninput="filterList()">
+    <button class="new-btn" onclick="window.location.href='voucher.html'">+ नवीन Voucher</button>
+  </div>
+  
+  <div class="voucher-list">
+    <div class="list-head">
+      <h3>सर्व Vouchers</h3>
+      <span class="count-badge" id="countBadge">लोड होत आहे...</span>
+    </div>
+    <div id="listContainer">
+      <div class="loading"><div class="spin"></div>लोड होत आहे...</div>
+    </div>
   </div>
 </div>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, query, orderBy, getDocs, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ══ FIREBASE CONFIG ══
+const firebaseConfig = {
+  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
+  authDomain: "gpsakhi-9685e.firebaseapp.com",
+  projectId: "gpsakhi-9685e",
+  storageBucket: "gpsakhi-9685e.firebasestorage.app",
+  messagingSenderId: "107629589245",
+  appId: "1:107629589245:web:7b288fda76b26aaadac494"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let allVouchers = [];
+let currentUid = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUid = user.uid;
+  await loadVouchers(user.uid);
+});
+
+async function loadVouchers(uid) {
+  try {
+    const q = query(collection(db, 'users', uid, 'vouchers'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    allVouchers = [];
+    let totalAmt = 0;
+    snap.forEach(d => { allVouchers.push({ id: d.id, ...d.data() }); totalAmt += d.data().amount || 0; });
+    document.getElementById('sTot').textContent = allVouchers.length;
+    document.getElementById('sAmt').textContent = '₹' + totalAmt.toLocaleString('en-IN');
+    renderList(allVouchers);
+  } catch(e) {
+    document.getElementById('listContainer').innerHTML = '<div class="loading">त्रुटी: ' + e.message + '</div>';
+  }
+}
+
+function renderList(list) {
+  document.getElementById('countBadge').textContent = list.length + ' vouchers';
+  if (!list.length) {
+    document.getElementById('listContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📋</div>
+        <h3>कोणतेही voucher आढळले नाही</h3>
+        <p>अजून कोणताही voucher तयार केला नाही.</p>
+        <button class="new-btn" onclick="window.location.href='voucher.html'">+ पहिला Voucher तयार करा</button>
+      </div>`;
+    return;
+  }
+  let html = '';
+  list.forEach(v => {
+    const date = v.createdAt ? new Date(v.createdAt.seconds * 1000).toLocaleDateString('mr-IN') : '—';
+    html += `
+      <div class="v-row">
+        <div class="v-icon">📋</div>
+        <div class="v-main">
+          <h4>${v.workName || 'Voucher'}</h4>
+          <p>${v.gpName || ''}${v.ps ? ' • ' + v.ps : ''}${v.dateRange ? ' | ' + v.dateRange : ''}</p>
+        </div>
+        <div class="v-right">
+          <div class="v-amt">₹${Number(v.amount || 0).toLocaleString('en-IN')}</div>
+          <div class="v-date">${date}</div>
+          <div class="v-actions">
+            <button class="btn-sm btn-del" onclick="deleteVoucher('${v.id}')">🗑️ काढा</button>
+          </div>
+        </div>
+      </div>`;
+  });
+  document.getElementById('listContainer').innerHTML = html;
+}
+
+window.deleteVoucher = async function(id) {
+  if (!confirm('हा voucher कायमचा काढायचा आहे का?')) return;
+  await deleteDoc(doc(db, 'users', currentUid, 'vouchers', id));
+  allVouchers = allVouchers.filter(v => v.id !== id);
+  renderList(allVouchers);
+};
+
+window.filterList = function() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  if (!q) { renderList(allVouchers); return; }
+  renderList(allVouchers.filter(v => 
+    (v.workName || '').toLowerCase().includes(q) || 
+    (v.gpName || '').toLowerCase().includes(q)
+  ));
+};
+</script>
 </body>
 </html>
