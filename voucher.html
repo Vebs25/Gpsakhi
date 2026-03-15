@@ -105,8 +105,26 @@ nav{background:var(--navy);padding:0 24px;height:62px;display:flex;align-items:c
 /* AD */
 .ad-box{background:#F9F9F9;border:1px dashed #CCC;border-radius:8px;padding:12px;text-align:center;color:#BBB;font-size:9pt;margin-bottom:16px;}
 
+/* PRINT INSTRUCTION */
+.print-tip-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.print-tip-box{background:white;border-radius:16px;max-width:400px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.print-tip-head{background:var(--navy);color:white;padding:16px 20px;display:flex;align-items:center;gap:10px;}
+.print-tip-head span{font-size:13pt;font-weight:700;}
+.print-tip-body{padding:20px;}
+.print-tip-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.print-tip-step:last-child{margin-bottom:0;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--saffron);color:white;font-weight:800;font-size:10pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.step-text strong{font-size:10pt;color:var(--navy);display:block;margin-bottom:2px;}
+.step-text span{font-size:9pt;color:#9CA3AF;}
+.print-tip-img{background:linear-gradient(135deg,#EEF2FF,#E0E7FF);border-radius:10px;padding:12px 16px;margin:14px 0;display:flex;align-items:center;gap:10px;border:1px solid #C7D2FE;}
+.print-tip-img .icon{font-size:28px;}
+.print-tip-img p{font-size:9pt;color:#3730A3;font-weight:600;line-height:1.5;}
+.print-tip-btns{display:flex;gap:10px;margin-top:16px;}
+.btn-cancel{flex:1;padding:11px;border:1.5px solid var(--sand);border-radius:8px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;cursor:pointer;color:#666;}
+.btn-goprint{flex:2;padding:11px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--saffron),#d4620f);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(232,112,26,0.3);}
+
 /* VOUCHER PRINT STYLES — UNCHANGED */
-.vp{width:277mm;min-height:205mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:space-between;}
+.vp{width:277mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:flex-start;}
 .gp{width:277mm;background:white;margin:0 auto 14px;padding:8mm 10mm;border:1px solid #888;}
 .vhd{text-align:center;margin-bottom:4px;}
 .vof{font-size:14pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:3px;margin-bottom:4px;}
@@ -124,21 +142,21 @@ nav{background:var(--navy);padding:0 24px;height:62px;display:flex;align-items:c
 .vt tr:nth-child(even) td{background:#f5f5f5;}
 .vt tr:nth-child(even) td.VHL{background:#c8c8c8!important;}
 .VTR td{background:#e8e8e8!important;font-weight:700;font-size:10.5pt;border-top:2px solid #000;}
-.vft{margin-top:6px;border-top:1px solid #000;padding-top:6px;}
+.vft{margin-top:4px;border-top:1px solid #000;padding-top:4px;}
 .vra{text-align:center;font-size:10.5pt;font-weight:700;margin-bottom:3px;}
 .vst{text-align:center;font-size:9.5pt;border:1px solid #000;padding:3px 8px;margin:3px auto;width:78%;}
-.vsg{display:flex;justify-content:space-around;margin-top:18px;font-size:10pt;font-weight:700;}
+.vsg{display:flex;justify-content:space-around;margin-top:10px;font-size:10pt;font-weight:700;}
 .vsg div{text-align:center;width:130px;}
 .vsl{border-top:1px solid #000;padding-top:4px;}
 
 @media screen{.vp,.gp{box-shadow:0 2px 8px rgba(0,0,0,0.1);}}
-@page{size:A4 landscape;margin:6mm 8mm;}
+@page{size:A4 landscape;margin:8mm 10mm;}
 @media print{
   nav,.gp-bar,.cont>.card,.bgen,.spin-box,.eb,.rbar,.bprt,.ad-box{display:none!important;}
   body{background:white!important;padding:0!important;margin:0!important;}
   .cont{padding:0!important;max-width:none!important;}
   #VOUT{display:block!important;border:none!important;padding:0!important;margin:0!important;}
-  .vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;padding:0!important;margin:0 0 0 0!important;}
+  .vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;height:auto!important;padding:2mm 4mm!important;margin:0!important;}
   .gp{border:none!important;box-shadow:none!important;width:100%!important;padding:0!important;margin:0!important;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
 }
@@ -249,6 +267,46 @@ nav{background:var(--navy);padding:0 24px;height:62px;display:flex;align-items:c
     <button class="bprt" id="BTN_PRT">🖨️ Print / PDF</button>
   </div>
   <div id="VOUT"></div>
+</div>
+
+<!-- PRINT INSTRUCTION POPUP -->
+<div class="print-tip-overlay" id="printTipOverlay" style="display:none;">
+  <div class="print-tip-box">
+    <div class="print-tip-head">
+      <span>🖨️ Print करण्यापूर्वी</span>
+    </div>
+    <div class="print-tip-body">
+      <div class="print-tip-step">
+        <div class="step-num">१</div>
+        <div class="step-text">
+          <strong>Print dialog उघडेल</strong>
+          <span>खाली "More options" किंवा "▼" वर click करा</span>
+        </div>
+      </div>
+      <div class="print-tip-step">
+        <div class="step-num">२</div>
+        <div class="step-text">
+          <strong>Orientation → Landscape निवडा</strong>
+          <span>Paper size: A4 असेल याची खात्री करा</span>
+        </div>
+      </div>
+      <div class="print-tip-step">
+        <div class="step-num">३</div>
+        <div class="step-text">
+          <strong>"Save as PDF" किंवा Print करा</strong>
+          <span>सर्व माहिती एका page मध्ये येईल</span>
+        </div>
+      </div>
+      <div class="print-tip-img">
+        <div class="icon">📄↔️</div>
+        <p>Orientation: <strong>Landscape</strong><br>Paper: <strong>A4</strong></p>
+      </div>
+      <div class="print-tip-btns">
+        <button class="btn-cancel" onclick="closePrintTip()">रद्द करा</button>
+        <button class="btn-goprint" onclick="doPrintNow()">🖨️ Print उघडा →</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Firebase — GP Profile Autofill only -->
@@ -722,10 +780,17 @@ function GENERATE() {
   },80);
 }
 function PRINTIT() {
+  document.getElementById('printTipOverlay').style.display = 'flex';
+}
+function closePrintTip() {
+  document.getElementById('printTipOverlay').style.display = 'none';
+}
+function doPrintNow() {
+  document.getElementById('printTipOverlay').style.display = 'none';
   var style = document.getElementById('PRINT_STYLE');
   if (!style) { style = document.createElement('style'); style.id = 'PRINT_STYLE'; document.head.appendChild(style); }
-  style.innerHTML = '@page{size:A4 landscape;margin:6mm 8mm;}';
-  window.print();
+  style.innerHTML = '@page{size:A4 landscape;margin:8mm 10mm;}';
+  setTimeout(function(){ window.print(); }, 100);
 }
 </script>
 </body>
