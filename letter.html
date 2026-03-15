@@ -151,6 +151,8 @@ function sgpt(t){
   g('gp1').classList.toggle('on',t===1);
   rp();
 }
+window.sgpt = sgpt;
+
 function getON(){return (GPT===1?'गट ग्रामपंचायत कार्यालय ':'ग्रामपंचायत कार्यालय ')+(gv('gpn')||'_____');}
 function getOA(){var p=[];var t=gv('gpt'),d=gv('gpd');if(t)p.push('पं. स. '+t);if(d)p.push('जि. प. '+d);return p.join(', ');}
 
@@ -222,6 +224,7 @@ function buildH(){
 }
 
 function rp(){var e=g('lp');if(e)e.innerHTML=buildH();}
+window.rp=rp;
 
 var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:#f0f0f0;}.a4{width:210mm;min-height:297mm;padding:20mm;margin:10mm auto;background:white;box-shadow:0 0 10px rgba(0,0,0,.1);box-sizing:border-box;line-height:1.6;font-size:14px;color:#000;}.hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}.hdr h1{margin:0;font-size:22px;font-weight:bold;}.hdr h2{margin:5px 0;font-size:16px;font-weight:normal;}.offs{display:flex;justify-content:space-between;margin-top:15px;font-weight:bold;font-size:14px;}.ob{text-align:center;width:30%;}.meta{display:flex;justify-content:space-between;margin-top:20px;font-weight:bold;font-size:14px;}.prati{margin-top:30px;margin-bottom:20px;font-size:14px;line-height:1.8;}.subref{margin-top:20px;font-size:14px;}.subref p{margin:5px 0;}.cont{margin-top:30px;text-align:justify;font-size:14px;line-height:1.8;}.cont p{margin:5px 0;}.sign{margin-top:80px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:14px;line-height:1.9;}@page{size:A4;margin:0;}@media print{body{background:none;}.a4{margin:0;box-shadow:none;}}';
 
@@ -267,7 +270,6 @@ onAuthStateChanged(auth, async (user) => {
   try {
     const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
     if (!snap.exists()) {
-      /* Profile नाही — profile.html वर पाठवा */
       if (confirm('GP Profile सेट केलेली नाही. आत्ता सेट करायची आहे का?')) {
         window.location.href = 'profile.html';
       }
@@ -275,19 +277,18 @@ onAuthStateChanged(auth, async (user) => {
     }
     const d = snap.data();
 
-    /* GP Type — profile मध्ये gpType field नाही, gpName वरून ठरवतो */
-    /* Default: गट ग्रामपंचायत (1) — user form मध्ये बदलू शकतो */
-    sgpt(1);
+    /* GP Type default: गट ग्रामपंचायत */
+    window.sgpt(1);
 
     /* Fields fill करा */
-    document.getElementById('gpn').value   = d.gpName  || '';
-    document.getElementById('gpt').value   = d.ps      || '';
-    document.getElementById('gpd').value   = d.dist    || '';
-    document.getElementById('sarp').value  = d.sarp    || '';
-    document.getElementById('usarp').value = d.usSarp  || '';
-    document.getElementById('gram').value  = d.gram    || '';
+    document.getElementById('gpn').value   = d.gpName || '';
+    document.getElementById('gpt').value   = d.ps     || '';
+    document.getElementById('gpd').value   = d.dist   || '';
+    document.getElementById('sarp').value  = d.sarp   || '';
+    document.getElementById('usarp').value = d.usSarp || '';
+    document.getElementById('gram').value  = d.gram   || '';
 
-    rp();
+    window.rp();
   } catch(e) {
     console.log('Profile fetch error:', e);
   }
