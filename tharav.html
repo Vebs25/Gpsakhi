@@ -268,14 +268,20 @@ function buildHTML(){
   var kBox='';
   if(khulasa){
     var lines=khulasa.split('\n');
-    var mainLines=[], lastLine='';
+    var lastLine='';
     // शेवटची non-empty ओळ शोधा
     for(var li=lines.length-1;li>=0;li--){
       if(lines[li].trim()){lastLine=lines[li].trim();lines.splice(li,1);break;}
     }
     var kInner='';
-    lines.forEach(function(l){kInner+=(l.trim()?l:'')+'<br>';});
-    if(lastLine) kInner+='<span class="last-line">'+lastLine+'</span>';
+    lines.forEach(function(l){
+      if(l.trim()){
+        kInner+='<p style="text-indent:2em;margin:4px 0;">'+l.trim()+'</p>';
+      } else {
+        kInner+='<p style="margin:2px 0;"></p>';
+      }
+    });
+    if(lastLine) kInner+='<p class="last-line" style="text-align:center;font-weight:bold;margin-top:8px;">'+lastLine+'</p>';
     kBox='<div class="t-khulasa-wrap">'
       +'<div class="t-khulasa-head">खुलासा</div>'
       +'<div class="t-khulasa">'+kInner+'</div>'
@@ -330,6 +336,8 @@ var PCSS='*{margin:0;padding:0;box-sizing:border-box;}'
   +'.tharav-block .t-khulasa-wrap{border:1px solid #000;margin-top:8px;}'
   +'.tharav-block .t-khulasa-head{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-weight:bold;font-size:12px;padding:4px 10px;}'
   +'.tharav-block .t-khulasa{font-size:13px;line-height:1.8;padding:8px 10px;text-align:justify;}'
+  +'.tharav-block .t-khulasa p{margin:4px 0;text-indent:2em;text-align:justify;}'
+  +'.tharav-block .t-khulasa p.last-line{text-align:center;font-weight:bold;text-indent:0;margin-top:8px;}'
   +'.tharav-block .t-khulasa .last-line{text-align:center;font-weight:bold;display:block;margin-top:6px;}'
   +'.suchak-row{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;font-weight:bold;line-height:1.9;}'
   +'.suchak-row .suchak-left{text-align:left;}'
