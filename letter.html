@@ -4,150 +4,235 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>पत्र जनरेटर — GP Sakhi</title>
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--gold:#C49A22;--cream:#FAF7F2;--sand:#E0D5C0;--text:#1C1410;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans Devanagari',sans-serif;background:#EDEAD4;color:var(--text);min-height:100vh;}
-
-/* ── NAV ── */
-nav{
-  background:var(--navy);padding:0 22px;height:64px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:100;
-  border-bottom:3px solid transparent;
-  border-image:linear-gradient(90deg,#FF9933 33%,#fff 33%,#fff 66%,#138808 66%) 1;
-  box-shadow:0 2px 16px rgba(0,0,0,0.25);
+:root {
+  --saffron: #F58220;
+  --saffron-light: #FFEDE0;
+  --navy: #1A2744;
+  --green: #138808;
+  --gold: #D4AF37;
+  --cream: #FAF7F2;
+  --sand: #EAE3D5;
+  --text: #1C1410;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --tricolor-top: #FF9933;
+  --tricolor-mid: #FFFFFF;
+  --tricolor-bot: #138808;
 }
-.back-btn{color:rgba(255,255,255,0.65);text-decoration:none;font-size:10pt;display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;transition:all 0.2s;}
-.back-btn:hover{color:white;background:rgba(255,255,255,0.08);}
-.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
-.nav-emblem{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 2px 10px rgba(232,112,26,0.4);}
-.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
-.nav-logo small{font-size:7.5pt;color:rgba(255,255,255,0.45);display:block;margin-top:-3px;letter-spacing:0.5px;}
-.nav-right{width:80px;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Noto Sans Devanagari', sans-serif; 
+  background: linear-gradient(145deg, var(--cream) 0%, #f0ebd8 100%);
+  color: var(--text); min-height: 100vh; 
+}
+
+/* ── CUSTOM SCROLLBAR ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--saffron); border-radius: 4px; }
+
+/* ── NAV (Clean UI) ── */
+nav {
+  background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  padding: 0 30px; height: 70px; display: flex; align-items: center; justify-content: space-between; 
+  position: sticky; top: 0; z-index: 200; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--glass-border);
+}
+nav::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--tricolor-top) 33%, var(--tricolor-mid) 33%, var(--tricolor-mid) 66%, var(--tricolor-bot) 66%);
+}
+.back-btn {
+  background: white; border: 1px solid #ddd; color: var(--text); border-radius: 20px; 
+  padding: 8px 16px; font-size: 9.5pt; font-weight: 700; text-decoration: none; transition: all 0.3s;
+  display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.back-btn:hover { background: var(--navy); color: white; border-color: var(--navy); transform: translateX(-2px); }
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-emblem {
+  width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--saffron), var(--gold));
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  box-shadow: 0 4px 10px rgba(245, 130, 32, 0.3); border: 2px solid white;
+}
+.nav-title { font-family: 'Tiro Devanagari Marathi', serif; font-size: 18pt; color: var(--navy); font-weight: bold; line-height: 1; }
+.nav-sub { font-size: 8pt; color: #666; display: block; letter-spacing: 1px; font-weight: 600; }
 
 /* ── AUTOFILL BAR ── */
-.autofill-bar{background:linear-gradient(135deg,#EAF5EE,#D4EDDA);border-bottom:2px solid #86EFAC;padding:9px 22px;font-size:9pt;color:#166534;display:none;align-items:center;gap:8px;animation:slideDown 0.5s ease;}
-.autofill-bar.show{display:flex;}
-@keyframes slideDown{from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:translateY(0);}}
+.autofill-bar {
+  background: #f0fdf4; border-bottom: 1px solid #bbf7d0;
+  padding: 12px 30px; font-size: 10pt; color: #166534; font-weight: 600;
+  display: none; align-items: center; gap: 10px;
+  animation: slideDown 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+.autofill-bar.show { display: flex; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── LAYOUT ── */
-.main-wrap{display:grid;grid-template-columns:420px 1fr;min-height:calc(100vh - 64px);}
-.form-panel{
-  background:white;border-right:1px solid var(--sand);
-  padding:20px 18px 80px;overflow-y:auto;
-  max-height:calc(100vh - 64px);position:sticky;top:64px;
+.main-wrap { display: grid; grid-template-columns: 450px 1fr; min-height: calc(100vh - 70px); }
+.form-panel {
+  background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border); padding: 24px; overflow-y: auto;
+  max-height: calc(100vh - 70px); position: sticky; top: 70px;
 }
-.preview-panel{padding:20px;background:#EDEAD4;}
+.preview-panel { padding: 30px; background: transparent; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
 
 /* ── FORM HEADER ── */
-.form-title{font-family:'Tiro Devanagari Marathi',serif;font-size:17pt;color:var(--navy);margin-bottom:3px;}
-.form-sub{font-size:9pt;color:#9CA3AF;margin-bottom:18px;}
+.form-title { font-family: 'Tiro Devanagari Marathi', serif; font-size: 20pt; color: var(--navy); margin-bottom: 4px; font-weight: bold; }
+.form-sub { font-size: 10pt; color: #64748b; margin-bottom: 24px; font-weight: 500; }
 
-/* ── SECTIONS ── */
-.section{margin-bottom:18px;border-radius:12px;overflow:hidden;border:1px solid #F0EDE8;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
-.sec-title{font-size:10pt;font-weight:700;color:white;background:linear-gradient(135deg,var(--navy),#2a3f6e);padding:9px 14px;display:flex;align-items:center;gap:7px;}
-.sec-body{padding:12px 14px;}
+/* ── CARDS (SECTIONS) ── */
+.card {
+  background: white; border: 1px solid #e2e8f0; border-radius: 16px; margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02); transition: all 0.3s; overflow: hidden;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); border-color: #cbd5e1; }
+.sec-title {
+  font-size: 11pt; font-weight: 800; color: var(--navy); background: #f8fafc;
+  padding: 14px 18px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 8px;
+}
+.sec-body { padding: 18px; }
 
 /* ── FORM FIELDS ── */
-.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
-.fld:last-child{margin-bottom:0;}
-.fld label{font-size:8.5pt;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;}
-.fld input,.fld textarea{padding:8px 11px;border:1.5px solid var(--sand);border-radius:8px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;background:#FAFAF7;width:100%;transition:all 0.2s;}
-.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--saffron);background:white;box-shadow:0 0 0 3px rgba(232,112,26,0.1);transform:translateY(-1px);}
-.fld textarea{resize:vertical;min-height:80px;line-height:1.7;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-.req{color:var(--saffron);}
+.fld { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.fld:last-child { margin-bottom: 0; }
+.fld label { font-size: 9.5pt; font-weight: 700; color: var(--navy); }
+.req { color: #d32f2f; }
+.fld input, .fld textarea {
+  padding: 12px 14px; border: 2px solid #e2e8f0; border-radius: 12px;
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 10.5pt; font-weight: 500;
+  background: white; width: 100%; transition: all 0.3s; color: var(--text);
+}
+.fld input:focus, .fld textarea:focus {
+  outline: none; border-color: var(--saffron); box-shadow: 0 0 0 4px rgba(245, 130, 32, 0.1);
+}
+.fld textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
 /* ── GP TYPE TOGGLE ── */
-.gptw{display:flex;gap:6px;}
-.gptb{
-  flex:1;padding:10px 6px;text-align:center;
-  border:1.5px solid var(--sand);border-radius:9px;
-  cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;
-  font-size:9.5pt;color:#6B7280;transition:all 0.25s ease;
-  font-weight:600;
+.gptw { display: flex; gap: 8px; background: #f1f5f9; padding: 6px; border-radius: 14px; }
+.gptb {
+  flex: 1; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 10pt; color: #64748b;
+  transition: all 0.3s ease; font-weight: 700; border: 2px solid transparent;
 }
-.gptb:hover{border-color:var(--saffron);color:var(--saffron);}
-.gptb.on{border-color:var(--saffron);background:linear-gradient(135deg,#FFF5EE,#FFE8D6);color:var(--saffron);font-weight:700;box-shadow:0 2px 10px rgba(232,112,26,0.15);}
+.gptb:hover { color: var(--navy); background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.gptb.on { background: white; color: var(--saffron); border-color: var(--saffron); box-shadow: 0 4px 15px rgba(245, 130, 32, 0.15); }
 
-/* ── REFS ── */
-.ref-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;animation:slideIn 0.3s ease;}
-@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
-.ref-row input{flex:1;padding:7px 10px;border:1.5px solid var(--sand);border-radius:7px;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;background:#FAFAF7;transition:all 0.2s;}
-.ref-row input:focus{outline:none;border-color:var(--saffron);background:white;}
-.rn{width:24px;height:24px;background:var(--navy);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8pt;font-weight:700;flex-shrink:0;}
-.dref{background:none;border:none;color:#EF4444;font-size:16pt;cursor:pointer;line-height:1;flex-shrink:0;transition:transform 0.15s;}
-.dref:hover{transform:scale(1.2);}
-.aref{background:transparent;border:1.5px dashed var(--sand);border-radius:7px;color:#9CA3AF;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;cursor:pointer;padding:7px;width:100%;transition:all 0.2s;}
-.aref:hover{border-color:var(--saffron);color:var(--saffron);background:#FFF8F3;}
+/* ── REFERENCES ── */
+.ref-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+.ref-row input {
+  flex: 1; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 10px;
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 10pt; transition: all 0.3s;
+}
+.ref-row input:focus { border-color: var(--saffron); outline: none; box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.1); }
+.rn { width: 30px; height: 30px; background: #f1f5f9; color: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10pt; font-weight: 800; flex-shrink: 0; }
+.dref { background: #fee2e2; border: none; color: #dc2626; width: 32px; height: 32px; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-weight: bold; }
+.dref:hover { background: #dc2626; color: white; transform: scale(1.1); }
+.aref {
+  background: white; border: 2px dashed #cbd5e1; border-radius: 12px; color: #64748b;
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 10.5pt; font-weight: 700;
+  cursor: pointer; padding: 12px; width: 100%; transition: all 0.3s; display: block; margin-top: 10px;
+}
+.aref:hover { border-color: var(--saffron); color: var(--saffron); background: var(--saffron-light); }
 
 /* ── PRINT BUTTON ── */
-.bprint{
-  display:block;width:100%;
-  background:linear-gradient(135deg,var(--navy),#2a3f6e);
-  color:white;border:none;border-radius:10px;padding:14px;
-  font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;
-  cursor:pointer;margin-top:8px;
-  box-shadow:0 4px 16px rgba(26,39,68,0.3);transition:all 0.25s;
+.bprint {
+  display: block; width: 100%; background: linear-gradient(135deg, var(--navy), #2C3E50);
+  color: white; border: none; border-radius: 14px; padding: 16px;
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 12pt; font-weight: 800;
+  cursor: pointer; margin-top: 10px; box-shadow: 0 6px 20px rgba(26,39,68,0.25); transition: all 0.3s;
 }
-.bprint:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,39,68,0.4);}
-.bprint:active{transform:translateY(0);}
+.bprint:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(26,39,68,0.35); }
+.bprint:active { transform: translateY(0); }
 
-/* ── PREVIEW ── */
-.ptit{font-size:10.5pt;font-weight:700;color:#6B7280;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:0.5px;text-transform:uppercase;font-size:8.5pt;}
-.lout{background:white;box-shadow:0 4px 24px rgba(0,0,0,0.12);border-radius:6px;overflow:hidden;}
-#lp{padding:16px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:13px;line-height:1.6;color:#000;}
-#lp .hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}
-#lp .hdr h1{margin:0;font-size:20px;font-weight:bold;}
-#lp .hdr h2{margin:5px 0;font-size:14px;font-weight:normal;}
-#lp .offs{display:flex;justify-content:space-between;margin-top:12px;font-size:12px;font-weight:bold;}
-#lp .ob{text-align:center;width:30%;}
-#lp .meta{display:flex;justify-content:space-between;margin-top:18px;font-weight:bold;font-size:13px;}
-#lp .prati{margin-top:24px;margin-bottom:16px;font-size:13px;line-height:1.8;}
-#lp .subref{margin-top:16px;font-size:13px;}
-#lp .subref p{margin:4px 0;font-weight:bold;}
-#lp .cont{margin-top:24px;text-align:justify;font-size:13px;line-height:1.8;}
-#lp .cont p{margin:5px 0;}
-#lp .sign{margin-top:60px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:12px;line-height:1.9;}
-
-@media(max-width:760px){
-  .main-wrap{grid-template-columns:1fr;}
-  .form-panel{max-height:none;position:static;}
-  .preview-panel{padding:14px;}
-  .g3{grid-template-columns:1fr;}
+/* ── PREVIEW PANEL ── */
+.ptit { font-size: 10pt; font-weight: 800; color: #94a3b8; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+.lout {
+  background: white; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  width: 210mm; min-height: 297mm; padding: 25mm 20mm; overflow: hidden;
 }
-@media print{
-  nav,.form-panel,.autofill-bar,.ptit{display:none!important;}
-  .main-wrap{display:block;}
-  .preview-panel{padding:0;}
-  .lout{box-shadow:none;}
-  body{background:white;}
+#lp { font-family: 'Noto Sans Devanagari', Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #000; }
+#lp .hdr { text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 25px; }
+#lp .hdr h1 { margin: 0; font-size: 24px; font-weight: bold; color: #000; }
+#lp .hdr h2 { margin: 8px 0; font-size: 16px; font-weight: normal; color: #000; }
+#lp .offs { display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px; font-weight: bold; color: #000; }
+#lp .ob { text-align: center; width: 30%; }
+#lp .meta { display: flex; justify-content: space-between; margin-top: 25px; font-weight: bold; font-size: 14px; color: #000; }
+#lp .prati { margin-top: 30px; margin-bottom: 20px; font-size: 15px; line-height: 1.8; color: #000; }
+#lp .subref { margin-top: 20px; font-size: 14px; color: #000; }
+#lp .subref p { margin: 6px 0; font-weight: bold; }
+#lp .cont { margin-top: 30px; text-align: justify; font-size: 15px; line-height: 1.9; color: #000; }
+#lp .cont p { margin: 8px 0; }
+#lp .sign { margin-top: 80px; display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 14px; line-height: 1.9; color: #000; }
+
+/* ── PRINT TIP POPUP (MODAL) ── */
+.print-tip-overlay { position: fixed; inset: 0; background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+.print-tip-box { background: white; border-radius: 24px; max-width: 420px; width: 100%; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.5); animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.print-tip-head { background: linear-gradient(135deg, var(--navy), #2C3E50); color: white; padding: 20px 24px; font-size: 14pt; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.print-tip-body { padding: 30px; }
+.print-tip-step { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-start; }
+.print-step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--saffron-light); color: var(--saffron); font-weight: 800; font-size: 12pt; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.print-step-text strong { font-size: 11pt; color: var(--navy); display: block; margin-bottom: 2px; }
+.print-step-text span { font-size: 9.5pt; color: #64748b; }
+.print-tip-hint { background: #f0f9ff; border-radius: 12px; padding: 12px 16px; margin: 20px 0; border: 1px solid #bae6fd; font-size: 10pt; color: #0369a1; font-weight: 700; text-align: center; }
+.print-tip-btns { display: flex; gap: 12px; margin-top: 24px; }
+.print-btn-cancel { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; background: white; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s; }
+.print-btn-go { flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--saffron), #e66b0e); color: white; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; font-weight: 800; cursor: pointer; box-shadow: 0 6px 15px rgba(245, 130, 32, 0.3); transition: all 0.2s; }
+.print-btn-go:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(245, 130, 32, 0.4); }
+
+@media(max-width:1000px){
+  .main-wrap { grid-template-columns: 1fr; }
+  .form-panel { max-height: none; position: static; border-right: none; border-bottom: 1px solid var(--glass-border); padding: 20px; }
+  .lout { width: 100%; min-height: auto; padding: 20px; }
+  #lp { font-size: 12px; }
+}
+@media(max-width: 768px) {
+  nav { padding: 0 16px; height: 60px; }
+  .nav-title { font-size: 14pt; }
+  .nav-emblem { width: 32px; height: 32px; font-size: 16px; }
+  .back-btn { padding: 6px 12px; font-size: 8.5pt; }
+  .nav-spacer { display: none; }
+}
+@media print {
+  nav, .form-panel, .autofill-bar, .ptit { display: none !important; }
+  .main-wrap { display: block; }
+  .preview-panel { padding: 0; background: white; }
+  .lout { box-shadow: none; border: none; width: 100%; height: 100%; padding: 0; margin: 0; }
+  body { background: white; }
 }
 </style>
 </head>
 <body>
+<!-- Clean Nav -->
 <nav>
-  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="dashboard.html" class="back-btn">← डॅशबोर्ड</a>
   <a href="index.html" class="nav-logo">
     <div class="nav-emblem">🏛️</div>
-    <div><span>GP Sakhi</span><small>ग्रामपंचायत सखी</small></div>
+    <div>
+      <div class="nav-title">GP Sakhi</div>
+      <small class="nav-sub">शासकीय पत्र जनरेटर</small>
+    </div>
   </a>
-  <div class="nav-right"></div>
+  <span class="nav-spacer" style="width:70px;display:inline-block;"></span>
 </nav>
+
 <div class="autofill-bar" id="autofillBar">
-  ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;margin-left:4px;">बदलायचे असेल तर येथे क्लिक करा</a>
+  ✅ Profile मधून माहिती आपोआप भरली गेली आहे. <a href="profile.html" style="color:var(--green);font-weight:800;margin-left:6px;text-decoration:none;">येथे बदला</a>
 </div>
 
 <div class="main-wrap">
  <div class="form-panel">
   <div class="form-title">✉️ पत्र जनरेटर</div>
-  <div class="form-sub">शासकीय पत्र मराठीत तयार करा</div>
+  <div class="form-sub">शासकीय व अधिकृत पत्रे सोप्या पद्धतीने तयार करा</div>
 
   <!-- ══ COMMON FIELDS ══ -->
-  <div class="section">
+  <div class="card">
     <div class="sec-title">🏛️ ग्रामपंचायत माहिती</div>
     <div class="sec-body">
       <div class="fld"><label>प्रकार <span class="req">*</span></label>
@@ -157,20 +242,20 @@ nav{
         </div>
       </div>
       <div class="g3">
-        <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="तोंडली" oninput="rp()"></div>
-        <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="मौदा" oninput="rp()"></div>
-        <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="नागपूर" oninput="rp()"></div>
+        <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="उदा. तोंडली" oninput="rp()"></div>
+        <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="उदा. मौदा" oninput="rp()"></div>
+        <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="उदा. नागपूर" oninput="rp()"></div>
       </div>
       <div class="g2">
-        <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="सौ. दर्शना बागडे" oninput="rp()"></div>
-        <div class="fld"><label>उप सरपंच</label><input type="text" id="usarp" placeholder="श्री. रामपाल धांडे" oninput="rp()"></div>
+        <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="उदा. सौ. दर्शना बागडे" oninput="rp()"></div>
+        <div class="fld"><label>उप सरपंच</label><input type="text" id="usarp" placeholder="उदा. श्री. रामपाल धांडे" oninput="rp()"></div>
       </div>
-      <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="श्री. वैभव बावनकर" oninput="rp()"></div>
+      <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="उदा. श्री. वैभव बावनकर" oninput="rp()"></div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="sec-title">📝 पत्र तपशील</div>
+  <div class="card">
+    <div class="sec-title">📝 पत्राचा तपशील</div>
     <div class="sec-body">
       <div class="g2">
         <div class="fld"><label>जावक क्र.</label><input type="text" id="jno" placeholder="423/2025-26" oninput="rp()"></div>
@@ -179,7 +264,7 @@ nav{
     </div>
   </div>
 
-  <div class="section">
+  <div class="card">
     <div class="sec-title">📮 प्रती (To)</div>
     <div class="sec-body">
       <div class="fld"><label>पद / हुद्दा</label><input type="text" id="pp" placeholder="उदा. गटविकास अधिकारी" oninput="rp()"></div>
@@ -187,32 +272,67 @@ nav{
     </div>
   </div>
 
-  <div class="section">
+  <div class="card">
     <div class="sec-title">📌 विषय व संदर्भ</div>
     <div class="sec-body">
-      <div class="fld"><label>विषय <span class="req">*</span></label><input type="text" id="vis" placeholder="विषय येथे लिहा" oninput="rp()"></div>
+      <div class="fld"><label>विषय <span class="req">*</span></label><input type="text" id="vis" placeholder="पत्राचा मुख्य विषय येथे लिहा" oninput="rp()"></div>
       <div id="rc"></div>
-      <button class="aref" onclick="addRef()">+ संदर्भ जोडा</button>
+      <button class="aref" onclick="addRef()">＋ संदर्भ जोडा</button>
     </div>
   </div>
 
-  <div class="section">
+  <div class="card">
     <div class="sec-title">📄 पत्र मजकूर</div>
     <div class="sec-body">
       <div class="fld"><label>मुख्य मजकूर <span class="req">*</span></label>
-        <textarea id="bod" rows="7" placeholder="पत्राचा मुख्य मजकूर येथे लिहा..." oninput="rp()"></textarea></div>
+        <textarea id="bod" placeholder="पत्राचा मुख्य मजकूर येथे लिहा..." oninput="rp()"></textarea></div>
       <div class="fld"><label>शेवटचे वाक्य</label>
         <input type="text" id="cl" value="करिता माहितीस सविनय सादर." oninput="rp()"></div>
     </div>
   </div>
 
-  <button class="bprint" onclick="doPrint()">🖨️ Print / PDF</button>
+  <button class="bprint" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Print / PDF सेव करा</button>
  </div>
 
  <div class="preview-panel">
-  <div class="ptit">👁️ पत्राचे Live Preview</div>
+  <div class="ptit">📄 पत्राचे Live Preview</div>
   <div class="lout"><div id="lp"></div></div>
  </div>
+</div>
+
+<!-- PRINT TIP POPUP -->
+<div id="printTipOverlay" class="print-tip-overlay">
+  <div class="print-tip-box">
+    <div class="print-tip-head">🖨️ Print करण्यापूर्वी</div>
+    <div class="print-tip-body">
+      <div class="print-tip-step">
+        <div class="print-step-num">१</div>
+        <div class="print-step-text">
+          <strong>Print dialog उघडेल</strong>
+          <span>More options / ▼ वर click करा</span>
+        </div>
+      </div>
+      <div class="print-tip-step">
+        <div class="print-step-num">२</div>
+        <div class="print-step-text">
+          <strong>Orientation → Portrait निवडा</strong>
+          <span>Paper size: A4 असेल याची खात्री करा</span>
+        </div>
+      </div>
+      <div class="print-tip-step">
+        <div class="print-step-num">३</div>
+        <div class="print-step-text">
+          <strong>Save as PDF करा</strong>
+          <span>सर्व माहिती एका page मध्ये अचूक येईल</span>
+        </div>
+      </div>
+      <div class="print-tip-hint">📄↕️ Orientation: <strong>Portrait (उभे)</strong> &nbsp;|&nbsp; Size: <strong>A4</strong></div>
+      <div class="print-tip-btns">
+        <button class="print-btn-cancel" onclick="document.getElementById('printTipOverlay').style.display='none';">रद्द करा</button>
+        <button class="print-btn-go" onclick="document.getElementById('printTipOverlay').style.display='none';doPrint();">🖨️ Print उघडा ➔</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -220,9 +340,6 @@ var RC=0, GPT=0;
 
 function g(id){return document.getElementById(id);}
 function gv(id){var e=g(id);return e?e.value.trim():'';}
-
-/* Mode switch */
-
 
 /* GP Type */
 function sgpt(t){
@@ -236,20 +353,6 @@ window.sgpt = sgpt;
 function getON(){return (GPT===1?'गट ग्रामपंचायत कार्यालय ':'ग्रामपंचायत कार्यालय ')+(gv('gpn')||'_____');}
 function getOA(){var p=[];var t=gv('gpt'),d=gv('gpd');if(t)p.push('पं. स. '+t);if(d)p.push('जि. प. '+d);return p.join(', ');}
 
-/* Templates */
-var T=[
-  {v:'मृत्यूप्रमाणपत्राची पडताळणी करण्याबाबत.',pp:'',po:'',refs:[],
-   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, आपण संदर्भाकित पत्रात नमूद केलेल्या मृतक\n१) _____ यांचा मृत्यू दिनांक _____ व नोंदणी क्रमांक - _____\n\nयांच्या मृत्यू दाखल्याची नोंद ग्रामपंचायत रेकॉर्डला उपलब्ध असून सदर दाखला सत्य आहे.',cl:'करिता माहितीस सविनय सादर.'},
-  {v:'पाणीपुरवठा योजना दुरुस्तीबाबत.',pp:'',po:'',refs:[],
-   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, ग्रामपंचायत _____ येथील पाणीपुरवठा योजनेची मुख्य पाईपलाईन दिनांक _____ पासून बंद असून गावातील नागरिकांना पाण्याची तीव्र टंचाई जाणवत आहे.\n\nसदर पाईपलाईन तातडीने दुरुस्त करण्यासाठी आवश्यक निधी उपलब्ध करून द्यावा ही विनंती.',cl:'आपला विश्वासू,'},
-  {v:'ग्रामीण रस्ता दुरुस्तीकामी अनुदान मागणीबाबत.',pp:'',po:'',refs:[],
-   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, ग्रामपंचायत हद्दीतील _____ ते _____ हा सुमारे _____ किलोमीटरचा रस्ता पावसाळ्यात पूर्णपणे खराब झाला असून नागरिकांना ये-जा करण्यास अडचणी येत आहेत.\n\nसदर रस्ता दुरुस्तीसाठी रुपये _____ एवढे अनुदान मंजूर करण्यात यावे ही नम्र विनंती.',cl:'करिता सविनय अर्ज असे.'},
-  {v:'लोकसंख्येची माहिती सादर करण्याबाबत.',
-   pp:'गटविकास अधिकारी',po:'पंचायत समिती मौदा',refs:[],
-   b:'उपरोक्त विषयाच्या अनुषंगाने सविनय कळविण्यात येते की, ग्रामपंचायत तोंडली, पं. स. मौदा, जि. नागपूर या ग्रामपंचायतीची सद्यस्थितीतील एकूण लोकसंख्या खालीलप्रमाणे आहे.\n\nएकूण लोकसंख्या : १०४७\n\nसदर माहिती ग्रामपंचायत रेकॉर्डनुसार असून योग्य ती कार्यवाही करावी ही विनंती.',
-   cl:'करिता माहितीस सविनय सादर.'}
-];
-
 function fmtD(s){if(!s)return'';var p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function getRefs(){var r=[];document.querySelectorAll('#rc input').forEach(function(e){if(e.value.trim())r.push(e.value.trim());});return r;}
 
@@ -258,12 +361,10 @@ function addRef(v){
   row.className='ref-row';row.id='rr'+n;
   row.innerHTML='<div class="rn">'+n+'</div>'
     +'<input type="text" id="rf'+n+'" value="'+v.replace(/"/g,'&quot;')+'" placeholder="संदर्भ '+n+'" oninput="rp()">'
-    +'<button class="dref" onclick="dlRef('+n+')">&times;</button>';
+    +'<button class="dref" onclick="dlRef('+n+')">✕</button>';
   g('rc').appendChild(row);rp();
 }
 function dlRef(n){var r=g('rr'+n);if(r){r.remove();rp();}}
-
-
 
 /* Letter HTML builder */
 function buildH(){
@@ -279,7 +380,7 @@ function buildH(){
     var n=/^[१२३४५\d][\)\.]/.test(l.trim());
     bh+='<p style="text-indent:'+(n?'0':'50px')+';">'+l+'</p>';
   });
-  if(!bh)bh='<p style="color:#bbb;text-indent:50px;">मजकूर येथे दिसेल...</p>';
+  if(!bh)bh='<p style="color:#cbd5e1;text-indent:50px;">मजकूर येथे दिसेल...</p>';
 
   var off='';
   if(sarp||us||gr)off='<div class="offs">'
@@ -306,7 +407,7 @@ function buildH(){
 function rp(){var e=g('lp');if(e)e.innerHTML=buildH();}
 window.rp=rp;
 
-var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:#f0f0f0;}.a4{width:210mm;min-height:297mm;padding:20mm;margin:10mm auto;background:white;box-shadow:0 0 10px rgba(0,0,0,.1);box-sizing:border-box;line-height:1.6;font-size:14px;color:#000;}.hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:20px;}.hdr h1{margin:0;font-size:22px;font-weight:bold;}.hdr h2{margin:5px 0;font-size:16px;font-weight:normal;}.offs{display:flex;justify-content:space-between;margin-top:15px;font-weight:bold;font-size:14px;}.ob{text-align:center;width:30%;}.meta{display:flex;justify-content:space-between;margin-top:20px;font-weight:bold;font-size:14px;}.prati{margin-top:30px;margin-bottom:20px;font-size:14px;line-height:1.8;}.subref{margin-top:20px;font-size:14px;}.subref p{margin:5px 0;}.cont{margin-top:30px;text-align:justify;font-size:14px;line-height:1.8;}.cont p{margin:5px 0;}.sign{margin-top:80px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:14px;line-height:1.9;}@page{size:A4;margin:0;}@media print{body{background:none;}.a4{margin:0;box-shadow:none;}}';
+var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:#f0f0f0;}.a4{width:210mm;min-height:297mm;padding:25mm 20mm;margin:10mm auto;background:white;box-shadow:0 0 10px rgba(0,0,0,.1);box-sizing:border-box;line-height:1.6;font-size:15px;color:#000;}.hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:15px;margin-bottom:25px;}.hdr h1{margin:0;font-size:24px;font-weight:bold;}.hdr h2{margin:8px 0;font-size:16px;font-weight:normal;}.offs{display:flex;justify-content:space-between;margin-top:15px;font-weight:bold;font-size:14px;}.ob{text-align:center;width:30%;}.meta{display:flex;justify-content:space-between;margin-top:25px;font-weight:bold;font-size:14px;}.prati{margin-top:30px;margin-bottom:20px;font-size:15px;line-height:1.8;}.subref{margin-top:20px;font-size:14px;}.subref p{margin:6px 0;}.cont{margin-top:30px;text-align:justify;font-size:15px;line-height:1.9;}.cont p{margin:8px 0;}.sign{margin-top:80px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:14px;line-height:1.9;}@page{size:A4;margin:0;}@media print{body{background:none;}.a4{margin:0;padding:25mm 20mm;box-shadow:none;}}';
 
 function doPrint(){
   var c=buildH(),w=window.open('','_blank');
@@ -317,6 +418,7 @@ function doPrint(){
     +'<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>');
   w.document.close();
 }
+window.doPrint = doPrint;
 
 /* ── Init ── */
 g('din').value = new Date().toISOString().split('T')[0];
@@ -357,11 +459,11 @@ onAuthStateChanged(auth, async (user) => {
     }
     const d = snap.data();
 
-    /* GP Type — profile मधून fetch करा */
-    var gpType = d.gpType || 'gat'; // 'gram' किंवा 'gat'
+    /* GP Type */
+    var gpType = d.gpType || 'gat';
     window.sgpt(gpType === 'gram' ? 0 : 1);
 
-    /* Fields fill करा */
+    /* Fields fill */
     document.getElementById('gpn').value   = d.gpName || '';
     document.getElementById('gpt').value   = d.ps     || '';
     document.getElementById('gpd').value   = d.dist   || '';
@@ -369,7 +471,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('usarp').value = d.usSarp || '';
     document.getElementById('gram').value  = d.gram   || '';
 
-    /* Autofill bar दाखवा */
+    /* Autofill bar */
     var bar = document.getElementById('autofillBar');
     if(bar) bar.classList.add('show');
 
@@ -381,3 +483,4 @@ onAuthStateChanged(auth, async (user) => {
 </script>
 </body>
 </html>
+
