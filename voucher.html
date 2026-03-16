@@ -4,73 +4,190 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>मजुरी बिल जनरेटर — GP Sakhi</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap');
-:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans Devanagari',Arial,sans-serif;background:#EDEAD4;color:#2C2416;}
+:root {
+  --saffron: #F58220;
+  --saffron-light: #FFEDE0;
+  --navy: #1A2744;
+  --green: #138808;
+  --green-light: #E5F6EB;
+  --gold: #D4AF37;
+  --cream: #FDFBF7;
+  --sand: #EAE3D5;
+  --text: #2C3E50;
+  --tricolor-top: #FF9933;
+  --tricolor-mid: #FFFFFF;
+  --tricolor-bot: #138808;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+}
 
-/* NAV */
-nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,#FF9933 33%,#fff 33%,#fff 66%,#138808 66%) 1;}
-.nav-logo{font-family:serif;font-size:15pt;color:white;text-decoration:none;}
-.back-btn{color:rgba(255,255,255,0.7);text-decoration:none;font-size:10pt;}
-.back-btn:hover{color:white;}
-.nav-save-status{font-size:9pt;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:6px;}
-.dot-saved{width:8px;height:8px;border-radius:50%;background:#4ADE80;}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: 'Noto Sans Devanagari', Arial, sans-serif; 
+  background: linear-gradient(145deg, var(--cream) 0%, #f0ebd8 100%);
+  color: var(--text); 
+  min-height: 100vh;
+}
 
-/* GP INFO BAR */
-.gp-bar{background:white;border-bottom:2px solid #E8701A;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;font-size:9.5pt;}
-.gp-bar-info{color:var(--navy);font-weight:700;}
-.gp-bar-link{color:var(--saffron);text-decoration:none;font-size:9pt;}
+/* ══ CUSTOM SCROLLBAR ══ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--saffron); border-radius: 4px; }
 
-/* VOUCHER TOOL STYLES — copied from original */
-.hdr{background:#1A2744;color:white;padding:14px 18px 12px;display:none;}
-.hdr h1{font-size:15pt;font-weight:700;}
-.hdr p{font-size:9pt;color:rgba(255,255,255,0.55);margin-top:2px;}
-.cont{max-width:900px;margin:0 auto;padding:18px 12px 60px;}
-.card{background:white;border:1px solid #D4C5A9;border-radius:12px;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-.ch{background:#E8701A;color:white;padding:10px 16px;font-size:10.5pt;font-weight:700;}
-.cb{padding:16px;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;}
-.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
-.fld:last-child{margin-bottom:0;}
-.fld label{font-size:9pt;font-weight:700;color:#1A2744;}
-.req{color:#E8701A;}
-.fld input,.fld select,.fld textarea{padding:8px 10px;border:1.5px solid #D4C5A9;border-radius:5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;background:#FAFAF7;width:100%;}
-.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:#E8701A;background:white;}
-.fld textarea{min-height:62px;resize:vertical;}
-.sec-title{text-align:center;font-size:9pt;font-weight:700;color:#E8701A;margin:6px 0 10px;}
-.wtable{width:100%;border-collapse:collapse;font-size:9.5pt;margin-bottom:8px;}
-.wtable th{background:#1A2744;color:white;padding:7px 6px;text-align:center;font-size:9pt;font-weight:700;border:1px solid #333;}
-.wtable td{border:1px solid #D4C5A9;padding:5px 4px;background:white;}
-.wtable tr:nth-child(even) td{background:#FFF8F0;}
-.wtable td input,.wtable td select{width:100%;padding:5px 6px;border:1px solid #D4C5A9;border-radius:4px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:9pt;background:white;}
-.tdnum{width:30px;text-align:center;font-weight:700;color:#C45A0E;}
-.tddel{width:32px;text-align:center;}
-.delbtn{background:#FEE2E2;border:1px solid #FECACA;border-radius:4px;color:#C0392B;font-size:12px;cursor:pointer;width:26px;height:26px;padding:0;}
-.badd{background:#EAF5EE;border:2px dashed #1A6E3C;border-radius:6px;color:#1A6E3C;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;font-weight:700;padding:9px;cursor:pointer;width:100%;display:block;}
-.bgen{display:block;width:100%;background:#1A2744;color:white;border:none;border-radius:7px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:12pt;font-weight:700;padding:13px;cursor:pointer;margin-top:16px;}
-.bgen:disabled{background:#888;cursor:not-allowed;}
-.spin-box{display:none;text-align:center;background:#1A2744;color:white;border-radius:8px;padding:20px;margin-top:14px;}
-.spin-box.on{display:block;}
-.spin{width:34px;height:34px;border:4px solid rgba(255,255,255,0.2);border-top-color:#E8701A;border-radius:50%;animation:sp 0.8s linear infinite;margin:0 auto 10px;}
-@keyframes sp{to{transform:rotate(360deg);}}
-.eb{display:none;background:#FEE2E2;border:1px solid #FECACA;border-radius:6px;padding:10px 14px;color:#C0392B;font-size:10pt;margin-top:10px;}
-.eb.on{display:block;}
-.rbar{display:none;background:#1A6E3C;color:white;padding:11px 16px;border-radius:8px 8px 0 0;align-items:center;justify-content:space-between;margin-top:24px;flex-wrap:wrap;gap:8px;}
-.rbar.on{display:flex;}
-.bprt{background:white;color:#1A6E3C;border:none;border-radius:5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;font-weight:700;padding:7px 14px;cursor:pointer;}
-.bsave{background:#E8701A;color:white;border:none;border-radius:5px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;font-weight:700;padding:7px 14px;cursor:pointer;}
-#VOUT{display:none;border:1px solid #D4C5A9;border-top:none;border-radius:0 0 8px 8px;background:white;padding:10px;overflow-x:auto;}
-#VOUT.on{display:block;}
-.note{background:#FFF8E6;border-left:3px solid #E8701A;padding:7px 11px;font-size:9pt;color:#7A6A52;margin-top:8px;border-radius:0 4px 4px 0;}
-.info-row{background:#E8F4FD;border:1px solid #BEE3F8;border-radius:5px;padding:8px 12px;font-size:9pt;color:#2C5282;margin-bottom:12px;}
-.gp-autofill-bar{background:#EAF5EE;border:1px solid #86EFAC;border-radius:6px;padding:8px 12px;font-size:9pt;color:#166534;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+/* ══ NAV ══ */
+nav {
+  background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  padding: 0 30px; height: 70px; display: flex; align-items: center; justify-content: space-between; 
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--glass-border);
+}
+nav::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--tricolor-top) 33%, var(--tricolor-mid) 33%, var(--tricolor-mid) 66%, var(--tricolor-bot) 66%);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-emblem {
+  width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--saffron), var(--gold));
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  box-shadow: 0 4px 10px rgba(245, 130, 32, 0.3); border: 2px solid white;
+}
+.nav-logo span { font-family: 'Tiro Devanagari Marathi', serif; font-size: 18pt; color: var(--navy); font-weight: bold; line-height: 1; }
+.nav-logo small { font-size: 8pt; color: #666; display: block; letter-spacing: 1px; font-weight: 600; }
+.back-btn {
+  background: white; border: 1px solid #ddd; color: var(--text); border-radius: 20px; 
+  padding: 8px 16px; font-size: 9.5pt; font-weight: 700; text-decoration: none; transition: all 0.3s;
+  display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.back-btn:hover { background: var(--navy); color: white; border-color: var(--navy); transform: translateX(-2px); }
 
-/* VOUCHER PRINT STYLES */
+/* ══ GP INFO BAR ══ */
+.gp-bar {
+  background: white; border-bottom: 2px solid var(--saffron); padding: 12px 30px; 
+  display: flex; align-items: center; justify-content: space-between; font-size: 10pt;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03); animation: slideDown 0.5s ease;
+}
+.gp-bar-info { color: var(--navy); font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.gp-bar-link {
+  color: var(--saffron); text-decoration: none; font-size: 9.5pt; font-weight: 700; 
+  background: var(--saffron-light); padding: 5px 12px; border-radius: 12px; transition: all 0.2s;
+}
+.gp-bar-link:hover { background: var(--saffron); color: white; }
+
+/* ══ PAGE CONTENT ══ */
+.cont { max-width: 1000px; margin: 0 auto; padding: 30px 20px 80px; animation: fadeIn 0.6s ease; }
+
+/* ══ CARDS ══ */
+.card {
+  background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+  border-radius: 24px; margin-bottom: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  transition: transform 0.3s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
+.ch {
+  background: linear-gradient(135deg, var(--navy), #2C3E50); color: white; padding: 16px 24px; 
+  font-size: 12.5pt; font-weight: 800; display: flex; align-items: center; gap: 10px;
+}
+.cb { padding: 24px; }
+
+/* ══ GRIDS & FIELDS ══ */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.fld { display: flex; flex-direction: column; gap: 6px; }
+.fld label { font-size: 9.5pt; font-weight: 700; color: var(--navy); }
+.req { color: #d32f2f; }
+.fld input, .fld select, .fld textarea {
+  padding: 12px 14px; border: 2px solid #e2e8f0; border-radius: 12px; 
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 10pt; font-weight: 500;
+  background: white; width: 100%; transition: all 0.3s; color: var(--text);
+}
+.fld input:focus, .fld select:focus, .fld textarea:focus {
+  outline: none; border-color: var(--saffron); box-shadow: 0 0 0 4px rgba(245, 130, 32, 0.1); background: white;
+}
+.fld textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+
+/* ══ WORKER TABLE UI ══ */
+.sec-title { text-align: center; font-size: 10.5pt; font-weight: 800; color: var(--navy); margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.sec-title::before, .sec-title::after { content: ''; height: 2px; width: 40px; background: var(--sand); border-radius: 2px; }
+.wtable { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 16px; }
+.wtable th {
+  background: #f1f5f9; color: var(--navy); padding: 12px 10px; text-align: left; 
+  font-size: 9.5pt; font-weight: 800; border-bottom: 2px solid #cbd5e1;
+}
+.wtable th:first-child { border-top-left-radius: 12px; }
+.wtable th:last-child { border-top-right-radius: 12px; }
+.wtable td { border-bottom: 1px solid #e2e8f0; padding: 8px 6px; background: white; vertical-align: middle; }
+.wtable tr:last-child td { border-bottom: none; }
+.wtable tr:hover td { background: #f8fafc; }
+.wtable td input, .wtable td select {
+  width: 100%; padding: 10px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; 
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 9.5pt; background: white; transition: all 0.3s;
+}
+.wtable td input:focus, .wtable td select:focus { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.1); }
+.tdnum { width: 40px; text-align: center !important; font-weight: 800; color: var(--saffron); font-size: 11pt; }
+.tddel { width: 40px; text-align: center; }
+.delbtn {
+  background: #fee2e2; border: none; border-radius: 8px; color: #dc2626; font-size: 14px; 
+  cursor: pointer; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.delbtn:hover { background: #dc2626; color: white; transform: scale(1.1); }
+.badd {
+  background: white; border: 2px dashed #94a3b8; border-radius: 12px; color: #475569; 
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 10.5pt; font-weight: 700; padding: 14px; 
+  cursor: pointer; width: 100%; display: block; transition: all 0.3s;
+}
+.badd:hover { border-color: var(--navy); color: var(--navy); background: #f1f5f9; }
+
+/* ══ BUTTONS & ALERTS ══ */
+.bgen {
+  display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+  background: linear-gradient(135deg, var(--saffron), #e66b0e); color: white; border: none; border-radius: 16px; 
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 14pt; font-weight: 800; padding: 18px; 
+  cursor: pointer; margin-top: 24px; box-shadow: 0 10px 25px rgba(245, 130, 32, 0.4); 
+  transition: all 0.3s; animation: pulseGlow 2s infinite;
+}
+.bgen:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(245, 130, 32, 0.5); }
+.bgen:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; animation: none; transform: none; }
+
+.spin-box { display: none; text-align: center; background: white; border-radius: 16px; padding: 30px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--sand); }
+.spin-box.on { display: block; animation: fadeIn 0.4s ease; }
+.spin {
+  width: 45px; height: 45px; border: 5px solid #e2e8f0; border-top-color: var(--saffron); 
+  border-radius: 50%; animation: sp 1s cubic-bezier(0.5, 0, 0.5, 1) infinite; margin: 0 auto 15px;
+}
+@keyframes sp { to { transform: rotate(360deg); } }
+
+.eb { display: none; background: #fef2f2; border: 2px solid #fecaca; border-radius: 12px; padding: 16px; color: #dc2626; font-size: 10.5pt; font-weight: 600; margin-top: 20px; text-align: center; }
+.eb.on { display: block; animation: shake 0.5s ease; }
+
+.rbar { display: none; background: linear-gradient(135deg, var(--green), #0f6b06); color: white; padding: 16px 24px; border-radius: 16px 16px 0 0; align-items: center; justify-content: space-between; margin-top: 30px; flex-wrap: wrap; gap: 12px; box-shadow: 0 10px 20px rgba(19, 136, 8, 0.2); }
+.rbar.on { display: flex; animation: slideDown 0.5s ease; }
+.bprt {
+  background: white; color: var(--green); border: none; border-radius: 10px; 
+  font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; font-weight: 800; padding: 10px 20px; 
+  cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.bprt:hover { transform: scale(1.05); }
+
+#VOUT { display: none; border: 2px solid var(--green); border-top: none; border-radius: 0 0 16px 16px; background: white; padding: 20px; overflow-x: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+#VOUT.on { display: block; }
+
+.note { background: #FFF8E6; border-left: 4px solid var(--saffron); padding: 12px 16px; font-size: 9.5pt; color: #7A6A52; margin-top: 12px; border-radius: 0 8px 8px 0; font-weight: 500; }
+.info-row { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 12px 16px; font-size: 10pt; color: #0369a1; margin-bottom: 16px; }
+.gp-autofill-bar { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px 16px; font-size: 10pt; color: #166534; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-weight: 500; }
+
+.ad-box { background: rgba(255,255,255,0.6); backdrop-filter: blur(5px); border: 2px dashed #cbd5e1; border-radius: 16px; padding: 15px; text-align: center; color: #94a3b8; font-size: 10pt; font-weight: 600; margin-bottom: 24px; letter-spacing: 2px; }
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(245, 130, 32, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(245, 130, 32, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 130, 32, 0); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+
+/* ══ VOUCHER PRINT STYLES (DO NOT TOUCH - KEEPS OFFICIAL LAYOUT) ══ */
 .vp{width:277mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:flex-start;gap:0;}
 .gp{width:100%;max-width:277mm;background:white;margin:0 auto 14px;padding:8mm 10mm;border:1px solid #888;}
 .vhd{text-align:center;margin-bottom:4px;}
@@ -96,45 +213,49 @@ nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:c
 .vsg div{text-align:center;width:130px;}
 .vsl{border-top:1px solid #000;padding-top:4px;}
 
-/* AD */
-.ad-box{background:#F9F9F9;border:1px dashed #CCC;border-radius:6px;padding:12px;text-align:center;color:#BBB;font-size:9pt;margin-bottom:14px;}
-
-@media screen{.vp,.gp{box-shadow:0 2px 8px rgba(0,0,0,0.1);}}
+@media screen{.vp,.gp{box-shadow:0 10px 30px rgba(0,0,0,0.1); border-radius: 8px; overflow:hidden;}}
 @page{size:A4 landscape;margin:6mm 8mm;}
 @media print{
   nav,.gp-bar,.cont>.card,.bgen,.spin-box,.eb,.rbar,.bprt,.bsave,.ad-box{display:none!important;}
   body,#VOUT{background:white!important;padding:0!important;margin:0!important;}
-  .cont{padding:0!important;max-width:none!important;}
-  #VOUT{display:block!important;border:none!important;padding:0!important;margin:0!important;}
-  .vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;height:auto!important;padding:2mm 3mm!important;margin:0!important;}
-  .gp{border:none!important;box-shadow:none!important;width:100%!important;max-width:100%!important;padding:2mm 3mm!important;margin:0!important;overflow:visible!important;}
+  .cont{padding:0!important;max-width:none!important;animation:none!important;}
+  #VOUT{display:block!important;border:none!important;padding:0!important;margin:0!important;box-shadow:none!important;}
+  .vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;height:auto!important;padding:2mm 3mm!important;margin:0!important;border-radius:0!important;}
+  .gp{border:none!important;box-shadow:none!important;width:100%!important;max-width:100%!important;padding:2mm 3mm!important;margin:0!important;overflow:visible!important;border-radius:0!important;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
 }
-@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr 1fr;}}
-@media(max-width:400px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+@media(max-width:768px){.g2,.g3,.g4{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.g2,.g3,.g4{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="dashboard.html" class="back-btn">← Dashboard</a>
-  <a href="index.html" class="nav-logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#E8701A,#C49A22);display:flex;align-items:center;justify-content:center;font-size:17px;">&#x1F3DB;</div><div><span style="font-size:14pt;font-weight:700;color:white;">GP Sakhi</span><small style="font-size:7.5pt;color:rgba(255,255,255,0.45);display:block;margin-top:-2px;">&#x917;&#x94D;&#x930;&#x93E;&#x92E;&#x92A;&#x902;&#x91A;&#x93E;&#x92F;&#x924; &#x938;&#x916;&#x940;</small></div></a>
-<span style="width:60px;display:inline-block;"></span>
+  <a href="dashboard.html" class="back-btn">← डॅशबोर्ड</a>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-emblem">🏛️</div>
+    <div>
+      <span>GP Sakhi</span>
+      <small>ग्रामपंचायत सखी</small>
+    </div>
+  </a>
+  <span style="width:70px;display:inline-block;"></span>
 </nav>
 
 <div class="gp-bar" id="gpBar" style="display:none;">
-  <span class="gp-bar-info" id="gpBarInfo">ग्रामपंचायत माहिती लोड होत आहे...</span>
+  <span class="gp-bar-info" id="gpBarInfo">⏳ ग्रामपंचायत माहिती लोड होत आहे...</span>
   <a href="profile.html" class="gp-bar-link">✏️ बदला</a>
 </div>
 
 <div class="cont">
-  <div class="ad-box">Advertisement</div>
+  <div class="ad-box">Advertisement Space</div>
 
+  <!-- GP INFO CARD -->
   <div class="card">
     <div class="ch">🏛️ ग्रामपंचायत माहिती</div>
     <div class="cb">
       <div class="gp-autofill-bar" id="autofillBar" style="display:none;">
-        ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;">बदलायचे असेल तर येथे क्लिक करा</a>
+        ✅ Profile मधून माहिती आपोआप भरली गेली आहे. <a href="profile.html" style="color:var(--green);font-weight:800;text-decoration:none;">येथे बदला</a>
       </div>
       <div class="g3">
         <div class="fld"><label>ग्रामपंचायत <span class="req">*</span></label><input type="text" id="GP_NAME" placeholder="उदा. तोंडली"></div>
@@ -159,106 +280,119 @@ nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:c
     </div>
   </div>
 
+  <!-- WORK INFO CARD -->
   <div class="card">
     <div class="ch">📋 कामाची माहिती</div>
     <div class="cb">
-      <div class="fld"><label>कामाचा तपशील <span class="req">*</span></label><textarea id="F_WORK" placeholder="उदा. मौजा खिडकी येथे सांडपाणी व घनकचरा व्यवस्थापन बांधकाम करणे"></textarea></div>
+      <div class="fld" style="margin-bottom:16px;"><label>कामाचा तपशील <span class="req">*</span></label><textarea id="F_WORK" placeholder="उदा. मौजा खिडकी येथे सांडपाणी व घनकचरा व्यवस्थापन बांधकाम करणे"></textarea></div>
       <div class="g4">
         <div class="fld"><label>सुरुवातीची तारीख <span class="req">*</span></label><input type="date" id="F_DATE"></div>
-        <div class="fld"><label>एकूण रक्कम (₹) <span class="req">*</span></label><input type="number" id="F_AMT" placeholder="76700"></div>
+        <div class="fld"><label>एकूण रक्कम (₹) <span class="req">*</span></label><input type="number" id="F_AMT" placeholder="उदा. 76700"></div>
         <div class="fld"><label>मिस्त्री रोजी (₹)</label><input type="number" id="F_MR" value="800"></div>
         <div class="fld"><label>लेबर रोजी (₹)</label><input type="number" id="F_LR" value="500"></div>
       </div>
-      <div class="g2">
+      <div class="g2" style="margin-bottom:0;">
         <div class="fld"><label>हप्ता क्र. सुरुवात</label><input type="number" id="F_VNO" value="1" min="1"></div>
         <div class="fld"><label>Default राहणार गाव</label><input type="text" id="F_VLG" placeholder="उदा. तोंडली"></div>
       </div>
     </div>
   </div>
 
+  <!-- WORKERS CARD -->
   <div class="card">
     <div class="ch">👷 मजुरांची माहिती</div>
     <div class="cb">
       <!-- MODE TOGGLE -->
-      <div style="display:flex;gap:0;border:2px solid #D4C5A9;border-radius:8px;overflow:hidden;margin-bottom:14px;">
+      <div style="display:flex;gap:0;border:2px solid #cbd5e1;border-radius:12px;overflow:hidden;margin-bottom:20px;">
         <button id="MODE_AUTO" onclick="setMode('auto')"
-          style="flex:1;padding:10px;border:none;background:#1A2744;color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;">
+          style="flex:1;padding:12px;border:none;background:#1A2744;color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;transition:all 0.3s;">
           ⚡ Auto — मजुरी आपोआप
         </button>
         <button id="MODE_MANUAL" onclick="setMode('manual')"
-          style="flex:1;padding:10px;border:none;background:#F5F0E8;color:#888;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;">
+          style="flex:1;padding:12px;border:none;background:#f8fafc;color:#64748b;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;transition:all 0.3s;">
           ✍️ Manual — वेगळी रक्कम
         </button>
       </div>
       <div id="MODE_NOTE_AUTO" class="info-row">⚡ <b>Auto Mode:</b> सर्व मजुरांची मजुरी एकूण रक्कमेनुसार आपोआप calculate होईल.</div>
-      <div id="MODE_NOTE_MANUAL" class="info-row" style="display:none;background:#FFF8E6;border-color:#E8701A;color:#7A6A52;">✍️ <b>Manual Mode:</b> प्रत्येक मजुराला किती रक्कम द्यायची ते स्वतः टाका. सर्व रकमांची बेरीज एकूण रकमेइतकी असणे आवश्यक आहे.</div>
-      <div class="sec-title">— मजुरांची यादी —</div>
-      <div style="overflow-x:auto">
+      <div id="MODE_NOTE_MANUAL" class="info-row" style="display:none;background:#fff7ed;border-color:#fed7aa;color:#c2410c;">✍️ <b>Manual Mode:</b> प्रत्येक मजुराला किती रक्कम द्यायची ते स्वतः टाका. सर्व रकमांची बेरीज एकूण रकमेइतकी असणे आवश्यक आहे.</div>
+      
+      <div class="sec-title">मजुरांची यादी</div>
+      <div style="overflow-x:auto; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 16px;">
         <table class="wtable">
           <thead><tr>
             <th class="tdnum">क्र.</th>
-            <th style="min-width:130px">मजुराचे नाव</th>
-            <th style="min-width:80px">पद</th>
-            <th style="min-width:90px">राहणार</th>
-            <th id="WA_HEAD" style="min-width:105px;display:none;">दिलेली रक्कम (₹)</th>
+            <th style="min-width:160px">मजुराचे नाव</th>
+            <th style="min-width:100px">पद</th>
+            <th style="min-width:120px">राहणार</th>
+            <th id="WA_HEAD" style="min-width:130px;display:none;">दिलेली रक्कम (₹)</th>
             <th class="tddel"></th>
           </tr></thead>
           <tbody id="WBODY"></tbody>
         </table>
       </div>
-      <button class="badd" id="BTN_ADD">+ मजूर जोडा</button>
-      <div class="note">💡 राहणार रिकामे सोडल्यास वरील "Default राहणार गाव" वापरला जाईल.</div>
+      <button class="badd" id="BTN_ADD">＋ नवीन मजूर जोडा</button>
+      <div class="note">💡 'राहणार' रकाना रिकाम्या सोडल्यास वरील "Default राहणार गाव" आपोआप वापरला जाईल.</div>
     </div>
   </div>
 
-  <button class="bgen" id="BTN_GEN">⚡ मजुरी बिल तयार करा</button>
+  <button class="bgen" id="BTN_GEN">⚡ मजुरी बिल (Voucher) तयार करा</button>
   <div class="eb" id="ERRBOX"></div>
-  <div class="spin-box" id="SPINBOX"><div class="spin"></div><div style="font-size:11pt;font-weight:700;">व्हाउचर तयार होत आहे...</div></div>
+  
+  <div class="spin-box" id="SPINBOX">
+    <div class="spin"></div>
+    <div style="font-size:13pt;font-weight:800;color:var(--navy);">बिल तयार होत आहे...</div>
+    <div style="font-size:10pt;color:#666;margin-top:5px;">कृपया थांबा</div>
+  </div>
 
   <div class="rbar" id="RBAR">
-    <span style="font-weight:700;">✅ मजुरी बिल तयार झाले</span>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="bprt" id="BTN_PRT">🖨️ Print / PDF</button>
+    <span style="font-weight:800;font-size:12pt;">✅ मजुरी बिल तयार झाले</span>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="bprt" id="BTN_PRT">🖨️ Print / PDF सेव करा</button>
     </div>
   </div>
   <div id="VOUT"></div>
 </div>
 
 
-<!-- PRINT TIP POPUP -->
-<div id="printTipOverlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:white;border-radius:16px;max-width:400px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <div style="background:#1A2744;color:white;padding:16px 20px;font-size:13pt;font-weight:700;">&#x1F5A8;&#xFE0F; Print करण्यापूर्वी</div>
-    <div style="padding:20px;font-family:'Noto Sans Devanagari',sans-serif;">
-      <div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;">
-        <div style="width:28px;height:28px;border-radius:50%;background:#E8701A;color:white;font-weight:800;font-size:10pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#x0967;</div>
-        <div><strong style="font-size:10pt;color:#1A2744;display:block;">Print dialog उघडेल</strong><span style="font-size:9pt;color:#9CA3AF;">More options / &#x25BC; वर click करा</span></div>
+<!-- PRINT TIP POPUP (REDESIGNED MODAL) -->
+<div id="printTipOverlay" style="display:none;position:fixed;inset:0;background:rgba(11, 17, 32, 0.85);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:white;border-radius:24px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.5);animation:fadeIn 0.3s ease;">
+    <div style="background:linear-gradient(135deg, var(--navy), #2C3E50);color:white;padding:20px 24px;font-size:14pt;font-weight:800;display:flex;align-items:center;gap:10px;">
+      🖨️ Print करण्यापूर्वी
+    </div>
+    <div style="padding:30px;font-family:'Noto Sans Devanagari',sans-serif;">
+      
+      <div style="display:flex;gap:15px;margin-bottom:20px;align-items:flex-start;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--saffron-light);color:var(--saffron);font-weight:800;font-size:12pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">१</div>
+        <div><strong style="font-size:11pt;color:var(--navy);display:block;margin-bottom:2px;">Print dialog उघडेल</strong><span style="font-size:9.5pt;color:#64748b;">More options / ▼ वर click करा</span></div>
       </div>
-      <div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;">
-        <div style="width:28px;height:28px;border-radius:50%;background:#E8701A;color:white;font-weight:800;font-size:10pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#x0968;</div>
-        <div><strong style="font-size:10pt;color:#1A2744;display:block;">Orientation &#x2192; Landscape निवडा</strong><span style="font-size:9pt;color:#9CA3AF;">Paper size: A4 असेल याची खात्री करा</span></div>
+      <div style="display:flex;gap:15px;margin-bottom:20px;align-items:flex-start;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--saffron-light);color:var(--saffron);font-weight:800;font-size:12pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">२</div>
+        <div><strong style="font-size:11pt;color:var(--navy);display:block;margin-bottom:2px;">Orientation → Landscape निवडा</strong><span style="font-size:9.5pt;color:#64748b;">Paper size: A4 असेल याची खात्री करा</span></div>
       </div>
-      <div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;">
-        <div style="width:28px;height:28px;border-radius:50%;background:#E8701A;color:white;font-weight:800;font-size:10pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&#x0969;</div>
-        <div><strong style="font-size:10pt;color:#1A2744;display:block;">Save as PDF करा</strong><span style="font-size:9pt;color:#9CA3AF;">सर्व माहिती एका page मध्ये येईल</span></div>
+      <div style="display:flex;gap:15px;margin-bottom:20px;align-items:flex-start;">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--saffron-light);color:var(--saffron);font-weight:800;font-size:12pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">३</div>
+        <div><strong style="font-size:11pt;color:var(--navy);display:block;margin-bottom:2px;">Save as PDF करा</strong><span style="font-size:9.5pt;color:#64748b;">सर्व माहिती एका page मध्ये अचूक येईल</span></div>
       </div>
-      <div style="background:#EEF2FF;border-radius:10px;padding:10px 16px;margin:12px 0;border:1px solid #C7D2FE;font-size:9pt;color:#3730A3;font-weight:600;">
-        &#x1F4C4;&#x2194;&#xFE0F; Orientation: <strong>Landscape</strong> &nbsp;|&nbsp; Paper: <strong>A4</strong>
+      
+      <div style="background:#f0f9ff;border-radius:12px;padding:12px 16px;margin:20px 0;border:1px solid #bae6fd;font-size:10pt;color:#0369a1;font-weight:700;text-align:center;">
+        📄 Orientation: Landscape &nbsp;|&nbsp; Size: A4
       </div>
-      <div style="display:flex;gap:10px;margin-top:14px;">
-        <button onclick="document.getElementById('printTipOverlay').style.display='none';" style="flex:1;padding:10px;border:1.5px solid #D4C5A9;border-radius:8px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;cursor:pointer;">रद्द करा</button>
-        <button onclick="document.getElementById('printTipOverlay').style.display='none';var s=document.getElementById('PS');if(!s){s=document.createElement('style');s.id='PS';document.head.appendChild(s);}s.innerHTML='@page{size:A4 landscape;margin:6mm 8mm;}';setTimeout(function(){window.print();},100);" style="flex:2;padding:10px;border:none;border-radius:8px;background:#E8701A;color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;">&#x1F5A8;&#xFE0F; Print उघडा &#x2192;</button>
+      
+      <div style="display:flex;gap:12px;margin-top:24px;">
+        <button onclick="document.getElementById('printTipOverlay').style.display='none';" style="flex:1;padding:12px;border:2px solid #e2e8f0;border-radius:12px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;color:#64748b;cursor:pointer;transition:all 0.2s;">रद्द करा</button>
+        <button onclick="document.getElementById('printTipOverlay').style.display='none';var s=document.getElementById('PS');if(!s){s=document.createElement('style');s.id='PS';document.head.appendChild(s);}s.innerHTML='@page{size:A4 landscape;margin:6mm 8mm;}';setTimeout(function(){window.print();},100);" style="flex:2;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg, var(--saffron), #e66b0e);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;box-shadow:0 6px 15px rgba(245, 130, 32, 0.3);transition:all 0.2s;">🖨️ Print उघडा ➔</button>
       </div>
     </div>
   </div>
 </div>
-<!-- Firebase + Voucher Logic -->
+
+<!-- Firebase + Voucher Logic (UNCHANGED LOGIC) -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ══ FIREBASE CONFIG ══
 const firebaseConfig = {
   apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
   authDomain: "gpsakhi-9685e.firebaseapp.com",
@@ -293,11 +427,9 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('F_LR').value = d.lr || 500;
     document.getElementById('autofillBar').style.display = 'flex';
     document.getElementById('gpBar').style.display = 'flex';
-    document.getElementById('gpBarInfo').textContent = 'ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
+    document.getElementById('gpBarInfo').innerHTML = '🏛️ ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
   }
 });
-
-
 </script>
 
 <script type="text/javascript">
@@ -308,13 +440,18 @@ function ADD_WORKER() {
   var defV = document.getElementById('F_VLG').value.trim();
   var tr = document.createElement('tr');
   tr.id = 'WR' + id;
-  var isManual = (document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)');
+  var isManual = (document.getElementById('MODE_MANUAL').style.background === 'rgb(248, 250, 252)' || document.getElementById('MODE_MANUAL').style.background === '#f8fafc' || document.getElementById('MODE_MANUAL').style.background === '') ? false : true;
+  // Fallback for logic check: The old JS checked specifically for '#1A2744' or 'rgb(26, 39, 68)'
+  if (document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' || document.getElementById('MODE_MANUAL').style.background === '#1A2744') {
+      isManual = true;
+  }
+  
   var waDisplay = isManual ? '' : 'none';
   tr.innerHTML = '<td class="tdnum"><span class="wnum">' + id + '</span></td>' +
     '<td><input type="text" class="WN" placeholder="मजुराचे नाव"></td>' +
     '<td><select class="WP"><option value="लेबर">लेबर</option><option value="मिस्त्री">मिस्त्री</option></select></td>' +
     '<td><input type="text" class="WV" value="' + defV + '" placeholder="रिकामे=default"></td>' +
-    '<td class="WA_CELL" style="display:' + waDisplay + ';"><input type="number" class="WA" placeholder="रक्कम टाका" min="0" style="width:100%;padding:5px 6px;border:1px solid #D4C5A9;border-radius:4px;font-size:9pt;background:white;"></td>' +
+    '<td class="WA_CELL" style="display:' + waDisplay + ';"><input type="number" class="WA" placeholder="रक्कम टाका" min="0"></td>' +
     '<td class="tddel"><button class="delbtn" onclick="DEL(' + id + ')">✕</button></td>';
   document.getElementById('WBODY').appendChild(tr);
   RENUM();
@@ -329,7 +466,7 @@ function GETW() {
     if (!nm) continue;
     var waEl = rows[i].getElementsByClassName('WA');
     var av = (waEl.length > 0) ? waEl[0].value.trim() : '';
-    var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)';
+    var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' || document.getElementById('MODE_MANUAL').style.background === '#1A2744';
     var manualAmt = (isManualMode && av !== '') ? parseInt(av) : null;
     out.push({ name: nm, post: rows[i].getElementsByClassName('WP')[0].value, village: rows[i].getElementsByClassName('WV')[0].value.trim() || defV, manualAmt: manualAmt });
   }
@@ -346,7 +483,7 @@ window.setMode = function(mode) {
 
   if (mode === 'auto') {
     autoBtn.style.background = '#1A2744'; autoBtn.style.color = 'white';
-    manualBtn.style.background = '#F5F0E8'; manualBtn.style.color = '#888';
+    manualBtn.style.background = '#f8fafc'; manualBtn.style.color = '#64748b';
     waHead.style.display = 'none';
     noteAuto.style.display = 'block'; noteManual.style.display = 'none';
     for (var i = 0; i < waCells.length; i++) {
@@ -355,7 +492,7 @@ window.setMode = function(mode) {
     }
   } else {
     manualBtn.style.background = '#1A2744'; manualBtn.style.color = 'white';
-    autoBtn.style.background = '#F5F0E8'; autoBtn.style.color = '#888';
+    autoBtn.style.background = '#f8fafc'; autoBtn.style.color = '#64748b';
     waHead.style.display = '';
     noteAuto.style.display = 'none'; noteManual.style.display = 'block';
     for (var i = 0; i < waCells.length; i++) {
@@ -654,7 +791,7 @@ function GENERATE() {
   if(amt<=0){eb.innerHTML='एकूण रक्कम टाका.';eb.className='eb on';return;}
   if(!workers.length){eb.innerHTML='कमीत कमी एक मजुराचे नाव टाका.';eb.className='eb on';return;}
   // Manual mode validation
-  var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)';
+  var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' || document.getElementById('MODE_MANUAL').style.background === '#1A2744';
   if(isManualMode){
     var anyBlank = workers.some(function(w){return w.manualAmt===null||isNaN(w.manualAmt);});
     if(anyBlank){eb.innerHTML='⚠️ Manual mode मध्ये सर्व मजुरांची दिलेली रक्कम टाकणे आवश्यक आहे.';eb.className='eb on';return;}
@@ -673,12 +810,9 @@ function GENERATE() {
     try{
       var p=dateV.split('-');
       var sd=new Date(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]),0,0,0,0);
-      // Manual mode मध्ये: सर्वात जास्त manualAmt असलेल्या मजुराच्या दिवसांनुसार vouchers बनवा
-      var isManualModeActive = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)';
+      var isManualModeActive = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' || document.getElementById('MODE_MANUAL').style.background === '#1A2744';
       var calcTotal = amt;
       if(isManualModeActive){
-        // सर्वात जास्त दिवस असलेला मजूर शोधा (रक्कम नाही — दिवस!)
-        // दिवस = manualAmt / rate (मिस्त्री=mr, लेबर=lr)
         var maxDays=0, maxWorker=null;
         for(var wi=0;wi<workers.length;wi++){
           var wk2=workers[wi];
@@ -686,7 +820,6 @@ function GENERATE() {
           var wDays=wk2.manualAmt/rt2;
           if(wDays>maxDays){maxDays=wDays;maxWorker=wk2;}
         }
-        // त्या मजुराची रक्कम CALC ला पाठवा — voucher structure त्यानुसार बनेल
         calcTotal = maxWorker.manualAmt;
         var tempWorkers=[maxWorker];
         var res=CALC(sd,calcTotal,tempWorkers,mr,lr,hday);
@@ -701,21 +834,15 @@ function GENERATE() {
       var vs=res.vs;
       var info={gp:gpN,ps:gpP,dist:gpD,sarp:gpS,gram:gpG,work:work};
       var html='';
-      // Manual mode: प्रत्येक worker ची दिलेली रक्कम voucher-wise वाटा
-      // Manual mode CALC मध्ये single worker वापरला — v2.wd हे working days बरोबर आहेत
-      // प्रत्येक voucher मध्ये MAX working days = v2.wd
-      // त्या worker ला त्याच्या manualAmt नुसार किती दिवस काम होते ते calculate करा
       for(var wi=0;wi<workers.length;wi++){
         var wk=workers[wi];
         var rt2=wk.post==='मिस्त्री'?mr:lr;
         if(wk.manualAmt!==null&&wk.manualAmt!==undefined){
           var remaining=wk.manualAmt;
           wk._perVoucherPaid=[];
-          // या worker चे total days = manualAmt / rate
           var totalDaysF=wk.manualAmt/rt2;
           var fullDaysTotal=Math.floor(totalDaysF);
           var partialAmt=Math.round((totalDaysF-fullDaysTotal)*rt2);
-          // partialAmt > 0 असेल तर शेवटच्या voucher मध्ये extra amount मिळतो
           for(var vi=0;vi<vs.length;vi++){
             var v2=vs[vi];
             var isLastVoucher=(vi===vs.length-1);
@@ -755,3 +882,4 @@ function PRINTIT() {
 </script>
 </body>
 </html>
+
