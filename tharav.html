@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ठराव जनरेटर — GP Sakhi</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--gold:#C49A22;--cream:#FAF7F2;--sand:#E0D5C0;--text:#1C1410;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:#EDEAD4;color:var(--text);min-height:100vh;}
+
+/* ── NAV ── */
+nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,#FF9933 33%,#fff 33%,#fff 66%,#138808 66%) 1;box-shadow:0 2px 16px rgba(0,0,0,0.25);}
+.back-btn{color:rgba(255,255,255,0.65);text-decoration:none;font-size:10pt;display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;transition:all 0.2s;}
+.back-btn:hover{color:white;background:rgba(255,255,255,0.08);}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;}
+.nav-emblem{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 2px 10px rgba(232,112,26,0.4);}
+.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:white;}
+.nav-logo small{font-size:7.5pt;color:rgba(255,255,255,0.45);display:block;margin-top:-3px;letter-spacing:0.5px;}
+
+/* ── AUTOFILL BAR ── */
+.autofill-bar-wrap{background:linear-gradient(135deg,#EAF5EE,#D4EDDA);border-bottom:2px solid #86EFAC;padding:9px 22px;font-size:9pt;color:#166534;display:none;align-items:center;gap:8px;animation:slideDown 0.5s ease;}
+.autofill-bar-wrap.show{display:flex;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:translateY(0);}}
+
+/* ── LAYOUT ── */
+.main-wrap{display:grid;grid-template-columns:440px 1fr;min-height:calc(100vh - 64px);}
+.form-panel{background:white;border-right:1px solid var(--sand);padding:20px 18px 80px;overflow-y:auto;max-height:calc(100vh - 64px);position:sticky;top:64px;}
+.preview-panel{padding:20px;background:#EDEAD4;}
+.form-title{font-family:'Tiro Devanagari Marathi',serif;font-size:17pt;color:var(--navy);margin-bottom:3px;}
+.form-sub{font-size:9pt;color:#9CA3AF;margin-bottom:16px;}
+
+/* ── SECTIONS ── */
+.section{margin-bottom:16px;border-radius:12px;overflow:hidden;border:1px solid #F0EDE8;box-shadow:0 1px 6px rgba(0,0,0,0.04);}
+.sec-title{font-size:10pt;font-weight:700;color:white;background:linear-gradient(135deg,var(--navy),#2a3f6e);padding:9px 14px;display:flex;align-items:center;gap:7px;}
+.sec-body{padding:12px 14px;}
+
+/* ── FORM FIELDS ── */
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+.fld:last-child{margin-bottom:0;}
+.fld label{font-size:8.5pt;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;}
+.fld input,.fld select,.fld textarea{padding:8px 11px;border:1.5px solid var(--sand);border-radius:8px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;background:#FAFAF7;width:100%;transition:all 0.2s;}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--saffron);background:white;box-shadow:0 0 0 3px rgba(232,112,26,0.1);transform:translateY(-1px);}
+.fld input[type=time]{cursor:pointer;}
+.fld textarea{resize:vertical;min-height:90px;line-height:1.7;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.req{color:var(--saffron);}
+
+/* ── SABHA TABS ── */
+.stabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+.stab{flex:1;min-width:85px;padding:9px 6px;text-align:center;border:1.5px solid var(--sand);border-radius:9px;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;font-size:9pt;color:#6B7280;transition:all 0.25s ease;white-space:nowrap;font-weight:600;}
+.stab:hover{border-color:var(--saffron);color:var(--saffron);}
+.stab.on{border-color:var(--saffron);background:linear-gradient(135deg,#FFF5EE,#FFE8D6);color:var(--saffron);font-weight:700;box-shadow:0 2px 10px rgba(232,112,26,0.15);}
+
+/* ── TOGGLES ── */
+.vishesh-toggle,.suchak-toggle{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#FAFAF7;border:1.5px solid var(--sand);border-radius:9px;cursor:pointer;margin-top:6px;transition:all 0.2s;}
+.vishesh-toggle:hover,.suchak-toggle:hover{border-color:var(--saffron);background:#FFF8F3;}
+.vishesh-toggle input[type=checkbox],.suchak-toggle input[type=checkbox]{width:16px;height:16px;accent-color:var(--saffron);cursor:pointer;}
+.vishesh-toggle label,.suchak-toggle label{font-size:9.5pt;font-weight:600;color:var(--navy);cursor:pointer;}
+.suchak-toggle{margin-bottom:0;}
+.suchak-fields{display:none;}
+.suchak-fields.on{display:block;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── GP TYPE TOGGLE ── */
+.gptw{display:flex;gap:6px;margin-bottom:8px;}
+.gptb{flex:1;padding:10px 6px;text-align:center;border:1.5px solid var(--sand);border-radius:9px;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;font-size:9.5pt;color:#6B7280;transition:all 0.25s ease;font-weight:600;}
+.gptb:hover{border-color:var(--saffron);color:var(--saffron);}
+.gptb.on{border-color:var(--saffron);background:linear-gradient(135deg,#FFF5EE,#FFE8D6);color:var(--saffron);font-weight:700;box-shadow:0 2px 10px rgba(232,112,26,0.15);}
+
+/* ── BUTTONS ── */
+.btn-print{display:block;width:100%;background:linear-gradient(135deg,var(--saffron),#d4620f);color:white;border:none;border-radius:10px;padding:14px;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;cursor:pointer;margin-top:8px;box-shadow:0 4px 16px rgba(232,112,26,0.3);transition:all 0.25s;}
+.btn-print:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(232,112,26,0.45);}
+.btn-save{display:block;width:100%;background:linear-gradient(135deg,var(--green),#14532d);color:white;border:none;border-radius:10px;padding:12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:700;cursor:pointer;margin-top:6px;box-shadow:0 4px 14px rgba(26,110,60,0.3);transition:all 0.25s;}
+.btn-save:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(26,110,60,0.4);}
+.gp-autofill{background:#EAF5EE;border:1px solid #86EFAC;border-radius:8px;padding:8px 12px;font-size:9pt;color:#166534;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.info-box{background:#FFF8E6;border:1px solid #FBBF24;border-radius:8px;padding:8px 12px;font-size:9pt;color:#92400E;margin-bottom:10px;}
+
+/* ── PREVIEW ── */
+.ptit{font-size:10.5pt;font-weight:700;color:#6B7280;margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:0.5px;text-transform:uppercase;font-size:8.5pt;}
+.lout{background:white;box-shadow:0 4px 24px rgba(0,0,0,0.12);border-radius:6px;overflow:hidden;max-width:720px;}
+#tp{padding:20px;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:13px;line-height:1.7;color:#000;}
+#tp .th-hdr{text-align:center;border-bottom:3px double #000;padding-bottom:12px;margin-bottom:18px;}
+#tp .th-hdr h1{font-size:20px;font-weight:800;margin:0;letter-spacing:0.3px;}
+#tp .th-hdr h2{font-size:13px;font-weight:400;margin:4px 0 0;color:#444;}
+#tp .th-hdr .offs{display:flex;justify-content:space-between;margin-top:14px;font-size:11.5px;font-weight:700;border-top:1px solid #ddd;padding-top:10px;}
+#tp .th-hdr .ob{text-align:center;width:30%;line-height:1.6;}
+#tp .tharav-title{text-align:center;font-size:15px;font-weight:800;text-decoration:underline;text-underline-offset:4px;margin:16px 0 12px;letter-spacing:0.5px;}
+#tp .th-meta{font-size:12.5px;margin-bottom:14px;border:1.5px solid #000;border-radius:4px;overflow:hidden;}
+#tp .th-meta table{width:100%;border-collapse:collapse;}
+#tp .th-meta td{padding:5px 10px;border-bottom:1px solid #ddd;}
+#tp .th-meta tr:last-child td{border-bottom:none;}
+#tp .th-meta td strong{color:#000;}
+#tp .th-body{font-size:13px;line-height:1.9;}
+#tp .th-body p{margin-bottom:10px;text-indent:40px;text-align:justify;}
+#tp .tharav-block{margin:16px 0;border:1.5px solid #000;border-radius:6px;overflow:hidden;}
+#tp .tharav-block .t-title{font-weight:800;font-size:13px;background:#f5f5f5;padding:8px 12px;border-bottom:1.5px solid #000;}
+#tp .tharav-block .t-khulasa-wrap{border-top:1.5px solid #000;}
+#tp .tharav-block .t-khulasa-head{background:#1A2744;color:white;font-weight:700;font-size:11.5px;padding:5px 12px;display:flex;align-items:center;gap:6px;letter-spacing:0.5px;}
+#tp .tharav-block .t-khulasa-head::before{content:'◈';font-size:10px;opacity:0.7;}
+#tp .tharav-block .t-khulasa{font-size:13px;line-height:1.9;padding:10px 12px;background:#fafafa;}
+#tp .tharav-block .t-khulasa p{text-indent:2em;text-align:justify;margin:4px 0;}
+#tp .tharav-block .t-khulasa .last-line{text-align:center;font-weight:700;display:block;margin-top:10px;padding-top:8px;border-top:1px dashed #ccc;}
+#tp .suchak-row{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;font-weight:700;line-height:1.9;padding:10px 0;border-top:1px dashed #ccc;border-bottom:1px dashed #ccc;}
+#tp .suchak-row .suchak-left{text-align:left;}
+#tp .suchak-row .suchak-right{text-align:right;}
+#tp .sign{margin-top:50px;display:flex;justify-content:space-between;font-weight:700;font-size:12px;line-height:1.9;}
+#tp .sign .sign-left{text-align:left;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}
+#tp .sign .sign-right{text-align:right;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}
+#tp .th-empty{color:#ccc;text-align:center;padding:50px;font-size:11pt;}
+
+@media(max-width:800px){.main-wrap{grid-template-columns:1fr;}.form-panel{max-height:none;position:static;}.preview-panel{padding:16px;}.g2,.g3{grid-template-columns:1fr;}}
+@media print{nav,.form-panel,.autofill-bar-wrap,.ptit{display:none!important;}.main-wrap{display:block;}.preview-panel{padding:0;}.lout{box-shadow:none;}body{background:white;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-emblem">🏛️</div>
+    <div><span>GP Sakhi</span><small>ग्रामपंचायत सखी</small></div>
+  </a>
+  <div style="width:80px;"></div>
+</nav>
+
+<div class="autofill-bar-wrap" id="autoFillBar">
+  ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;margin-left:4px;">बदलायचे असेल तर येथे क्लिक करा</a>
+</div>
+
+<div class="main-wrap">
+ <div class="form-panel">
+  <div class="form-title">📜 ठराव जनरेटर</div>
+  <div class="form-sub">सभेचा एक ठराव मराठीत तयार करा</div>
+  <div class="info-box" id="noProfileBar" style="display:none;">⚠️ GP Profile नाही. <a href="profile.html" style="color:var(--saffron);font-weight:700;">सेट करा →</a></div>
+
+  <div class="section">
+    <div class="sec-title">📋 सभेचा प्रकार</div>
+    <div class="sec-body">
+      <div class="stabs">
+        <div class="stab on" id="st0" onclick="setSabha(0)">मासिक सभा</div>
+        <div class="stab"    id="st1" onclick="setSabha(1)">ग्रामसभा</div>
+        <div class="stab"    id="st2" onclick="setSabha(2)">महिला सभा</div>
+        <div class="stab"    id="st3" onclick="setSabha(3)">वार्ड सभा</div>
+      </div>
+      <div class="vishesh-toggle" onclick="toggleVishesh()">
+        <input type="checkbox" id="visheshChk">
+        <label for="visheshChk">विशेष सभा (विशेष मासिक / विशेष ग्रामसभा इ.)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">🏛️ ग्रामपंचायत माहिती</div>
+    <div class="sec-body">
+      <div class="fld"><label>प्रकार <span class="req">*</span></label>
+        <div class="gptw">
+          <div class="gptb on" id="gp0" onclick="setGPT(0)">ग्रामपंचायत</div>
+          <div class="gptb"    id="gp1" onclick="setGPT(1)">गट ग्रामपंचायत</div>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="तोंडली" oninput="rp()"></div>
+        <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="मौदा" oninput="rp()"></div>
+        <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="नागपूर" oninput="rp()"></div>
+      </div>
+      <div class="g2">
+        <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="सौ. दर्शना बागडे" oninput="syncAdhyaksha();rp()"></div>
+        <div class="fld"><label>उपसरपंच</label><input type="text" id="usarp" placeholder="श्री. रामपाल धांडे" oninput="rp()"></div>
+      </div>
+      <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="श्री. वैभव बावनकर" oninput="rp()"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">📅 सभेची माहिती</div>
+    <div class="sec-body">
+      <div class="g2">
+        <div class="fld"><label>दिनांक <span class="req">*</span></label><input type="date" id="din" onchange="rp()"></div>
+        <div class="fld"><label>वेळ 🕐</label><input type="time" id="vel" onchange="rp()"></div>
+      </div>
+      <div class="fld"><label>स्थळ</label><input type="text" id="sthal" placeholder="ग्रामपंचायत कार्यालय" oninput="rp()"></div>
+      <div class="fld"><label>अध्यक्षस्थानी <span class="req">*</span></label><input type="text" id="adhyaksha" placeholder="सौ. दर्शना बागडे" oninput="rp()"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">📌 ठराव</div>
+    <div class="sec-body">
+      <div class="fld"><label>ठराव क्रमांक <span class="req">*</span></label><input type="text" id="thno" placeholder="उदा. १ किंवा १/१" oninput="rp()"></div>
+      <div class="fld"><label>विषय <span class="req">*</span></label><input type="text" id="vishay" placeholder="ठरावाचा विषय लिहा" oninput="rp()"></div>
+      <div class="fld"><label>खुलासा</label><textarea id="khulasa" rows="6" placeholder="सभेत झालेल्या चर्चेचा खुलासा व ठरावाचा मजकूर येथे लिहा..." oninput="rp()"></textarea></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">✍️ सूचक / अनुमोदक <span style="font-size:8pt;opacity:0.6;font-weight:400;">(optional)</span></div>
+    <div class="sec-body">
+      <div class="suchak-toggle" onclick="toggleSuchak()">
+        <input type="checkbox" id="suchakChk">
+        <label for="suchakChk">सूचक आणि अनुमोदक जोडायचे आहेत</label>
+      </div>
+      <div class="suchak-fields" id="suchakFields">
+        <div class="g2" style="margin-top:10px;">
+          <div class="fld"><label>सूचक</label><input type="text" id="suchak" placeholder="सूचकाचे नाव" oninput="rp()"></div>
+          <div class="fld"><label>अनुमोदक</label><input type="text" id="anumodik" placeholder="अनुमोदकाचे नाव" oninput="rp()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-print" onclick="doPrint()">🖨️ Print / PDF</button>
+  <button class="btn-save" id="saveBtn" onclick="doSave()">💾 Firebase मध्ये Save करा</button>
+ </div>
+
+ <div class="preview-panel">
+  <div class="ptit">
+    <span>👁️ ठरावाचे Live Preview</span>
+    <span>बदल केल्यावर लगेच दिसतो</span>
+  </div>
+  <div class="lout"><div id="tp"><div class="th-empty">माहिती भरल्यावर ठराव येथे दिसेल...</div></div></div>
+ </div>
+</div>
+
+<!-- 100% Safe Global Variables to Prevent Errors -->
+<script>
+window.SABHA = 0;
+window.VISHESH = false;
+window.GPT_THARAV = 1;
+window.SABHA_NAMES = ['मासिक सभा','ग्रामसभा','महिला सभा','वार्ड सभा'];
+window.adhyakshaEdited = false;
+
+function g(id){ return document.getElementById(id); }
+function gv(id){ var e = g(id); return e ? e.value.trim() : ''; }
+
+function setSabha(t){
+  window.SABHA = t;
+  for(var i=0; i<4; i++) g('st'+i).classList.toggle('on', i===t);
+  rp();
+}
+window.setSabha = setSabha;
+
+function setGPT(t){
+  window.GPT_THARAV = t;
+  g('gp0').classList.toggle('on', t===0);
+  g('gp1').classList.toggle('on', t===1);
+  rp();
+}
+window.setGPT = setGPT;
+
+function toggleVishesh(){
+  setTimeout(function(){
+    window.VISHESH = g('visheshChk').checked;
+    rp();
+  }, 10);
+}
+window.toggleVishesh = toggleVishesh;
+
+function toggleSuchak(){
+  setTimeout(function(){
+    var on = g('suchakChk').checked;
+    g('suchakFields').classList.toggle('on', on);
+    rp();
+  }, 10);
+}
+window.toggleSuchak = toggleSuchak;
+
+function getSabhaTitle(){
+  return (window.VISHESH ? 'विशेष ' : '') + window.SABHA_NAMES[window.SABHA];
+}
+
+function fmtTime(val){
+  if(!val) return '';
+  var p = val.split(':'), h = parseInt(p[0]), m = p[1];
+  var ampm = h >= 12 ? 'सायंकाळी' : 'सकाळी';
+  var h12 = h % 12 || 12;
+  return ampm + ' ' + h12 + ':' + m + ' वाजता';
+}
+
+function fmtD(s){
+  if(!s) return '';
+  var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function buildHTML(){
+  var gpn = gv('gpn'), gpt = gv('gpt'), gpd = gv('gpd');
+  var sarp = gv('sarp'), usarp = gv('usarp'), gram = gv('gram');
+  var din = fmtD(g('din').value) || '__/__/____';
+  var vel = fmtTime(g('vel').value) || '_____';
+  var sthal = gv('sthal') || 'ग्रामपंचायत कार्यालय';
+  var adhyaksha = gv('adhyaksha') || sarp || 'सरपंच';
+  var thno = gv('thno') || '___';
+  var vishay = gv('vishay') || '___________________';
+  var khulasa = g('khulasa').value.trim();
+  var sabhaTitle = getSabhaTitle();
+  
+  var chk = g('suchakChk');
+  var showSuchak = chk && chk.checked;
+  var suchak = showSuchak ? gv('suchak') : '';
+  var anumodik = showSuchak ? gv('anumodik') : '';
+
+  var office = (window.GPT_THARAV === 1 ? 'गट ग्रामपंचायत ' : 'ग्रामपंचायत ') + (gpn || '_____');
+  var addr = []; 
+  if(gpt) addr.push('पं. स. ' + gpt); 
+  if(gpd) addr.push('जि. ' + gpd);
+
+  var hdr = '<div class="th-hdr"><h1>'+office+'</h1>'+(addr.length ? '<h2>'+addr.join(', ')+'</h2>' : '')+'</div>';
+  var ttl = '<div class="tharav-title">'+sabhaTitle+' — ठराव</div>';
+  var meta = '<div class="th-meta"><table>'
+    +'<tr><td><strong>दिनांक :</strong> '+din+'</td><td><strong>वेळ :</strong> '+vel+'</td></tr>'
+    +'<tr><td colspan="2"><strong>स्थळ :</strong> '+sthal+'</td></tr>'
+    +'</table></div>';
+
+  var body = '<div class="th-body"><p>आज दिनांक '+din+' रोजी '+vel+' माननीय अध्यक्ष <strong>'+adhyaksha+'</strong> यांच्या अध्यक्षतेखाली '+sthal+' येथे '+sabhaTitle+' घेण्यात आली. आजच्या सभेत खालील ठराव पारित करण्यात आला आहे.</p>';
+
+  var kBox = '';
+  if(khulasa){
+    var lines = khulasa.split('\n');
+    var lastLine = '';
+    for(var li=lines.length-1; li>=0; li--){
+      if(lines[li].trim()){ lastLine=lines[li].trim(); lines.splice(li,1); break; }
+    }
+    var kInner = '';
+    lines.forEach(function(l){
+      if(l.trim()){ kInner += '<p style="text-indent:2em;margin:4px 0;">'+l.trim()+'</p>'; } 
+      else { kInner += '<p style="margin:2px 0;"></p>'; }
+    });
+    if(lastLine) kInner += '<p class="last-line" style="text-align:center;font-weight:bold;margin-top:8px;">'+lastLine+'</p>';
+    kBox = '<div class="t-khulasa-wrap"><div class="t-khulasa-head">खुलासा</div><div class="t-khulasa">'+kInner+'</div></div>';
+  }
+
+  body += '<div class="tharav-block"><div class="t-title">ठराव क्र. '+thno+' : '+vishay+'</div>'+kBox+'</div>';
+
+  if(showSuchak && (suchak || anumodik)){
+    body += '<div class="suchak-row">'
+      +'<div class="suchak-left">सूचक :<br><strong>'+(suchak||'—')+'</strong></div>'
+      +'<div class="suchak-right">अनुमोदक :<br><strong>'+(anumodik||'—')+'</strong></div>'
+      +'</div>';
+  }
+  body += '</div>';
+
+  var ss = sarp.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'') || 'सरपंच';
+  var gs = gram.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'') || 'ग्रामपंचायत अधिकारी';
+  var sign = '<div class="sign">'
+    +'<div class="sign-left">('+ss+')<br>सरपंच<br>'+office+'</div>'
+    +'<div class="sign-right">('+gs+')<br>ग्रामपंचायत अधिकारी<br>'+office+'</div>'
+    +'</div>';
+
+  return hdr + ttl + meta + body + sign;
+}
+
+function rp(){
+  var e = g('tp');
+  if(e) e.innerHTML = buildHTML();
+}
+window.rp = rp;
+
+var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:white;color:#000;}.a4{width:210mm;min-height:297mm;padding:18mm 22mm 18mm 28mm;margin:0 auto;background:white;line-height:1.85;font-size:13px;color:#000;}.th-hdr{text-align:center;border-bottom:3px double #000;padding-bottom:12px;margin-bottom:18px;}.th-hdr h1{font-size:18px;font-weight:800;margin:0;letter-spacing:0.3px;}.th-hdr h2{font-size:12px;font-weight:400;margin:4px 0 0;}.tharav-title{text-align:center;font-size:15px;font-weight:800;text-decoration:underline;margin:16px 0 12px;letter-spacing:0.5px;}.th-meta{font-size:12px;margin-bottom:14px;border:1.5px solid #000;}.th-meta table{width:100%;border-collapse:collapse;}.th-meta td{padding:5px 10px;border-bottom:1px solid #000;}.th-meta tr:last-child td{border-bottom:none;}.th-body{font-size:13px;line-height:1.85;}.th-body p{margin-bottom:10px;text-indent:40px;text-align:justify;}.tharav-block{margin:16px 0;border:1.5px solid #000;}.tharav-block .t-title{font-weight:800;font-size:13px;background:#efefef!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:7px 12px;border-bottom:1.5px solid #000;}.tharav-block .t-khulasa-wrap{border-top:1.5px solid #000;}.tharav-block .t-khulasa-head{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;font-weight:700;font-size:12px;padding:5px 12px;letter-spacing:0.5px;}.tharav-block .t-khulasa{font-size:13px;line-height:1.85;padding:10px 12px;text-align:justify;}.tharav-block .t-khulasa p{margin:5px 0;text-indent:2em;text-align:justify;}.tharav-block .t-khulasa p.last-line{text-align:center;font-weight:700;text-indent:0;margin-top:10px;padding-top:8px;border-top:1px solid #000;}.tharav-block .t-khulasa .last-line{text-align:center;font-weight:700;display:block;margin-top:8px;}.suchak-row{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;font-weight:700;line-height:1.9;padding:10px 0;border-top:1px solid #000;border-bottom:1px solid #000;}.suchak-row .suchak-left{text-align:left;}.suchak-row .suchak-right{text-align:right;}.sign{margin-top:60px;display:flex;justify-content:space-between;font-weight:700;font-size:12px;line-height:1.9;}.sign .sign-left{text-align:left;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}.sign .sign-right{text-align:right;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}@page{size:A4 portrait;margin:0;}@media print{*{color:#000!important;background:white!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}.tharav-block .t-khulasa-head,.tharav-block .t-title{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}';
+
+function doPrint(){
+  var w = window.open('','_blank');
+  if(!w){ alert('Popup blocked!'); return; }
+  w.document.write('<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
+    +'<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">'
+    +'<style>'+PCSS+'</style></head><body><div class="a4">'+buildHTML()+'</div>'
+    +'<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>');
+  w.document.close();
+}
+window.doPrint = doPrint;
+
+function syncAdhyaksha(){
+  if(!window.adhyakshaEdited){
+    var s = document.getElementById('sarp').value.trim();
+    var a = document.getElementById('adhyaksha');
+    if(a && s) a.value = s;
+  }
+}
+window.syncAdhyaksha = syncAdhyaksha;
+
+document.addEventListener('DOMContentLoaded', function(){
+  var a = document.getElementById('adhyaksha');
+  if(a) a.addEventListener('input', function(){ window.adhyakshaEdited = true; });
+  
+  // Prefill default date and time
+  var din = g('din');
+  var vel = g('vel');
+  if(din && !din.value) din.value = new Date().toISOString().split('T')[0];
+  if(vel && !vel.value) vel.value = '11:00';
+  rp();
+});
+</script>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey:            'AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw',
+  authDomain:        'gpsakhi-9685e.firebaseapp.com',
+  projectId:         'gpsakhi-9685e',
+  storageBucket:     'gpsakhi-9685e.firebasestorage.app',
+  messagingSenderId: '107629589245',
+  appId:             '1:107629589245:web:7b288fda76b26aaadac494'
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+let currentUser = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+    if (!snap.exists()) {
+      const bar = document.getElementById('noProfileBar');
+      if (bar) bar.style.display = 'block';
+      return;
+    }
+    const d = snap.data();
+
+    // Auto-fill values
+    document.getElementById('gpn').value   = d.gpName || '';
+    document.getElementById('gpt').value   = d.ps     || '';
+    document.getElementById('gpd').value   = d.dist   || '';
+    document.getElementById('sarp').value  = d.sarp   || '';
+    document.getElementById('usarp').value = d.usSarp || '';
+    document.getElementById('gram').value  = d.gram   || '';
+
+    var gpTypeVal = d.gpType || 'gat';
+    window.setGPT(gpTypeVal === 'gram' ? 0 : 1);
+
+    const sthalEl = document.getElementById('sthal');
+    if (sthalEl && !sthalEl.value.trim()) {
+      sthalEl.value = 'ग्रामपंचायत कार्यालय' + (d.gpName ? ', ' + d.gpName : '');
+    }
+    
+    if (!window.adhyakshaEdited) {
+      document.getElementById('adhyaksha').value = d.sarp || '';
+    }
+
+    var bar = document.getElementById('autoFillBar');
+    if (bar) bar.classList.add('show');
+    
+    window.rp();
+  } catch(e) {
+    console.log('Profile fetch error:', e);
+  }
+});
+
+window.doSave = async function() {
+  if (!currentUser) { alert('लॉगिन करा.'); return; }
+  const gpn = document.getElementById('gpn').value.trim();
+  if (!gpn) { alert('ग्रामपंचायत नाव भरा.'); return; }
+  
+  const btn = document.getElementById('saveBtn');
+  btn.textContent = '⏳ Save होत आहे...'; btn.disabled = true;
+  
+  try {
+    const chk = document.getElementById('suchakChk');
+    const showS = chk ? chk.checked : false;
+    const isVishesh = document.getElementById('visheshChk').checked;
+    const sabhaName = window.SABHA_NAMES[window.SABHA];
+    
+    await addDoc(collection(db, 'users', currentUser.uid, 'tharav'), {
+      gpName:    gpn,
+      ps:        document.getElementById('gpt').value.trim(),
+      dist:      document.getElementById('gpd').value.trim(),
+      sabhaType: (isVishesh ? 'विशेष ' : '') + sabhaName,
+      date:      document.getElementById('din').value,
+      time:      document.getElementById('vel').value,
+      sthal:     document.getElementById('sthal').value.trim(),
+      adhyaksha: document.getElementById('adhyaksha').value.trim(),
+      tharavNo:  document.getElementById('thno').value.trim(),
+      vishay:    document.getElementById('vishay').value.trim(),
+      khulasa:   document.getElementById('khulasa').value.trim(),
+      suchak:    showS ? document.getElementById('suchak').value.trim() : '',
+      anumodik:  showS ? document.getElementById('anumodik').value.trim() : '',
+      createdAt: serverTimestamp()
+    });
+    
+    btn.textContent = '✅ यशस्वीरित्या Saved!'; 
+    btn.style.background = '#1A6E3C';
+    
+    setTimeout(function(){ 
+      btn.textContent='💾 Firebase मध्ये Save करा'; 
+      btn.style.background=''; 
+      btn.disabled=false; 
+    }, 2500);
+    
+  } catch(e) {
+    alert('त्रुटी: ' + e.message);
+    btn.textContent = '💾 Firebase मध्ये Save करा'; 
+    btn.disabled = false;
+  }
+};
+</script>
+</body>
+</html>
+
+
