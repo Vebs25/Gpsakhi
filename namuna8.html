@@ -5,409 +5,398 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>नमुना ८ | GP Sakhi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap');
-:root{
-  --navy:#0F1E3C;--saffron:#E8701A;--green:#1A6E3C;--gold:#C49A22;
-  --n8navy:#0a1628;--n8blue:#1a3a6b;--n8saffron:#e8620a;--n8gold:#c9920a;
-  --n8green:#166534;--n8muted:#6b7280;--n8bg:#f0f4ff;
-  --cream:#FAF7F2;--sand:#E0D5C0;
+:root {
+  --saffron: #F58220;
+  --saffron-light: #FFEDE0;
+  --navy: #1A2744;
+  --green: #138808;
+  --green-light: #E5F6EB;
+  --gold: #D4AF37;
+  --cream: #FDFBF7;
+  --sand: #EAE3D5;
+  --text: #2C3E50;
+  --tricolor-top: #FF9933;
+  --tricolor-mid: #FFFFFF;
+  --tricolor-bot: #138808;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1410;min-height:100vh;}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { 
+  font-family: 'Noto Sans Devanagari', sans-serif; 
+  background: linear-gradient(145deg, var(--cream) 0%, #f0ebd8 100%);
+  color: var(--text); 
+  min-height: 100vh;
+}
+
+/* ── CUSTOM SCROLLBAR ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--saffron); border-radius: 4px; }
 
 /* ── NAV ── */
-.gpnav{
-  background:var(--navy);color:white;
-  padding:0 22px;height:64px;
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;z-index:200;
-  border-bottom:3px solid transparent;
-  border-image:linear-gradient(90deg,#FF9933 33%,#fff 33%,#fff 66%,#138808 66%) 1;
-  box-shadow:0 2px 20px rgba(0,0,0,0.3);
+.gpnav {
+  background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+  padding: 0 30px; height: 70px; display: flex; align-items: center; justify-content: space-between; 
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--glass-border);
 }
-.gpnav-back{
-  color:rgba(255,255,255,0.6);font-size:10pt;cursor:pointer;
-  text-decoration:none;display:flex;align-items:center;gap:6px;
-  transition:color 0.2s;padding:6px 10px;border-radius:6px;
+.gpnav::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--tricolor-top) 33%, var(--tricolor-mid) 33%, var(--tricolor-mid) 66%, var(--tricolor-bot) 66%);
 }
-.gpnav-back:hover{color:white;background:rgba(255,255,255,0.08);}
-.gpnav-center{display:flex;align-items:center;gap:12px;}
-.gpnav-emblem{
-  width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--saffron),var(--gold));
-  display:flex;align-items:center;justify-content:center;font-size:19px;
-  box-shadow:0 2px 10px rgba(232,112,26,0.4);
+.gpnav-back {
+  background: white; border: 1px solid #ddd; color: var(--text); border-radius: 20px; 
+  padding: 8px 16px; font-size: 9.5pt; font-weight: 700; text-decoration: none; transition: all 0.3s;
+  display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
-.gpnav-title{font-size:15pt;font-weight:800;color:white;letter-spacing:0.3px;}
-.gpnav-sub{font-size:8pt;color:rgba(255,255,255,0.45);display:block;margin-top:-3px;letter-spacing:0.5px;}
-.gpnav-user{font-size:8pt;color:rgba(255,255,255,0.5);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gpnav-back:hover { background: var(--navy); color: white; border-color: var(--navy); transform: translateX(-2px); }
+.gpnav-center { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.gpnav-emblem {
+  width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--saffron), var(--gold));
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  box-shadow: 0 4px 10px rgba(245, 130, 32, 0.3); border: 2px solid white;
+}
+.gpnav-title { font-family: 'Tiro Devanagari Marathi', serif; font-size: 18pt; color: var(--navy); font-weight: bold; line-height: 1; }
+.gpnav-sub { font-size: 8pt; color: #666; display: block; letter-spacing: 1px; font-weight: 600; }
+.gpnav-user { font-size: 9pt; color: var(--navy); font-weight: 700; background: rgba(26, 39, 68, 0.05); padding: 8px 16px; border-radius: 20px; }
 
 /* ── AUTOFILL BAR ── */
-.autofill-bar{
-  background:linear-gradient(135deg,#EAF5EE,#D4EDDA);
-  border:1px solid #86EFAC;border-radius:0;
-  padding:9px 22px;font-size:9pt;color:#166534;
-  display:flex;align-items:center;gap:8px;
-  animation:slideDown 0.5s cubic-bezier(0.22,1,0.36,1);
+.autofill-bar {
+  background: #f0fdf4; border-bottom: 1px solid #bbf7d0;
+  padding: 12px 30px; font-size: 10pt; color: #166534; font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+  animation: slideDown 0.5s cubic-bezier(0.22,1,0.36,1);
 }
-@keyframes slideDown{from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:translateY(0);}}
-
-/* ── WRAP ── */
-.n8wrap{background:#E8E4D9;min-height:calc(100vh - 64px);}
-
-/* ── STEP TABS ── */
-.step-tabs{
-  background:var(--n8navy);
-  display:flex;
-  border-top:1px solid rgba(255,255,255,0.06);
-  padding:0 8px;
-  gap:2px;
-}
-.step-tab{
-  flex:1;padding:11px 4px;background:none;border:none;
-  color:rgba(255,255,255,0.38);
-  font-family:'Noto Sans Devanagari',sans-serif;
-  font-size:11px;cursor:pointer;
-  border-bottom:3px solid transparent;
-  transition:all 0.25s ease;font-weight:700;text-align:center;
-}
-.step-tab:hover{color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.04);}
-.step-tab.active{color:#FF9933;border-bottom-color:#FF9933;background:rgba(255,153,51,0.07);}
-.step-tab.done{color:#4ade80;border-bottom-color:#4ade80;}
-.sn{
-  display:inline-flex;width:19px;height:19px;border-radius:50%;
-  background:rgba(255,255,255,0.1);font-size:9px;
-  align-items:center;justify-content:center;margin-right:4px;
-  transition:all 0.25s;vertical-align:middle;
-}
-.step-tab.active .sn{background:#FF9933;color:#fff;box-shadow:0 0 8px rgba(255,153,51,0.5);}
-.step-tab.done .sn{background:#4ade80;color:#111;}
+@keyframes slideDown { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── LAYOUT ── */
-.app-body{display:grid;grid-template-columns:350px 1fr;min-height:calc(100vh - 108px);}
-.sidebar{
-  background:white;
-  border-right:1px solid #E0D5C0;
-  overflow-y:auto;
-  max-height:calc(100vh - 108px);
-  position:sticky;top:64px;
+.n8wrap { display: flex; flex-direction: column; min-height: calc(100vh - 70px); }
+.app-body { display: grid; grid-template-columns: 420px 1fr; flex: 1; }
+
+/* ── SIDEBAR (FORM) ── */
+.sidebar {
+  background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
+  overflow-y: auto; max-height: calc(100vh - 70px);
+  position: sticky; top: 70px; padding: 24px;
 }
-.step-panel{display:none;}
-.step-panel.active{display:block;animation:panelIn 0.35s cubic-bezier(0.22,1,0.36,1);}
-@keyframes panelIn{from{opacity:0;transform:translateX(-12px);}to{opacity:1;transform:translateX(0);}}
+.step-panel { display: none; }
+.step-panel.active { display: block; animation: panelIn 0.4s cubic-bezier(0.22,1,0.36,1); }
+@keyframes panelIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
+
+/* ── STEP TABS (SEPARATED CARDS) ── */
+.step-tabs {
+  display: flex; gap: 10px; margin-bottom: 24px;
+}
+.step-tab {
+  flex: 1; padding: 12px 8px; text-align: center; font-size: 10pt; font-weight: 700; 
+  color: #64748b; background: white; border: 2px solid #e2e8f0; border-radius: 16px; 
+  cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+.step-tab:hover { border-color: #cbd5e1; background: #f8fafc; }
+.step-tab.active { background: var(--navy); color: white; border-color: var(--navy); box-shadow: 0 6px 15px rgba(26,39,68,0.2); transform: translateY(-2px); }
+.step-tab.done { color: var(--green); border-color: #bbf7d0; background: #f0fdf4; }
+
+.sn {
+  width: 28px; height: 28px; border-radius: 50%; background: #f1f5f9; 
+  display: flex; align-items: center; justify-content: center; font-size: 10pt; 
+  font-weight: 800; color: #94a3b8; transition: all 0.3s;
+}
+.step-tab.active .sn { background: var(--saffron); color: white; box-shadow: 0 0 10px rgba(245,130,32,0.4); }
+.step-tab.done .sn { background: var(--green-light); color: var(--green); }
 
 /* ── SECTION HEADERS ── */
-.sec-head{
-  background:linear-gradient(135deg,var(--n8navy) 0%,#1e3a6b 100%);
-  color:#fff;padding:10px 14px;font-size:11px;font-weight:700;
-  letter-spacing:0.5px;display:flex;align-items:center;gap:7px;
-  border-left:3px solid var(--saffron);
+.sec-head {
+  font-size: 13pt; font-weight: 800; color: var(--navy); margin: 24px 0 16px; 
+  display: flex; align-items: center; gap: 10px; font-family: 'Tiro Devanagari Marathi', serif;
 }
-.sec-sub{
-  background:#f0f4ff;color:var(--n8blue);
-  padding:7px 14px;font-size:11px;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.4px;
-  border-left:4px solid var(--n8saffron);margin-top:4px;
+.sec-head::before { content: ''; display: block; width: 4px; height: 20px; background: var(--saffron); border-radius: 4px; }
+.sec-sub {
+  font-size: 10.5pt; font-weight: 800; color: var(--navy); margin: 16px 0 10px; 
+  display: flex; align-items: center; gap: 8px;
 }
+.sec-sub::before { content: ''; display: block; width: 3px; height: 14px; background: var(--gold); border-radius: 3px; }
 
 /* ── FORM ── */
-.form-group{padding:5px 12px;}
-.form-group label{
-  display:block;font-size:9.5px;color:var(--n8muted);
-  font-weight:700;margin-bottom:3px;
-  text-transform:uppercase;letter-spacing:0.5px;
+.form-group { margin-bottom: 14px; }
+.form-group label {
+  display: block; font-size: 9.5pt; color: var(--navy);
+  font-weight: 700; margin-bottom: 6px;
 }
-.form-group input,.form-group select,.form-group textarea{
-  width:100%;border:1.5px solid #DDE3EF;border-radius:7px;
-  padding:7px 10px;font-size:13px;
-  font-family:'Noto Sans Devanagari',sans-serif;
-  color:#1C1410;background:#FAFBFC;
-  transition:all 0.2s ease;
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; border: 2px solid #e2e8f0; border-radius: 12px;
+  padding: 12px 14px; font-size: 10pt; font-weight: 500;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  color: var(--text); background: white; transition: all 0.3s;
 }
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
-  outline:none;border-color:var(--n8blue);background:#fff;
-  box-shadow:0 0 0 3px rgba(26,58,107,0.1);
-  transform:translateY(-1px);
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--saffron); background: white;
+  box-shadow: 0 0 0 4px rgba(245, 130, 32, 0.1); transform: translateY(-1px);
 }
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 12px 4px;}
-.form-row .form-group{padding:3px 0;}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* ── RATE TABLE ── */
-.rate-table-wrap{margin:5px 12px;}
-.rate-table{width:100%;border-collapse:collapse;font-size:12px;}
-.rate-table th{
-  background:var(--n8navy);color:#fff;
-  padding:7px 6px;text-align:center;font-size:11px;font-weight:700;
+.rate-table-wrap { background: white; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+.rate-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+.rate-table th { background: #f8fafc; color: var(--navy); padding: 12px 10px; text-align: center; font-size: 9.5pt; font-weight: 800; border-bottom: 2px solid #e2e8f0; }
+.rate-table th:first-child { text-align: left; }
+.rate-table td { border-bottom: 1px solid #f1f5f9; padding: 10px 8px; vertical-align: middle; transition: background 0.2s; }
+.rate-table tr:hover td { background: #f0f9ff; }
+.prop-label { font-size: 10pt; font-weight: 800; color: var(--navy); }
+.prop-note { font-size: 8pt; color: #64748b; margin-top: 2px; }
+.rate-table input {
+  width: 100%; border: 2px solid #e2e8f0; border-radius: 8px;
+  padding: 8px; font-size: 10pt; font-weight: 700;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  text-align: right; background: white; transition: all 0.3s;
 }
-.rate-table th:first-child{text-align:left;}
-.rate-table td{border:1px solid #DDE3EF;padding:5px 4px;vertical-align:middle;transition:background 0.15s;}
-.rate-table tr:hover td{background:#EEF2FF !important;}
-.rate-table tr:nth-child(even) td{background:#F5F7FF;}
-.prop-label{font-size:12px;font-weight:600;color:var(--n8navy);}
-.prop-note{font-size:9.5px;color:var(--n8muted);}
-.rate-table input{
-  width:100%;border:1.5px solid #DDE3EF;border-radius:5px;
-  padding:5px 4px;font-size:12.5px;
-  font-family:'Noto Sans Devanagari',sans-serif;
-  text-align:right;background:#fff;transition:all 0.2s;
-}
-.rate-table input:focus{outline:none;border-color:var(--n8blue);box-shadow:0 0 0 2px rgba(26,58,107,0.1);}
-.col-h13{background:#1a5c3a!important;color:#fff!important;font-size:9px!important;}
-.col-h14{background:#1a3a6b!important;color:#fff!important;font-size:9px!important;}
-.col-htr{background:#7c2d12!important;color:#fff!important;font-size:9px!important;}
-.na-cell{background:#f0f0f0;text-align:center;color:#bbb;font-size:10px;}
-.rate-legend{
-  background:#fff8f0;border:1px solid var(--n8gold);
-  border-radius:7px;margin:4px 12px;padding:7px 10px;
-  font-size:9px;color:#4a3800;line-height:1.7;
+.rate-table input:focus { outline: none; border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.1); }
+.na-cell { background: #f8fafc; text-align: center; color: #cbd5e1; font-size: 9pt; font-weight: 600; border-radius: 8px; }
+.rate-legend {
+  background: #fff8f0; border-left: 4px solid var(--gold); border-radius: 10px; margin-bottom: 16px; padding: 12px 16px;
+  font-size: 9.5pt; color: #7A6A52; line-height: 1.6; font-weight: 500;
 }
 
 /* ── PROP CARDS ── */
-.prop-card{
-  background:var(--n8bg);border:1.5px solid #C5D5F5;
-  border-radius:10px;margin:5px 12px;padding:9px 11px;
-  transition:all 0.25s ease;
-  animation:propIn 0.35s cubic-bezier(0.22,1,0.36,1);
+.prop-card {
+  background: white; border: 1px solid var(--glass-border);
+  border-radius: 16px; margin-bottom: 16px; padding: 20px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
-@keyframes propIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.prop-card:hover{border-color:var(--n8blue);box-shadow:0 4px 14px rgba(26,58,107,0.12);}
-.prop-card-head{font-size:11px;font-weight:700;color:var(--n8blue);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:4px;}
-.prop-card-type{background:#1a3a6b;color:#fff;padding:2px 8px;border-radius:10px;font-size:9px;}
-.btn-del{
-  background:#fee2e2;border:none;color:#dc2626;
-  border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;font-weight:700;
-  transition:all 0.15s;
+.prop-card:hover { border-color: var(--navy); box-shadow: 0 10px 25px rgba(26,39,68,0.08); transform: translateY(-2px); }
+.prop-card-head { font-size: 11pt; font-weight: 800; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.prop-card-type { background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 12px; font-size: 8.5pt; font-weight: 700; }
+.btn-del {
+  background: #fee2e2; border: none; color: #dc2626; width: 28px; height: 28px;
+  border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
 }
-.btn-del:hover{background:#fecaca;transform:scale(1.08);}
+.btn-del:hover { background: #dc2626; color: white; transform: scale(1.1); }
 
 /* ── WATER BUTTONS ── */
-.water-grp{display:flex;gap:6px;padding:5px 0 6px;}
-.wb{
-  flex:1;border:1.5px solid #DDE3EF;border-radius:8px;
-  padding:9px 3px;font-size:10px;font-weight:600;
-  cursor:pointer;text-align:center;background:#FAFBFC;color:#555;
-  transition:all 0.2s ease;font-family:'Noto Sans Devanagari',sans-serif;
+.water-grp { display: flex; gap: 8px; background: #f1f5f9; padding: 8px; border-radius: 16px; }
+.wb {
+  flex: 1; border: none; border-radius: 12px;
+  padding: 12px 6px; font-size: 10pt; font-weight: 700;
+  cursor: pointer; text-align: center; background: transparent; color: #64748b;
+  transition: all 0.3s ease; font-family: 'Noto Sans Devanagari', sans-serif;
 }
-.wb:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-.wb.sel-none{border-color:#6b7280;background:#f0f0f0;color:#6b7280;}
-.wb.sel-sam{border-color:#0284c7;background:#e0f2fe;color:#0284c7;box-shadow:0 2px 10px rgba(2,132,199,0.2);}
-.wb.sel-vis{border-color:#7c3aed;background:#ede9fe;color:#7c3aed;box-shadow:0 2px 10px rgba(124,58,237,0.2);}
+.wb.sel-none { background: #fee2e2; color: #dc2626; box-shadow: 0 2px 10px rgba(220,38,38,0.2); }
+.wb.sel-sam { background: white; color: var(--navy); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.wb.sel-vis { background: white; color: #0284c7; box-shadow: 0 2px 10px rgba(2,132,199,0.2); }
 
 /* ── LIVE CALC ── */
-.live-calc{
-  background:linear-gradient(135deg,#0a1628,#1a3a6b);
-  margin:7px 12px;border-radius:10px;padding:10px 12px;
-  box-shadow:0 6px 20px rgba(10,22,40,0.35);
+.live-calc {
+  background: linear-gradient(135deg, var(--navy), #0f172a);
+  margin: 24px 0; border-radius: 20px; padding: 24px;
+  box-shadow: 0 10px 30px rgba(10,22,40,0.2); position: relative; overflow: hidden;
 }
-.lc-title{font-size:9.5px;font-weight:700;color:#FF9933;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;}
-.lc-row{
-  display:flex;justify-content:space-between;
-  padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.06);
-  font-size:10px;
+.live-calc::after { content: '⚡'; position: absolute; right: 10px; top: 10px; font-size: 60px; opacity: 0.05; pointer-events: none; }
+.lc-title { font-size: 11pt; font-weight: 800; color: var(--gold); letter-spacing: 1px; margin-bottom: 12px; }
+.lc-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); font-size: 10.5pt;
 }
-.lc-row:last-child{border-bottom:none;font-weight:700;font-size:12px;}
-.lc-label{color:rgba(255,255,255,0.55);}
-.lc-val{color:#4ade80;font-weight:600;transition:all 0.3s ease;}
-.lc-row:last-child .lc-val{color:#FF9933;font-size:13px;}
-.lc-sep{height:1px;background:rgba(255,153,51,0.25);margin:4px 0;}
-.lc-ph{color:#facc15;font-size:9.5px;font-weight:700;padding:3px 0 1px;}
+.lc-row:last-child { border-bottom: none; font-weight: 800; font-size: 13pt; margin-top: 8px; padding-top: 12px; border-top: 2px solid rgba(255,153,51,0.3); }
+.lc-label { color: rgba(255,255,255,0.7); font-weight: 500; }
+.lc-val { color: #4ade80; font-weight: 700; transition: all 0.3s ease; }
+.lc-row:last-child .lc-val { color: var(--saffron); font-size: 15pt; text-shadow: 0 0 15px rgba(245,130,32,0.4); }
+.lc-ph { color: #facc15; font-size: 9.5pt; font-weight: 800; padding: 10px 0 4px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 8px; }
 
 /* ── BUTTONS ── */
-.nav-btns{display:flex;gap:6px;padding:10px 12px 4px;}
-.btn-next{
-  flex:2;background:linear-gradient(135deg,var(--n8saffron),#c44e00);
-  color:#fff;border:none;border-radius:8px;padding:11px;
-  font-size:12px;font-weight:700;cursor:pointer;
-  font-family:'Noto Sans Devanagari',sans-serif;
-  transition:all 0.2s;box-shadow:0 3px 12px rgba(232,98,10,0.3);
+.nav-btns { display: flex; gap: 10px; margin-top: 24px; }
+.btn-next {
+  flex: 2; background: linear-gradient(135deg, var(--saffron), #e66b0e);
+  color: white; border: none; border-radius: 14px; padding: 16px;
+  font-size: 12pt; font-weight: 800; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  transition: all 0.3s; box-shadow: 0 6px 20px rgba(245, 130, 32, 0.3);
 }
-.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(232,98,10,0.45);}
-.btn-next:active{transform:translateY(0);}
-.btn-back{
-  flex:1;background:var(--n8navy);color:#fff;border:none;
-  border-radius:8px;padding:11px;font-size:11px;font-weight:600;cursor:pointer;
-  font-family:'Noto Sans Devanagari',sans-serif;transition:all 0.2s;
+.btn-next:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(245, 130, 32, 0.5); }
+.btn-back {
+  flex: 1; background: white; color: var(--navy); border: 2px solid #e2e8f0;
+  border-radius: 14px; padding: 16px; font-size: 11pt; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif; transition: all 0.3s;
 }
-.btn-back:hover{background:#162035;}
-.btn-gen{
-  display:block;width:calc(100% - 24px);margin:8px 12px 4px;
-  background:linear-gradient(135deg,var(--n8green),#14532d);
-  color:#fff;border:none;border-radius:10px;padding:13px;
-  font-size:13px;font-weight:700;cursor:pointer;
-  font-family:'Noto Sans Devanagari',sans-serif;
-  box-shadow:0 4px 16px rgba(22,101,52,0.35);transition:all 0.25s;
+.btn-back:hover { border-color: var(--navy); background: #f8fafc; }
+.btn-gen {
+  display: block; width: 100%; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--green), #0f6b06);
+  color: white; border: none; border-radius: 16px; padding: 18px;
+  font-size: 13pt; font-weight: 800; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  box-shadow: 0 8px 25px rgba(19, 136, 8, 0.3); transition: all 0.3s;
+  animation: pulseGlow 2s infinite;
 }
-.btn-gen:hover{transform:translateY(-2px);box-shadow:0 7px 22px rgba(22,101,52,0.5);}
-.btn-gen:active{transform:translateY(0);}
-.btn-print{
-  display:block;width:calc(100% - 24px);margin:4px 12px;
-  background:var(--n8navy);color:#fff;border:none;border-radius:8px;
-  padding:10px;font-size:11.5px;font-weight:600;cursor:pointer;
-  font-family:'Noto Sans Devanagari',sans-serif;transition:all 0.2s;
+.btn-gen:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(19, 136, 8, 0.4); }
+.btn-print {
+  display: block; width: 100%; background: var(--navy); color: white; border: none; border-radius: 14px;
+  padding: 14px; font-size: 12pt; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif; transition: all 0.3s; box-shadow: 0 4px 15px rgba(26,39,68,0.2);
 }
-.btn-print:hover{background:#162035;transform:translateY(-1px);}
-.btn-reset{
-  display:block;width:calc(100% - 24px);margin:4px 12px 12px;
-  background:#fff;color:var(--n8muted);border:1.5px solid #DDE3EF;
-  border-radius:8px;padding:8px;font-size:10.5px;cursor:pointer;
-  font-family:'Noto Sans Devanagari',sans-serif;transition:all 0.2s;
+.btn-print:hover { background: #2C3E50; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,39,68,0.3); }
+.btn-reset {
+  display: block; width: 100%; margin-top: 16px;
+  background: white; color: #dc2626; border: 2px dashed #fecaca;
+  border-radius: 12px; padding: 12px; font-size: 11pt; font-weight: 700; cursor: pointer;
+  font-family: 'Noto Sans Devanagari', sans-serif; transition: all 0.3s;
 }
-.btn-reset:hover{border-color:#dc2626;color:#dc2626;}
+.btn-reset:hover { background: #fef2f2; border-color: #dc2626; }
 
 /* ── PROP LIST UI ── */
-.prop-empty{
-  margin:8px 12px;
-  border:2px dashed #C5D5F5;border-radius:12px;
-  padding:20px 16px;text-align:center;
-  background:linear-gradient(135deg,#f8faff,#f0f4ff);
-  animation:fadeIn 0.4s ease;
+.prop-empty {
+  border: 2px dashed #cbd5e1; border-radius: 16px;
+  padding: 30px 20px; text-align: center;
+  background: #f8fafc; animation: fadeIn 0.4s ease;
 }
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.prop-empty-icon{font-size:32px;margin-bottom:8px;display:block;animation:bounce 2s ease-in-out infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-.prop-empty-text{font-size:11px;font-weight:700;color:var(--n8blue);margin-bottom:4px;}
-.prop-empty-sub{font-size:10px;color:var(--n8muted);}
-.prop-empty-arrow{font-size:18px;margin-top:8px;display:block;color:var(--n8saffron);animation:arrowBounce 1.5s ease-in-out infinite;}
-@keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+.prop-empty-icon { font-size: 40px; margin-bottom: 12px; display: block; animation: floatBounce 2s ease-in-out infinite; }
+.prop-empty-text { font-size: 12pt; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+.prop-empty-sub { font-size: 10pt; color: #64748b; font-weight: 500; }
+.prop-empty-arrow { font-size: 24px; margin-top: 12px; display: block; color: var(--saffron); animation: arrowBounce 1.5s ease-in-out infinite; }
+.prop-count-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; padding: 10px 16px;
+  background: linear-gradient(135deg, var(--navy), #0f172a);
+  border-radius: 12px; color: white; font-size: 10.5pt; font-weight: 800;
+}
+.prop-count-num { background: var(--saffron); color: white; border-radius: 12px; padding: 4px 10px; font-size: 10pt; font-weight: 800; }
 
-.prop-count-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  margin:6px 12px 2px;padding:6px 10px;
-  background:linear-gradient(135deg,#1a3a6b,#0a1628);
-  border-radius:8px;color:white;font-size:10px;font-weight:700;
-}
-.prop-count-num{
-  background:#FF9933;color:white;border-radius:12px;
-  padding:2px 8px;font-size:11px;font-weight:800;
-}
-
-/* ── PREVIEW ── */
-.preview-area{background:#C8CEDC;overflow-y:auto;padding:16px;}
-.preview-label{
-  text-align:center;font-size:8.5px;color:#888;margin-bottom:10px;
-  text-transform:uppercase;letter-spacing:2px;
-}
+/* ── PREVIEW AREA ── */
+.preview-area { background: transparent; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+.preview-label { text-align: center; font-size: 10pt; font-weight: 800; color: #94a3b8; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
 /* ── INFO BOX ── */
-.info-box{
-  margin:8px 12px;background:#f0f4ff;
-  border:1.5px solid #C5D5F5;border-radius:10px;
-  padding:11px 13px;font-size:10px;color:#1a3a6b;line-height:1.9;
+.info-box {
+  background: #f0f9ff; border: 2px solid #bae6fd; border-radius: 16px;
+  padding: 16px 20px; font-size: 10pt; color: #0369a1; line-height: 1.8; margin-bottom: 24px; font-weight: 500;
 }
-.info-box strong{color:var(--n8saffron);}
+.info-box strong { color: var(--navy); font-weight: 800; }
 
-/* ── NAMUNA 8 DOCUMENT — ORIGINAL UNCHANGED ── */
-#doc{background:#fff;width:277mm;min-height:190mm;margin:0 auto;padding:6mm 6mm 8mm 6mm;font-family:'Noto Sans Devanagari',Arial,sans-serif;font-size:10pt;box-shadow:0 4px 24px rgba(0,0,0,.18);border:1px solid #000;display:flex;flex-direction:column;}
-.doc-header{text-align:center;font-weight:bold;margin-bottom:4mm;line-height:1.5;}
-.doc-header .raj-line{font-size:8pt;color:#000;}
-.doc-header .namuna-line{font-size:13pt;font-weight:800;color:#000;}
-.doc-header .gp-line{font-size:11pt;font-weight:700;color:#000;margin-top:2px;}
-#doc table{width:100%;border-collapse:collapse;table-layout:fixed;}
-#doc th,#doc td{border:1px solid #000;padding:2px 2px;text-align:center;vertical-align:middle;line-height:1.3;word-break:break-word;color:#000;}
-#doc .sub-header th{font-size:7.5pt;font-weight:700;background:#fff;color:#000;height:10mm;padding:1px;border:1px solid #000;}
-#doc .col13-head{background:#fff!important;color:#000!important;font-weight:800!important;}
-#doc .col14-head{background:#fff!important;color:#000!important;font-weight:800!important;}
-#doc .col-num td{background:#f0f0f0;font-size:7.5pt;font-weight:700;color:#000;height:5mm;padding:1px;}
-#doc .bg-grey{background-color:#f0f0f0;}
-#doc .left-align{text-align:left;padding-left:3px;}
-#doc .data-td{font-size:9.5pt;height:9mm;color:#000;}
-#doc .total-row{background:#f0f0f0;font-weight:700;}
-#doc .amount{font-weight:700;color:#000;}
-#doc .grand{background:#fff!important;color:#000!important;font-weight:800!important;font-size:10pt!important;border:2px solid #000!important;}
-#doc .col13-cell{background:#fff!important;}
-#doc .col14-cell{background:#fff!important;}
-#doc .data-td:empty::after,#doc .empty-tr td:empty::after{content:'—';color:#999;font-size:8pt;}
-#doc .total-row td:empty::after{content:'';}
-#doc .amount:empty::after{content:'';}
+/* ── NAMUNA 8 DOCUMENT — ORIGINAL UNCHANGED LOGIC/CLASSES ── */
+#doc { background: #fff; width: 277mm; min-height: 190mm; padding: 6mm 6mm 8mm 6mm; font-family: 'Noto Sans Devanagari', Arial, sans-serif; font-size: 10pt; box-shadow: 0 20px 60px rgba(0,0,0,.1); border-radius: 8px; border: 1px solid #ddd; display: flex; flex-direction: column; }
+.doc-header { text-align: center; font-weight: bold; margin-bottom: 4mm; line-height: 1.5; }
+.doc-header .raj-line { font-size: 8pt; color: #000; }
+.doc-header .namuna-line { font-size: 13pt; font-weight: 800; color: #000; }
+.doc-header .gp-line { font-size: 11pt; font-weight: 700; color: #000; margin-top: 2px; }
+#doc table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+#doc th, #doc td { border: 1px solid #000; padding: 2px 2px; text-align: center; vertical-align: middle; line-height: 1.3; word-break: break-word; color: #000; }
+#doc .sub-header th { font-size: 7.5pt; font-weight: 700; background: #fff; color: #000; height: 10mm; padding: 1px; border: 1px solid #000; }
+#doc .col13-head, #doc .col14-head { background: #fff !important; color: #000 !important; font-weight: 800 !important; }
+#doc .col-num td { background: #f0f0f0; font-size: 7.5pt; font-weight: 700; color: #000; height: 5mm; padding: 1px; }
+#doc .bg-grey { background-color: #f0f0f0; }
+#doc .left-align { text-align: left; padding-left: 3px; }
+#doc .data-td { font-size: 9.5pt; height: 9mm; color: #000; }
+#doc .total-row { background: #f0f0f0; font-weight: 700; }
+#doc .amount { font-weight: 700; color: #000; }
+#doc .grand { background: #fff !important; color: #000 !important; font-weight: 800 !important; font-size: 10pt !important; border: 2px solid #000 !important; }
+#doc .col13-cell, #doc .col14-cell { background: #fff !important; }
+#doc .data-td:empty::after, #doc .empty-tr td:empty::after { content: '—'; color: #999; font-size: 8pt; }
+#doc .total-row td:empty::after, #doc .amount:empty::after { content: ''; }
 #tbl1 col.c1{width:5mm;}#tbl1 col.c2{width:5mm;}#tbl1 col.c3{width:7mm;}#tbl1 col.c4{width:38mm;}#tbl1 col.c5{width:22mm;}#tbl1 col.c6{width:20mm;}#tbl1 col.c7{width:14mm;}#tbl1 col.c8{width:11mm;}#tbl1 col.c9{width:9mm;}#tbl1 col.c10{width:9mm;}#tbl1 col.c11{width:14mm;}#tbl1 col.c12{width:14mm;}#tbl1 col.c13{width:15mm;}#tbl1 col.c14{width:15mm;}#tbl1 col.c15{width:10mm;}
 #tbl2 col.c16{width:18mm;}#tbl2 col.c17{width:9mm;}#tbl2 col.c18{width:18mm;}#tbl2 col.c19{width:9mm;}#tbl2 col.c20{width:14mm;}#tbl2 col.c21{width:13mm;}#tbl2 col.c22{width:13mm;}#tbl2 col.c23{width:13mm;}#tbl2 col.c24{width:13mm;}#tbl2 col.c25{width:14mm;}#tbl2 col.c26{width:13mm;}#tbl2 col.c27{width:13mm;}#tbl2 col.c28{width:13mm;}#tbl2 col.c29{width:13mm;}#tbl2 col.c30{width:13mm;}#tbl2 col.c31{width:24mm;}
-.doc-bottom{margin-top:auto;padding-top:4mm;display:flex;justify-content:space-between;align-items:flex-end;}
-.date-left{font-size:10pt;font-weight:700;color:#000;}
-.sig-right{text-align:center;}
-.sig-line{border-top:1.5px solid #000;padding-top:4px;min-width:55mm;font-size:10pt;font-weight:700;color:#000;line-height:1.8;}
-.tip-section{font-size:7.5pt;margin-top:3mm;padding:4px 8px;background:#fff;border:1px solid #000;color:#000;line-height:1.5;}
+.doc-bottom { margin-top: auto; padding-top: 4mm; display: flex; justify-content: space-between; align-items: flex-end; }
+.date-left { font-size: 10pt; font-weight: 700; color: #000; }
+.sig-right { text-align: center; }
+.sig-line { border-top: 1.5px solid #000; padding-top: 4px; min-width: 55mm; font-size: 10pt; font-weight: 700; color: #000; line-height: 1.8; }
+.tip-section { font-size: 7.5pt; margin-top: 3mm; padding: 4px 8px; background: #fff; border: 1px solid #000; color: #000; line-height: 1.5; }
 
-/* ── PRINT TIP POPUP ── */
-.print-tip-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;}
-.print-tip-box{background:white;border-radius:16px;max-width:400px;width:100%;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
-.print-tip-head{background:var(--n8navy);color:white;padding:16px 20px;font-size:13pt;font-weight:700;}
-.print-tip-body{padding:20px;}
-.print-tip-step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start;}
-.print-step-num{width:28px;height:28px;border-radius:50%;background:var(--n8saffron);color:white;font-weight:800;font-size:10pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.print-step-text strong{font-size:10pt;color:var(--n8navy);display:block;margin-bottom:2px;}
-.print-step-text span{font-size:9pt;color:#9CA3AF;}
-.print-tip-hint{background:#EEF2FF;border-radius:10px;padding:10px 16px;margin:12px 0;border:1px solid #C7D2FE;font-size:9pt;color:#3730A3;font-weight:600;}
-.print-tip-btns{display:flex;gap:10px;margin-top:14px;}
-.print-btn-cancel{flex:1;padding:10px;border:1.5px solid #D4C5A9;border-radius:8px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;cursor:pointer;color:#666;}
-.print-btn-go{flex:2;padding:10px;border:none;border-radius:8px;background:var(--n8saffron);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;}
+/* ── PRINT TIP POPUP (REDESIGNED MODAL) ── */
+.print-tip-overlay { position: fixed; inset: 0; background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+.print-tip-box { background: white; border-radius: 24px; max-width: 420px; width: 100%; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.5); animation: fadeIn 0.3s ease; }
+.print-tip-head { background: linear-gradient(135deg, var(--navy), #2C3E50); color: white; padding: 20px 24px; font-size: 14pt; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.print-tip-body { padding: 30px; }
+.print-tip-step { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-start; }
+.print-step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--saffron-light); color: var(--saffron); font-weight: 800; font-size: 12pt; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.print-step-text strong { font-size: 11pt; color: var(--navy); display: block; margin-bottom: 2px; }
+.print-step-text span { font-size: 9.5pt; color: #64748b; }
+.print-tip-hint { background: #f0f9ff; border-radius: 12px; padding: 12px 16px; margin: 20px 0; border: 1px solid #bae6fd; font-size: 10pt; color: #0369a1; font-weight: 700; text-align: center; }
+.print-tip-btns { display: flex; gap: 12px; margin-top: 24px; }
+.print-btn-cancel { flex: 1; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; background: white; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; font-weight: 700; color: #64748b; cursor: pointer; transition: all 0.2s; }
+.print-btn-go { flex: 2; padding: 12px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--saffron), #e66b0e); color: white; font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; font-weight: 800; cursor: pointer; box-shadow: 0 6px 15px rgba(245, 130, 32, 0.3); transition: all 0.2s; }
+.print-btn-go:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(245, 130, 32, 0.4); }
 
-@media print{
-  @page{size:A4 landscape;margin:4mm 4mm;}
-  html,body{background:#fff!important;}
-  .gpnav,.autofill-bar,.step-tabs,.app-body>.sidebar,.preview-label{display:none!important;}
-  .app-body{display:block!important;}
-  .preview-area{background:#fff!important;padding:0!important;overflow:visible!important;}
-  #doc{box-shadow:none!important;border:none!important;width:289mm!important;min-height:0!important;padding:0!important;font-size:8.5pt!important;margin:0!important;display:block!important;}
-  #doc table{font-size:8.5pt!important;}
-  #doc .sub-header th{height:9mm!important;font-size:7pt!important;}
-  #doc .data-td{height:8mm!important;font-size:8.5pt!important;}
-  #doc .col-num td{height:3.5mm!important;font-size:7pt!important;}
-  #doc .amount{font-size:8.5pt!important;}
-  #doc .grand{font-size:8.5pt!important;background:#fff!important;color:#000!important;border:2px solid #000!important;}
-  #doc th,#doc td{padding:1px 1px!important;}
-  .doc-header .namuna-line{font-size:11pt!important;}
-  .doc-header .gp-line{font-size:9.5pt!important;}
-  .doc-header .raj-line{font-size:7.5pt!important;}
-  .doc-bottom{margin-top:4mm!important;}
-  .sig-line{font-size:9pt!important;}
-  .tip-section{font-size:7pt!important;}
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes floatBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes arrowBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(19, 136, 8, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(19, 136, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(19, 136, 8, 0); } }
+
+/* ── PRINT MEDIA (STRICTLY PRESERVED) ── */
+@media print {
+  @page { size: A4 landscape; margin: 4mm 4mm; }
+  html, body { background: #fff !important; }
+  .gpnav, .autofill-bar, .step-tabs, .app-body > .sidebar, .preview-label { display: none !important; }
+  .app-body { display: block !important; }
+  .preview-area { background: #fff !important; padding: 0 !important; overflow: visible !important; display: block !important; }
+  #doc { box-shadow: none !important; border: none !important; border-radius: 0 !important; width: 289mm !important; min-height: 0 !important; padding: 0 !important; font-size: 8.5pt !important; margin: 0 !important; display: block !important; }
+  #doc table { font-size: 8.5pt !important; }
+  #doc .sub-header th { height: 9mm !important; font-size: 7pt !important; }
+  #doc .data-td { height: 8mm !important; font-size: 8.5pt !important; }
+  #doc .col-num td { height: 3.5mm !important; font-size: 7pt !important; }
+  #doc .amount { font-size: 8.5pt !important; }
+  #doc .grand { font-size: 8.5pt !important; background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
+  #doc th, #doc td { padding: 1px 1px !important; }
+  .doc-header .namuna-line { font-size: 11pt !important; }
+  .doc-header .gp-line { font-size: 9.5pt !important; }
+  .doc-header .raj-line { font-size: 7.5pt !important; }
+  .doc-bottom { margin-top: 4mm !important; }
+  .sig-line { font-size: 9pt !important; }
+  .tip-section { font-size: 7pt !important; }
 }
-@media(max-width:900px){
-  .app-body{grid-template-columns:1fr;}
-  .sidebar{max-height:none;position:static;}
+
+@media(max-width: 1000px) {
+  .app-body { grid-template-columns: 1fr; }
+  .sidebar { max-height: none; position: static; border-right: none; border-bottom: 1px solid var(--glass-border); padding: 20px; }
+  .preview-area { padding: 15px; }
+  .gpnav { padding: 0 16px; }
 }
 </style>
 </head>
 <body>
 
-<!-- GP Sakhi Topbar -->
+<!-- Topbar -->
 <div class="gpnav">
-  <a href="dashboard.html" class="gpnav-back">← Dashboard</a>
-  <a href="index.html" class="gpnav-center" style="text-decoration:none;">
+  <a href="dashboard.html" class="gpnav-back">← डॅशबोर्ड</a>
+  <a href="index.html" class="gpnav-center">
     <div class="gpnav-emblem">🏛️</div>
     <div>
       <div class="gpnav-title">GP Sakhi</div>
       <small class="gpnav-sub">नमुना ८ जनरेटर</small>
     </div>
   </a>
-  <div class="gpnav-user" id="userEmail"></div>
+  <div class="gpnav-user" id="userEmail" style="display:none;"></div>
 </div>
 
 <!-- Auto-fill bar -->
 <div class="autofill-bar" id="autofillBar" style="display:none;">
-  ✅ Profile मधून माहिती auto-fill झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:700;margin-left:4px;">बदलायचे असेल तर येथे क्लिक करा</a>
+  ✅ Profile मधून माहिती आपोआप भरली गेली आहे. <a href="profile.html" style="color:var(--green);font-weight:800;margin-left:6px;text-decoration:none;">येथे बदला</a>
 </div>
 
 <div class="n8wrap">
-<!-- Step Tabs -->
+<div class="app-body">
+<div class="sidebar">
+
+<!-- Step Tabs (Now perfectly separated into 3 distinct bordered boxes) -->
 <div class="step-tabs">
   <button class="step-tab active" id="stab1" onclick="goStep(1)"><span class="sn">१</span>ग्रामपंचायत</button>
   <button class="step-tab" id="stab2" onclick="goStep(2)"><span class="sn">२</span>मालमत्ता</button>
   <button class="step-tab" id="stab3" onclick="goStep(3)"><span class="sn">३</span>तयार करा</button>
 </div>
 
-<div class="app-body">
-<div class="sidebar">
-
-<!-- STEP 1 — ग्रामपंचायत (profile मधून auto-fill) -->
+<!-- STEP 1 — ग्रामपंचायत -->
 <div class="step-panel active" id="sp1">
   <div class="sec-head">🏘️ ग्रामपंचायत माहिती</div>
-  <div class="form-group"><label>ग्रामपंचायत नाव</label><input type="text" id="gp" placeholder="तोंडली"></div>
+  <div class="form-group"><label>ग्रामपंचायत नाव</label><input type="text" id="gp" placeholder="उदा. तोंडली"></div>
   <div class="form-row">
-    <div class="form-group"><label>तालुका</label><input type="text" id="taluka" placeholder="मौदा"></div>
-    <div class="form-group"><label>जिल्हा</label><input type="text" id="dist" placeholder="नागपूर"></div>
+    <div class="form-group"><label>तालुका</label><input type="text" id="taluka" placeholder="उदा. मौदा"></div>
+    <div class="form-group"><label>जिल्हा</label><input type="text" id="dist" placeholder="उदा. नागपूर"></div>
   </div>
   <div class="form-row">
     <div class="form-group"><label>वर्ष (सुरुवात)</label><input type="number" id="yr_s" value="2025"></div>
@@ -416,7 +405,7 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
   <div class="form-group"><label>दिनांक</label><input type="date" id="din"></div>
 
   <div class="sec-head">💡 इतर कर — ग्रामपंचायत निश्चित (रु.)</div>
-  <div class="rate-legend">⚠️ हे कर फक्त इमारतींवर लागतात — खाली जागेवर नाही</div>
+  <div class="rate-legend">⚠️ हे कर फक्त <strong>इमारतींवर</strong> लागतात — खाली जागेवर लागत नाही.</div>
   <div class="form-row">
     <div class="form-group"><label>दिवाबत्ती कर (रु.)</label><input type="number" id="div_kr" value="100" min="0" oninput="liveCalc()"></div>
     <div class="form-group"><label>आरोग्य कर (रु.)</label><input type="number" id="aro_kr" value="100" min="0" oninput="liveCalc()"></div>
@@ -435,10 +424,10 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
     <table class="rate-table">
       <thead>
         <tr>
-          <th style="width:36%;text-align:left;">मालमत्ता प्रकार</th>
-          <th class="col-h13">Col १३<br>RR दर</th>
-          <th class="col-h14">Col १४<br>RR दर</th>
-          <th class="col-htr">कर दर<br>(रु./१०००)</th>
+          <th style="width:38%;text-align:left;">मालमत्ता प्रकार</th>
+          <th>Col १३<br>RR दर</th>
+          <th>Col १४<br>RR दर</th>
+          <th>कर दर<br>(रु./१०००)</th>
         </tr>
       </thead>
       <tbody>
@@ -476,12 +465,11 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
     </table>
   </div>
   <div class="nav-btns">
-    <button class="btn-next" onclick="goStep(2)">पुढे → मालमत्ता माहिती</button>
+    <button class="btn-next" onclick="goStep(2)">पुढे ➔ मालमत्ता माहिती</button>
   </div>
-  <div style="height:10px;"></div>
 </div>
 
-<!-- STEP 2 — मालमत्ता (unchanged) -->
+<!-- STEP 2 — मालमत्ता -->
 <div class="step-panel" id="sp2">
   <div class="sec-head">👤 मालकाची माहिती</div>
   <div class="form-row">
@@ -493,11 +481,11 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
   <div class="form-group"><label>भोगवटादाराचे नाव</label><input type="text" id="tenant" value="स्वतः"></div>
 
   <div class="sec-head">💧 पाणी कर प्रकार (एकच निवडा)</div>
-  <div class="rate-legend" style="margin-top:4px;">
+  <div class="rate-legend" style="margin-top:0;">
     रक्कम Step १ मध्ये निश्चित केलेली वापरली जाईल<br>
-    सामान्य: ₹<span id="show_sam">0</span> &nbsp;|&nbsp; विशेष: ₹<span id="show_vis">0</span>
+    सामान्य: <strong>₹<span id="show_sam">0</span></strong> &nbsp;|&nbsp; विशेष: <strong>₹<span id="show_vis">0</span></strong>
   </div>
-  <div class="form-group" style="padding-top:5px;">
+  <div class="form-group">
     <div class="water-grp">
       <button class="wb sel-none" id="wb_none" onclick="setWater('none')">🚫 नाही</button>
       <button class="wb" id="wb_sam" onclick="setWater('sam')">💧 सामान्य</button>
@@ -508,9 +496,9 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
   <div class="sec-head">🏠 मालमत्तेची यादी</div>
   <div id="prop_list"></div>
 
-  <div class="sec-sub" style="margin-top:5px;">➕ नवीन मालमत्ता जोडा</div>
-  <div class="prop-card" style="margin-top:4px;">
-    <div class="form-group" style="padding:3px 0;">
+  <div class="sec-sub">➕ नवीन मालमत्ता जोडा</div>
+  <div class="prop-card" style="background:#f8fafc; border: 2px dashed #cbd5e1; margin-top:8px;">
+    <div class="form-group">
       <label>मालमत्तेचे वर्णन</label>
       <select id="f_type" onchange="onFTypeChange()">
         <option value="jaga">🌳 खाली जागा</option>
@@ -521,7 +509,7 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
       </select>
     </div>
     <div id="f_build_fields">
-      <div class="form-group" style="padding:3px 0;">
+      <div class="form-group">
         <label>इमारतीचा वापर</label>
         <select id="f_usage">
           <option value="niv" selected>निवासी</option>
@@ -530,29 +518,28 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
         </select>
       </div>
       <div class="form-row" style="padding:0;">
-        <div class="form-group" style="padding:3px 0;"><label>बांधकामाचे वर्ष</label><input type="number" id="f_yr" value="2000" min="1900" max="2025"></div>
-        <div class="form-group" style="padding:3px 0;"><label>मजले</label><input type="number" id="f_fl" value="1" min="1" max="20"></div>
+        <div class="form-group"><label>बांधकामाचे वर्ष</label><input type="number" id="f_yr" value="2000" min="1900" max="2025"></div>
+        <div class="form-group"><label>मजले</label><input type="number" id="f_fl" value="1" min="1" max="20"></div>
       </div>
     </div>
-    <div class="form-row" style="padding:0;margin-top:3px;">
-      <div class="form-group" style="padding:3px 0;"><label id="f_l_lbl">लांबी (फूट)</label><input type="number" id="f_len" value="0" min="0"></div>
-      <div class="form-group" style="padding:3px 0;"><label id="f_w_lbl">रुंदी (फूट)</label><input type="number" id="f_wid" value="0" min="0"></div>
+    <div class="form-row" style="padding:0;">
+      <div class="form-group"><label id="f_l_lbl">लांबी (फूट)</label><input type="number" id="f_len" value="0" min="0"></div>
+      <div class="form-group"><label id="f_w_lbl">रुंदी (फूट)</label><input type="number" id="f_wid" value="0" min="0"></div>
     </div>
-    <button onclick="addProp()" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#1a3a6b,#0a1628);color:#fff;border:none;border-radius:8px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;box-shadow:0 3px 10px rgba(26,58,107,0.3);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">+ मालमत्ता जोडा</button>
+    <button onclick="addProp()" style="width:100%;margin-top:10px;background:var(--navy);color:#fff;border:none;border-radius:12px;padding:14px;font-size:11pt;font-weight:800;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;box-shadow:0 6px 15px rgba(26,39,68,0.2);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ मालमत्ता जोडा</button>
   </div>
 
   <div class="live-calc">
-    <div class="lc-title">⚡ एकूण गणना</div>
+    <div class="lc-title">⚡ एकूण गणना (Live Calculation)</div>
     <div id="lc_props"></div>
-    <div class="lc-sep"></div>
-    <div class="lc-row"><span class="lc-label">एकूण घरकर</span><span class="lc-val" id="lc_gharkr">—</span></div>
+    <div class="lc-row" style="margin-top:10px;"><span class="lc-label">एकूण घरकर</span><span class="lc-val" id="lc_gharkr">—</span></div>
     <div class="lc-row"><span class="lc-label">दिवाबत्ती + आरोग्य</span><span class="lc-val" id="lc_da">—</span></div>
     <div class="lc-row"><span class="lc-label">पाणी कर</span><span class="lc-val" id="lc_pani">—</span></div>
-    <div class="lc-row"><span class="lc-label">🔶 एकूण देय कर</span><span class="lc-val" id="lc_total">—</span></div>
+    <div class="lc-row"><span class="lc-label" style="color:var(--gold);">🔶 एकूण देय कर</span><span class="lc-val" id="lc_total">—</span></div>
   </div>
 
-  <div class="sec-sub" style="margin-top:5px;">📋 अपील फेरफार (रु.) — ऐच्छिक</div>
-  <div class="form-row" style="padding-top:4px;">
+  <div class="sec-sub">📋 अपील फेरफार (रु.) — ऐच्छिक</div>
+  <div class="form-row">
     <div class="form-group"><label>घरकर</label><input type="number" id="ap_ghar" value="0" min="0"></div>
     <div class="form-group"><label>दिवाबत्ती</label><input type="number" id="ap_div" value="0" min="0"></div>
   </div>
@@ -560,13 +547,12 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
     <div class="form-group"><label>आरोग्य</label><input type="number" id="ap_aro" value="0" min="0"></div>
     <div class="form-group"><label>पाणी</label><input type="number" id="ap_pani" value="0" min="0"></div>
   </div>
-  <div class="form-group"><label>नंतर वाढ/घट आदेश शेरा</label><textarea id="aadesh" rows="2" style="resize:vertical;" placeholder="आदेशाचे संदर्भात शेरा..."></textarea></div>
+  <div class="form-group"><label>नंतर वाढ/घट आदेश शेरा</label><textarea id="aadesh" rows="2" placeholder="आदेशाचे संदर्भात शेरा..."></textarea></div>
 
   <div class="nav-btns">
     <button class="btn-back" onclick="goStep(1)">← मागे</button>
-    <button class="btn-next" onclick="goStep(3)">पुढे → तयार करा</button>
+    <button class="btn-next" onclick="goStep(3)">पुढे ➔ तयार करा</button>
   </div>
-  <div style="height:10px;"></div>
 </div>
 
 <!-- STEP 3 — तयार करा -->
@@ -576,24 +562,26 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
     <strong>📐 सूत्र:</strong><br>
     इमारत भां.मू. = (चौ.मी. × Col१४ × घसारा%) × भारांक<br>
     जागा भां.मू. = चौ.मी. × Col१३<br>
-    घरकर = (भां.मू. × कर दर) ÷ १,०००<br>
-    <strong>⚠️ नियम:</strong> दिवाबत्ती/आरोग्य/पाणी फक्त इमारत row मध्ये<br>
-    <strong>🖨️ Print:</strong> A4 Landscape — पूर्ण पान भरतो
+    घरकर = (भां.मू. × कर दर) ÷ १,०००<br><br>
+    <strong>⚠️ नियम:</strong> दिवाबत्ती/आरोग्य/पाणी कर फक्त इमारतीसाठी लागू.<br>
+    <strong>🖨️ Print:</strong> A4 Landscape (आडवे पान) — पूर्ण पान भरतो.
   </div>
+  
   <button class="btn-gen" onclick="generateDoc()">✅ नमुना ८ तयार करा</button>
-  <button class="btn-print" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Landscape प्रिंट</button>
-  <div class="nav-btns" style="padding-top:4px;">
-    <button class="btn-back" onclick="goStep(2)" style="flex:1;">← मालमत्ता</button>
-    <button class="btn-back" onclick="goStep(1)" style="flex:1;background:#555;">← ग्रामपंचायत</button>
+  <button class="btn-print" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Landscape मध्ये प्रिंट करा</button>
+  
+  <div class="nav-btns" style="margin-top:16px;">
+    <button class="btn-back" onclick="goStep(2)">← मालमत्ता बदल</button>
+    <button class="btn-back" onclick="goStep(1)" style="border-color:#cbd5e1;background:#f8fafc;color:#64748b;">← ग्रामपंचायत</button>
   </div>
-  <button class="btn-reset" onclick="resetAll()">🔄 सर्व रीसेट</button>
+  <button class="btn-reset" onclick="resetAll()">🔄 सर्व माहिती रीसेट करा</button>
 </div>
 
 </div><!-- sidebar -->
 
 <!-- PREVIEW -->
 <div class="preview-area">
-  <div class="preview-label">📄 नमुना ८ — A4 Landscape Full Page Preview</div>
+  <div class="preview-label">📄 नमुना ८ — A4 Landscape Preview</div>
   <div id="doc">
     <div class="doc-header">
       <div class="raj-line">महाराष्ट्र शासन राजपत्र असाधारण चार-ब डिसेंबर २०१५/पौष १०, शके १९३७</div>
@@ -626,7 +614,7 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
         <tr class="sub-header"><th>घरकर<br>(२०)</th><th>दिवाबत्ती<br>कर<br>(२१)</th><th>आरोग्य<br>कर<br>(२२)</th><th>सामान्य<br>पाणी<br>(२३)</th><th>विशेष<br>पाणी<br>(२४)</th><th>एकुण<br>(२५)</th><th>घरकर<br>(२६)</th><th>दिवाबत्ती<br>(२७)</th><th>आरोग्य<br>(२८)</th><th>सामान्य<br>(२९)</th><th>विशेष<br>(३०)</th></tr>
       </thead>
       <tbody id="tbody2">
-        <tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३०</td><td>३१</td></tr>
+        <tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३0</td><td>३१</td></tr>
       </tbody>
     </table>
     <div class="doc-bottom">
@@ -665,13 +653,13 @@ body{font-family:'Noto Sans Devanagari',sans-serif;background:#E8E4D9;color:#1C1
         <div class="print-step-num">३</div>
         <div class="print-step-text">
           <strong>Save as PDF करा</strong>
-          <span>सर्व माहिती एका page मध्ये येईल</span>
+          <span>सर्व माहिती एका page मध्ये अचूक येईल</span>
         </div>
       </div>
-      <div class="print-tip-hint">📄↔️ Orientation: <strong>Landscape</strong> &nbsp;|&nbsp; Paper: <strong>A4</strong></div>
+      <div class="print-tip-hint">📄↔️ Orientation: <strong>Landscape</strong> &nbsp;|&nbsp; Size: <strong>A4</strong></div>
       <div class="print-tip-btns">
         <button class="print-btn-cancel" onclick="document.getElementById('printTipOverlay').style.display='none';">रद्द करा</button>
-        <button class="print-btn-go" onclick="document.getElementById('printTipOverlay').style.display='none';window.print();">🖨️ Print उघडा →</button>
+        <button class="print-btn-go" onclick="document.getElementById('printTipOverlay').style.display='none';window.print();">🖨️ Print उघडा ➔</button>
       </div>
     </div>
   </div>
@@ -697,6 +685,7 @@ const db = getFirestore(app);
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   document.getElementById('userEmail').textContent = user.displayName || user.email || '';
+  document.getElementById('userEmail').style.display = 'block';
 
   // Profile मधून auto-fill
   try {
@@ -727,7 +716,6 @@ onAuthStateChanged(auth, async (user) => {
       if (d.n8TrJhop !== undefined) document.getElementById('tr_jhop').value = d.n8TrJhop;
 
       document.getElementById('autofillBar').style.display = 'flex';
-      // live calc update
       if (typeof liveCalc === 'function') liveCalc();
       if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
     }
@@ -735,7 +723,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 </script>
 
-<!-- Original Namuna 8 Logic — unchanged -->
+<!-- Original Namuna 8 Logic — UNCHANGED -->
 <script>
 const PROP_NAMES={jaga:'खाली जागा',rcc:'आर.सी.सी.',sem:'दगड/विटा-सिमेंट',mati:'दगड/विटा-माती',jhop:'झोपडी/माती'};
 const US_NAMES={niv:'निवासी',van:'वाणिज्यिक',aud:'औद्योगिक'};
@@ -816,10 +804,10 @@ function renderPropList(){
         <span class="prop-card-type">${isJ?'जागा':US_NAMES[p.usage]}</span>
         <button class="btn-del" onclick="delProp(${i})" title="काढा">✕</button>
       </div>
-      <div style="font-size:9.5px;color:#555;line-height:1.8;display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="font-size:10pt;color:#555;font-weight:600;display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
         ${isJ?'':`<span>📅 ${p.yr}</span>`}
         <span>📐 ${p.len}×${p.wid}${isJ?'':('×'+p.fl+'मजले')}</span>
-        <span>= <strong style="color:var(--n8blue);">${sqft.toFixed(0)} चौ.फु.</strong></span>
+        <span>= <strong style="color:var(--navy);font-size:11pt;">${sqft.toFixed(0)} चौ.फु.</strong></span>
       </div>
     </div>`;
   }).join('');
@@ -959,9 +947,9 @@ function generateDoc(){
     `<tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३०</td><td>३१</td></tr>${t2}`;
 
   const btn=document.querySelector('.btn-gen');
-  btn.textContent='✅ तयार झाले!';
+  btn.innerHTML='✅ नमुना ८ तयार झाला!';
   btn.style.background='linear-gradient(135deg,#059669,#047857)';
-  setTimeout(()=>{btn.textContent='✅ नमुना ८ तयार करा';btn.style.background='';},2500);
+  setTimeout(()=>{btn.innerHTML='✅ नमुना ८ तयार करा';btn.style.background='';},2500);
 }
 
 function goStep(n){
@@ -997,3 +985,5 @@ window.onload=()=>{
 </script>
 </body>
 </html>
+
+
