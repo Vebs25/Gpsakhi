@@ -1,676 +1,317 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>GP Sakhi — ग्रामपंचायत सखी</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --saffron: #F58220;
-  --saffron-light: #FFEDE0;
-  --navy: #1A2744;
-  --green: #138808;
-  --green-light: #E5F6EB;
-  --gold: #D4AF37;
-  --ashoka: #000080;
-  --cream: #FDFBF7;
-  --sand: #EAE3D5;
-  --text: #2C3E50;
-  --tricolor-top: #FF9933;
-  --tricolor-mid: #FFFFFF;
-  --tricolor-bot: #138808;
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.4);
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { 
-  font-family: 'Noto Sans Devanagari', sans-serif; 
-  background: var(--cream); 
-  color: var(--text); 
-  min-height: 100vh; 
-  overflow-x: hidden; 
+body{
+font-family:'Noto Sans Devanagari',sans-serif;
+background:linear-gradient(135deg,#fff7e6,#f3fff4);
+min-height:100vh;
+color:#222;
+overflow-x:hidden;
 }
 
-/* ══ CUSTOM SCROLLBAR ══ */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--cream); }
-::-webkit-scrollbar-thumb { background: var(--saffron); border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: #d96f18; }
+/* ================= NAVBAR ================= */
 
-/* ══ LOADING SCREEN ══ */
-.loading-screen {
-  position: fixed; inset: 0; z-index: 9999;
-  background: radial-gradient(circle at center, var(--navy) 0%, #0d1424 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: opacity 0.8s ease, visibility 0.8s;
-}
-.loading-screen.hide { opacity: 0; visibility: hidden; }
-.load-emblem { font-size: 64px; margin-bottom: 20px; animation: floatBounce 2s ease-in-out infinite; filter: drop-shadow(0 0 15px rgba(245, 130, 32, 0.5)); }
-.loading-logo { font-family: 'Tiro Devanagari Marathi', serif; font-size: 36pt; color: white; margin-bottom: 8px; letter-spacing: 1px; }
-.loading-logo span { color: var(--saffron); }
-.load-sub { color: rgba(255,255,255,0.6); font-size: 11pt; letter-spacing: 3px; margin-bottom: 40px; text-transform: uppercase; }
-.spinner {
-  width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--saffron); border-right-color: var(--green);
-  border-radius: 50%; animation: spin 1s linear infinite;
+nav{
+height:70px;
+background:linear-gradient(90deg,#ff9933,#ffffff,#138808);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 30px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+position:fixed;
+top:0;
+width:100%;
+z-index:100;
 }
 
-/* ══ NAV ══ */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 75px;
-  display: flex; align-items: center; justify-content: space-between; padding: 0 40px;
-  background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
-nav::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  background: linear-gradient(90deg, var(--tricolor-top) 33%, var(--tricolor-mid) 33%, var(--tricolor-mid) 66%, var(--tricolor-bot) 66%);
-}
-.nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; cursor: pointer; }
-.nav-emblem {
-  width: 45px; height: 45px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--saffron), var(--gold));
-  display: flex; align-items: center; justify-content: center; font-size: 24px;
-  box-shadow: 0 4px 12px rgba(245, 130, 32, 0.3); border: 2px solid white;
-}
-.nav-logo-text span { font-family: 'Tiro Devanagari Marathi', serif; font-size: 20pt; color: var(--navy); font-weight: bold; line-height: 1; }
-.nav-logo-text small { font-size: 8.5pt; color: #666; letter-spacing: 1px; font-weight: 600; }
-.nav-right { display: flex; align-items: center; gap: 16px; }
-
-/* User Controls */
-.nav-user { display: none; align-items: center; gap: 14px; background: rgba(26, 39, 68, 0.05); padding: 5px 15px 5px 5px; border-radius: 30px; }
-.nav-user.show { display: flex; animation: slideIn 0.5s ease; }
-.nav-user img { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--green); }
-.nav-user span { color: var(--navy); font-size: 10.5pt; font-weight: 600; }
-.nav-dashboard-btn {
-  background: var(--navy); color: white; border: none; border-radius: 20px;
-  padding: 8px 18px; font-size: 9.5pt; font-weight: 600; cursor: pointer; transition: all 0.3s;
-}
-.nav-dashboard-btn:hover { background: var(--saffron); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(245, 130, 32, 0.3); }
-.nav-logout { background: transparent; border: 1px solid #ccc; color: #555; border-radius: 20px; padding: 7px 14px; font-size: 9pt; cursor: pointer; transition: all 0.2s; }
-.nav-logout:hover { background: #ffebee; color: #d32f2f; border-color: #d32f2f; }
-
-/* Login Button */
-.nav-login-btn {
-  background: linear-gradient(135deg, var(--saffron), #e66b0e); color: white; border: none;
-  border-radius: 25px; padding: 10px 24px; font-size: 10.5pt; font-weight: 700; cursor: pointer;
-  box-shadow: 0 4px 15px rgba(245, 130, 32, 0.4); transition: all 0.3s;
-  display: flex; align-items: center; gap: 8px;
-}
-.nav-login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 130, 32, 0.6); }
-
-/* ══ HERO SECTION ══ */
-.hero {
-  min-height: 100vh; padding: 120px 20px 80px; position: relative;
-  background: linear-gradient(145deg, var(--cream) 0%, #f0ebd8 100%);
-  display: flex; align-items: center; justify-content: center; overflow: hidden;
-}
-/* Abstract Animated Background */
-.hero-shapes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.shape { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; animation: drift 15s infinite alternate; }
-.shape-1 { width: 400px; height: 400px; background: var(--saffron); top: -10%; left: -10%; }
-.shape-2 { width: 500px; height: 500px; background: var(--green); bottom: -20%; right: -10%; animation-delay: -5s; }
-.shape-3 { width: 300px; height: 300px; background: var(--gold); top: 40%; left: 50%; animation-delay: -10s; }
-.hero-ashoka { position: absolute; right: -5vw; top: 50%; transform: translateY(-50%); width: 60vw; max-width: 600px; opacity: 0.03; z-index: 1; pointer-events: none; }
-
-.hero-content {
-  position: relative; z-index: 2; max-width: 800px; text-align: center;
-  background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.8);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+.logo{
+font-size:22px;
+font-weight:700;
 }
 
-.hero-gov-badge {
-  display: inline-flex; align-items: center; gap: 10px; background: white;
-  border: 1px solid var(--sand); color: var(--navy); padding: 8px 20px;
-  border-radius: 30px; font-size: 9pt; font-weight: 700; letter-spacing: 1px;
-  margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  animation: fadeDown 0.8s ease forwards;
+.logo span{
+color:#e65100;
 }
-.hero-gov-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 
-.hero-title { font-family: 'Tiro Devanagari Marathi', serif; font-size: 56pt; color: var(--navy); line-height: 1.1; margin-bottom: 5px; animation: fadeUp 0.8s ease 0.2s both; }
-.hero-title span { color: var(--saffron); }
-.hero-sub { font-size: 16pt; font-weight: 600; color: var(--gold); margin-bottom: 20px; letter-spacing: 2px; animation: fadeUp 0.8s ease 0.3s both; }
-.hero-tagline { font-size: 14pt; color: #555; margin-bottom: 40px; line-height: 1.6; animation: fadeUp 0.8s ease 0.4s both; }
-.hero-tagline strong { color: var(--navy); }
-
-.hero-cta { display: flex; flex-direction: column; align-items: center; gap: 15px; animation: fadeUp 0.8s ease 0.5s both; }
-.btn-google {
-  display: flex; align-items: center; gap: 14px; background: white; color: var(--text); border: 2px solid #eee;
-  border-radius: 16px; padding: 16px 36px; font-size: 13pt; font-weight: 700; cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.nav-btn{
+background:#1565c0;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+transition:0.3s;
 }
-.btn-google:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 30px rgba(0,0,0,0.12); border-color: var(--saffron); }
-.btn-google img { width: 26px; height: 26px; }
-.hero-note { font-size: 9.5pt; color: #777; font-weight: 500; display: flex; align-items: center; gap: 6px; }
 
-.hero-stats { display: flex; gap: 40px; margin-top: 50px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.8s ease 0.6s both; border-top: 1px solid var(--sand); padding-top: 30px; }
-.hero-stat { text-align: center; }
-.hero-stat-num { font-size: 26pt; font-weight: 800; color: var(--navy); display: block; line-height: 1; }
-.hero-stat-label { font-size: 9.5pt; color: #666; font-weight: 600; margin-top: 5px; display: block; }
-
-/* Waves Divider */
-.custom-shape-divider-bottom { position: absolute; bottom: 0; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 3; }
-.custom-shape-divider-bottom svg { position: relative; display: block; width: calc(100% + 1.3px); height: 80px; }
-.custom-shape-divider-bottom .shape-fill { fill: #ffffff; }
-
-/* ══ COMMON SECTION STYLES ══ */
-.section { padding: 100px 20px; position: relative; }
-.section-wrap { max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
-.section-eyebrow { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px; }
-.section-eyebrow .line { width: 60px; height: 2px; background: linear-gradient(90deg, transparent, var(--saffron)); }
-.section-eyebrow .line.right { background: linear-gradient(270deg, transparent, var(--saffron)); }
-.section-eyebrow span { font-size: 10pt; font-weight: 800; color: var(--saffron); letter-spacing: 3px; text-transform: uppercase; }
-.section-heading { text-align: center; font-family: 'Tiro Devanagari Marathi', serif; font-size: 32pt; color: var(--navy); margin-bottom: 15px; }
-.section-sub { text-align: center; font-size: 11.5pt; color: #666; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-/* ══ TOOLS SECTION ══ */
-.tools-section { background: #ffffff; }
-.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; }
-.tool-card {
-  background: white; border-radius: 24px; padding: 35px 25px; text-align: center; position: relative;
-  border: 1px solid var(--sand); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03); overflow: hidden;
+.nav-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
-.tool-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
-  background: linear-gradient(90deg, var(--saffron), var(--gold)); transform: scaleX(0); transition: transform 0.4s; transform-origin: left;
+
+/* ================= HERO ================= */
+
+.hero{
+padding-top:130px;
+text-align:center;
+padding-bottom:90px;
 }
-.tool-card.live:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(245, 130, 32, 0.1); border-color: transparent; }
-.tool-card.live:hover::before { transform: scaleX(1); }
-.tool-card.soon { background: #f9f9f9; border: 1px dashed #ccc; opacity: 0.8; }
 
-.tool-badge { position: absolute; top: 15px; right: 15px; font-size: 7.5pt; font-weight: 700; padding: 5px 12px; border-radius: 20px; }
-.badge-live { background: var(--green-light); color: var(--green); }
-.badge-soon { background: #e2e8f0; color: #64748b; }
-
-.tool-icon-wrap {
-  width: 75px; height: 75px; border-radius: 20px; margin: 0 auto 20px;
-  display: flex; align-items: center; justify-content: center; font-size: 35px;
-  background: var(--saffron-light); color: var(--saffron); transition: transform 0.3s;
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
 }
-.tool-card:nth-child(2) .tool-icon-wrap { background: var(--green-light); color: var(--green); }
-.tool-card:nth-child(3) .tool-icon-wrap { background: #e0f2fe; color: #0284c7; }
-.tool-card:nth-child(4) .tool-icon-wrap { background: #fef08a; color: #ca8a04; }
-.tool-card.soon .tool-icon-wrap { background: #e2e8f0; color: #64748b; filter: grayscale(1); }
 
-.tool-card.live:hover .tool-icon-wrap { transform: scale(1.1) rotate(5deg); }
-.tool-card h4 { font-size: 13pt; font-weight: 800; color: var(--navy); margin-bottom: 10px; }
-.tool-card p { font-size: 9.5pt; color: #666; line-height: 1.6; }
-
-.ad-banner { background: #fafafa; border: 2px dashed #ddd; border-radius: 12px; padding: 20px; text-align: center; color: #aaa; font-size: 10pt; max-width: 800px; margin: 0 auto 50px; font-weight: 600; letter-spacing: 2px; }
-
-/* ══ FEATURES ══ */
-.features { background: var(--cream); overflow: hidden; }
-.features-bg-pattern { position: absolute; inset: 0; opacity: 0.03; background-image: radial-gradient(var(--navy) 2px, transparent 2px); background-size: 30px 30px; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-.feat-card {
-  background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
-  border-radius: 24px; padding: 40px 30px; transition: all 0.3s;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: flex-start;
+.hero p{
+font-size:18px;
+opacity:0.8;
+margin-bottom:30px;
 }
-.feat-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); background: white; }
-.feat-icon {
-  width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
-  font-size: 30px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-}
-.feat-card:nth-child(1) .feat-icon { background: linear-gradient(135deg, #FF9A9E, #FECFEF); color: #d32f2f; }
-.feat-card:nth-child(2) .feat-icon { background: linear-gradient(135deg, #84FAB0, #8FD3F4); color: #0f6b06; }
-.feat-card:nth-child(3) .feat-icon { background: linear-gradient(135deg, #A1C4FD, #C2E9FB); color: #0277bd; }
-.feat-card:nth-child(4) .feat-icon { background: linear-gradient(135deg, #FDFBFB, #EBEDEE); color: #f57c00; }
-.feat-card h3 { font-size: 14pt; font-weight: 800; color: var(--navy); margin-bottom: 12px; }
-.feat-card p { font-size: 10.5pt; color: #555; line-height: 1.7; }
 
-/* ══ HOW IT WORKS ══ */
-.how { background: var(--navy); color: white; position: relative; }
-.how-bg { position: absolute; inset: 0; background: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/></svg>'); }
-.how .section-heading { color: white; }
-.how .section-sub { color: rgba(255,255,255,0.7); }
-.how .section-eyebrow span { color: var(--gold); }
-.steps-wrapper { position: relative; max-width: 900px; margin: 0 auto; }
-.steps-line { position: absolute; top: 45px; left: 10%; right: 10%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
-.steps-line-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0; background: linear-gradient(90deg, var(--saffron), var(--gold)); transition: width 1.5s ease; }
-.steps-row { display: flex; justify-content: space-between; position: relative; z-index: 2; flex-wrap: wrap; gap: 20px; }
-.step { flex: 1; min-width: 180px; text-align: center; padding: 0 10px; }
-.step-bubble {
-  width: 90px; height: 90px; border-radius: 50%; background: var(--navy); border: 4px solid rgba(255,255,255,0.2);
-  color: white; font-size: 26pt; font-weight: 800; display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 25px; transition: all 0.4s; position: relative; z-index: 3;
+.cta-btn{
+background:linear-gradient(90deg,#ff9933,#ff6f00);
+color:white;
+padding:15px 30px;
+font-size:18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
 }
-.step:hover .step-bubble { background: var(--saffron); border-color: var(--gold); transform: scale(1.15); box-shadow: 0 0 30px rgba(245, 130, 32, 0.5); }
-.step h4 { font-size: 13pt; font-weight: 700; color: white; margin-bottom: 12px; }
-.step p { font-size: 10pt; color: rgba(255,255,255,0.6); line-height: 1.6; }
-.how.visible .steps-line-fill { width: 100%; }
 
-/* ══ GOVT BANNER ══ */
-.govt-banner { background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0 0l50 50L100 0v100H0V0z" fill="%23fcf9f2" fill-opacity="0.4"/></svg>'), linear-gradient(135deg, #ffffff, #fdf8e9); border-top: 5px solid var(--saffron); border-bottom: 5px solid var(--green); padding: 60px 20px; text-align: center; position: relative; }
-.govt-banner-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 2; }
-.govt-banner .ashoka { font-size: 60px; display: inline-block; margin-bottom: 20px; animation: spin 20s linear infinite; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-.govt-banner h3 { font-family: 'Tiro Devanagari Marathi', serif; font-size: 22pt; color: var(--navy); margin-bottom: 15px; }
-.govt-banner p { font-size: 12pt; color: #555; line-height: 1.8; font-weight: 500; }
-.govt-seal { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
-.seal-badge { background: white; border: 2px solid var(--sand); border-radius: 50px; padding: 10px 24px; font-size: 10pt; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-/* ══ FOOTER ══ */
-footer { background: #0b1120; color: rgba(255,255,255,0.5); padding: 50px 20px 30px; text-align: center; position: relative; overflow: hidden; }
-.footer-tricolor { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--tricolor-top) 33%, var(--tricolor-mid) 33%, var(--tricolor-mid) 66%, var(--tricolor-bot) 66%); }
-footer .footer-logo { font-family: 'Tiro Devanagari Marathi', serif; font-size: 24pt; color: white; margin-bottom: 15px; }
-footer .footer-logo span { color: var(--saffron); }
-footer p { font-size: 10.5pt; line-height: 1.8; margin-bottom: 10px; }
-.footer-links { margin: 25px 0; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-.footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 10pt; font-weight: 600; transition: color 0.3s; padding: 5px 10px; border-radius: 5px; }
-.footer-links a:hover { color: var(--saffron); background: rgba(255,255,255,0.05); }
-.footer-copy { margin-top: 30px; font-size: 9pt; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-
-/* ══ MODAL ══ */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(8px);
-  z-index: 2000; display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+.cta-btn:hover{
+transform:scale(1.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
-.modal-overlay.show { opacity: 1; pointer-events: all; }
-.modal {
-  background: white; border-radius: 30px; padding: 50px 40px; max-width: 450px; width: 92%;
-  text-align: center; transform: translateY(40px) scale(0.95); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.5);
-}
-.modal::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
-  background: linear-gradient(90deg, var(--tricolor-top) 33%, var(--tricolor-mid) 33%, var(--tricolor-mid) 66%, var(--tricolor-bot) 66%);
-}
-.modal-overlay.show .modal { transform: translateY(0) scale(1); }
-.modal-emblem { font-size: 60px; margin-bottom: 20px; display: inline-block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-.modal h2 { font-family: 'Tiro Devanagari Marathi', serif; font-size: 24pt; color: var(--navy); margin-bottom: 12px; }
-.modal p { font-size: 11pt; color: #666; margin-bottom: 35px; line-height: 1.6; }
-.modal .btn-google { width: 100%; justify-content: center; margin-bottom: 20px; padding: 18px; font-size: 12pt; border-radius: 16px; }
-.modal-note { font-size: 9pt; color: #999; line-height: 1.6; background: #f9f9f9; padding: 12px; border-radius: 12px; }
-.modal-close {
-  position: absolute; top: 20px; right: 20px; background: #f1f1f1; border: none;
-  width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer;
-  color: #555; display: flex; align-items: center; justify-content: center; transition: all 0.3s;
-}
-.modal-close:hover { background: #ffebee; color: #d32f2f; transform: rotate(90deg); }
 
-/* ══ ANIMATIONS ══ */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes spin { 100% { transform: rotate(360deg); } }
-@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } }
-@keyframes floatBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-@keyframes drift { 0% { transform: translate(0,0) rotate(0deg); } 100% { transform: translate(30px, -30px) rotate(10deg); } }
-@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+/* ================= FEATURES ================= */
 
-/* Scroll Reveal Classes */
-.reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-
-/* Responsive */
-@media(max-width: 768px) {
-  nav { padding: 0 20px; height: 65px; }
-  .nav-logo-text span { font-size: 16pt; }
-  .nav-login-btn { padding: 8px 16px; font-size: 9.5pt; }
-  .hero { padding: 100px 15px 60px; }
-  .hero-title { font-size: 40pt; }
-  .hero-sub { font-size: 13pt; }
-  .hero-content { padding: 30px 20px; }
-  .section-heading { font-size: 26pt; }
-  .steps-line { display: none; }
-  .step { min-width: 100%; margin-bottom: 30px; }
-  .hero-ashoka { width: 120vw; right: -20vw; }
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+padding:60px;
 }
+
+.card{
+background:white;
+border-radius:16px;
+padding:30px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h3{
+margin-top:10px;
+margin-bottom:10px;
+}
+
+.card p{
+opacity:0.8;
+}
+
+/* ================= LOADING ================= */
+
+.loading-screen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#1a2744;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:white;
+z-index:200;
+transition:0.5s;
+}
+
+.loading-screen.hide{
+opacity:0;
+pointer-events:none;
+}
+
+.loader{
+width:40px;
+height:40px;
+border:4px solid rgba(255,255,255,0.3);
+border-top:4px solid white;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin-bottom:20px;
+}
+
+@keyframes spin{
+100%{transform:rotate(360deg);}
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+}
+
+.modal.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.modal-box{
+background:white;
+padding:40px;
+border-radius:12px;
+text-align:center;
+width:320px;
+}
+
+.google-btn{
+background:white;
+border:1px solid #ddd;
+padding:12px;
+width:100%;
+cursor:pointer;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+}
+
 </style>
 </head>
+
 <body>
 
-<!-- Loading -->
+<!-- Loading Screen -->
+
 <div class="loading-screen" id="loadingScreen">
-  <div class="load-emblem">🏛️</div>
-  <div class="loading-logo">GP <span>Sakhi</span></div>
-  <div class="load-sub">ग्रामपंचायत सखी • महाराष्ट्र</div>
-  <div class="spinner"></div>
+<div class="loader"></div>
+<div>GP Sakhi Loading...</div>
 </div>
 
-<script>
-// Firebase load झाला नाही तरी 2.5 सेकंदात loading screen hide करा
-setTimeout(function(){
-  var ls = document.getElementById('loadingScreen');
-  if(ls){ ls.classList.add('hide'); setTimeout(function(){ ls.style.display='none'; }, 800); }
-}, 2500);
-</script>
+<!-- NAVBAR -->
 
-<!-- NAV -->
 <nav>
-  <div class="nav-logo" onclick="window.scrollTo(0,0)">
-    <div class="nav-emblem">🏛️</div>
-    <div class="nav-logo-text">
-      <span>GP Sakhi</span>
-      <small>ग्रामपंचायत सखी</small>
-    </div>
-  </div>
-  <div class="nav-right">
-    <div class="nav-user" id="navUser">
-      <img id="navUserImg" src="" alt="">
-      <span id="navUserName"></span>
-      <button class="nav-dashboard-btn" onclick="window.location.href='dashboard.html'">Dashboard</button>
-      <button class="nav-logout" onclick="handleLogout()">बाहेर</button>
-    </div>
-    <button class="nav-login-btn" id="navLoginBtn" onclick="showLoginModal()">🔑 लॉगिन करा</button>
-  </div>
+
+<div class="logo">
+🏛 GP <span>Sakhi</span>
+</div>
+
+<button class="nav-btn" id="navLoginBtn" onclick="showLoginModal()">
+Login
+</button>
+
 </nav>
 
 <!-- HERO -->
+
 <section class="hero">
-  <div class="hero-shapes">
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-  </div>
-  <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='1em' font-size='80'>☸</text></svg>" class="hero-ashoka" alt="">
-  
-  <div class="hero-content">
-    <div class="hero-gov-badge">
-      <div class="dot"></div>
-      महाराष्ट्र शासन मान्यताप्राप्त डिजिटल साधन
-    </div>
-    <h1 class="hero-title">GP <span>Sakhi</span></h1>
-    <p class="hero-sub">ग्रामपंचायत सखी</p>
-    <p class="hero-tagline">
-      ग्रामपंचायतीची <strong>कागदपत्रे, बिले, पत्रे व ठराव</strong><br>
-      आता एकाच ठिकाणी — मोफत, सोपे, मराठीत
-    </p>
-    <div class="hero-cta">
-      <button class="btn-google" id="heroGoogleBtn" onclick="showLoginModal()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-        Google ने सुरुवात करा
-      </button>
-      <p class="hero-note">🔒 Google च्या सुरक्षित login द्वारे • पूर्णपणे मोफत</p>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="hero-stat-num">४+</span>
-        <span class="hero-stat-label">उपलब्ध Tools</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">१००%</span>
-        <span class="hero-stat-label">मोफत सेवा</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">मराठी</span>
-        <span class="hero-stat-label">माध्यम</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="custom-shape-divider-bottom">
-    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.06,130.83,123.82,192.27,110,237.9,99.55,283.4,75.14,321.39,56.44Z" class="shape-fill"></path>
-    </svg>
-  </div>
-</section>
+<h1>डिजिटल ग्रामपंचायत व्यवस्थापन</h1>
 
-<!-- TOOLS SECTION -->
-<section class="section tools-section">
-  <div class="section-wrap">
-    <div class="section-eyebrow reveal">
-      <div class="line"></div>
-      <span>उपलब्ध साधने</span>
-      <div class="line right"></div>
-    </div>
-    <h2 class="section-heading reveal">GP Sakhi Tools</h2>
-    <p class="section-sub reveal">ग्रामपंचायत कामाचे सर्व साधने एकाच ठिकाणी</p>
-    
-    <div class="ad-banner reveal">Advertisement Space</div>
-    
-    <div class="tools-grid">
-      <div class="tool-card live reveal reveal-delay-1" onclick="showLoginModal()">
-        <span class="tool-badge badge-live">✓ उपलब्ध</span>
-        <div class="tool-icon-wrap">📋</div>
-        <h4>मजुरी बिल जनरेटर</h4>
-        <p>हप्तेवारी व गोषवारा तयार करा. मजुरांची यादी, रक्कम आणि print एकाच ठिकाणी.</p>
-      </div>
-      <div class="tool-card live reveal reveal-delay-2" onclick="showLoginModal()">
-        <span class="tool-badge badge-live">✓ उपलब्ध</span>
-        <div class="tool-icon-wrap">🏠</div>
-        <h4>नमुना ८ जनरेटर</h4>
-        <p>कर आकारणी नोंदवही तयार करा. मालमत्ता नोंद व कर निर्धारण सोपे.</p>
-      </div>
-      <div class="tool-card live reveal reveal-delay-3" onclick="showLoginModal()">
-        <span class="tool-badge badge-live">✓ उपलब्ध</span>
-        <div class="tool-icon-wrap">📝</div>
-        <h4>पत्र जनरेटर</h4>
-        <p>शासकीय पत्रव्यवहार मराठीत तयार करा. जावक पत्र, अर्ज आणि विनंती पत्रे.</p>
-      </div>
-      <div class="tool-card live reveal reveal-delay-4" onclick="showLoginModal()">
-        <span class="tool-badge badge-live">✓ उपलब्ध</span>
-        <div class="tool-icon-wrap">📜</div>
-        <h4>ठराव जनरेटर</h4>
-        <p>ग्रामसभा, मासिक, महिला व वार्ड सभेचे ठराव तयार करा. Print ready format.</p>
-      </div>
-      <div class="tool-card soon reveal reveal-delay-1">
-        <span class="tool-badge badge-soon">लवकरच</span>
-        <div class="tool-icon-wrap">📄</div>
-        <h4>नमुना / प्रमाणपत्र</h4>
-        <p>विविध सरकारी नमुने व प्रमाणपत्रे तयार करणे.</p>
-      </div>
-    </div>
-  </div>
+<p>
+ग्रामपंचायतचे काम सोपे, जलद आणि डिजिटल पद्धतीने करा
+</p>
+
+<button class="cta-btn" onclick="showLoginModal()">
+सुरू करा
+</button>
+
 </section>
 
 <!-- FEATURES -->
-<section class="section features">
-  <div class="features-bg-pattern"></div>
-  <div class="section-wrap">
-    <div class="section-eyebrow reveal">
-      <div class="line"></div>
-      <span>का वापरावे?</span>
-      <div class="line right"></div>
-    </div>
-    <h2 class="section-heading reveal">GP Sakhi चे फायदे</h2>
-    <p class="section-sub reveal">ग्रामसेवक, सरपंच आणि ग्रामपंचायत कर्मचाऱ्यांसाठी</p>
-    
-    <div class="features-grid">
-      <div class="feat-card reveal reveal-delay-1">
-        <div class="feat-icon">⚡</div>
-        <h3>वेळाची बचत</h3>
-        <p>हाताने लिहिण्याचा वेळ वाचवा. GP Profile एकदा सेट केल्यावर सर्व tools मध्ये आपोआप माहिती भरली जाते.</p>
-      </div>
-      <div class="feat-card reveal reveal-delay-2">
-        <div class="feat-icon">🎯</div>
-        <h3>अचूक कागदपत्रे</h3>
-        <p>शासनाच्या नियमांप्रमाणे format. चुका कमी होतात आणि कागदपत्रे सरकारी नमुन्यात तयार होतात.</p>
-      </div>
-      <div class="feat-card reveal reveal-delay-3">
-        <div class="feat-icon">☁️</div>
-        <h3>Cloud Storage</h3>
-        <p>सर्व vouchers व कागदपत्रे Google Firebase वर सुरक्षित. कुठेही, कधीही access करा.</p>
-      </div>
-      <div class="feat-card reveal reveal-delay-4">
-        <div class="feat-icon">🆓</div>
-        <h3>पूर्णपणे मोफत</h3>
-        <p>GP Sakhi ची सर्व सेवा मोफत आहे. कोणतेही hidden charges नाहीत.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- HOW IT WORKS -->
-<section class="section how" id="how-section">
-  <div class="how-bg"></div>
-  <div class="section-wrap">
-    <div class="section-eyebrow reveal">
-      <div class="line"></div>
-      <span>कसे वापरावे</span>
-      <div class="line right"></div>
-    </div>
-    <h2 class="section-heading reveal">४ सोप्या पायऱ्या</h2>
-    <p class="section-sub reveal">सुरुवात करणे खूप सोपे आहे</p>
-    
-    <div class="steps-wrapper">
-      <div class="steps-line"><div class="steps-line-fill"></div></div>
-      <div class="steps-row">
-        <div class="step reveal reveal-delay-1">
-          <div class="step-bubble">१</div>
-          <h4>Google Login</h4>
-          <p>तुमच्या Google account ने मोफत login करा.</p>
-        </div>
-        <div class="step reveal reveal-delay-2">
-          <div class="step-bubble">२</div>
-          <h4>GP Profile सेट करा</h4>
-          <p>ग्रामपंचायत, सरपंच, ग्रामसेवक माहिती एकदा भरा.</p>
-        </div>
-        <div class="step reveal reveal-delay-3">
-          <div class="step-bubble">३</div>
-          <h4>Tool वापरा</h4>
-          <p>हवे ते tool उघडा — माहिती auto-fill होईल.</p>
-        </div>
-        <div class="step reveal reveal-delay-4">
-          <div class="step-bubble">४</div>
-          <h4>Print / Save</h4>
-          <p>तयार कागद print करा किंवा इतिहासात save करा.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<section class="features">
 
-<!-- GOVT BANNER -->
-<div class="govt-banner reveal">
-  <div class="govt-banner-inner">
-    <span class="ashoka">☸</span>
-    <h3>महाराष्ट्र शासन — ग्रामविकास विभाग</h3>
-    <p>GP Sakhi हे ग्रामपंचायत कार्यालयाचे डिजिटलीकरण करण्यासाठी<br>तयार केलेले मोफत डिजिटल साधन आहे.</p>
-    <div class="govt-seal">
-      <div class="seal-badge">🏛️ ग्रामपंचायत कार्यालय</div>
-      <div class="seal-badge">📋 73वी घटनादुरुस्ती</div>
-      <div class="seal-badge">🌿 महाराष्ट्र</div>
-    </div>
-  </div>
+<div class="card reveal">
+<h3>💰 Voucher Generator</h3>
+<p>मजुरी वाउचर सहज तयार करा</p>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-tricolor"></div>
-  <div class="footer-logo">GP <span>Sakhi</span></div>
-  <p>ग्रामपंचायत सखी — महाराष्ट्रातील ग्रामपंचायतींसाठी मोफत डिजिटल सेवा</p>
-  <div class="footer-links">
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Use</a>
-    <a href="dashboard.html">Dashboard</a>
-  </div>
-  <p class="footer-copy">© 2025 GP Sakhi • सर्व हक्क राखीव</p>
-</footer>
+<div class="card reveal">
+<h3>📊 ग्रामपंचायत Tools</h3>
+<p>ग्रामपंचायत कामांसाठी डिजिटल टूल्स</p>
+</div>
+
+<div class="card reveal">
+<h3>🧾 Reports</h3>
+<p>कामाचे रिपोर्ट्स तयार करा</p>
+</div>
+
+</section>
 
 <!-- LOGIN MODAL -->
-<div class="modal-overlay" id="loginModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeLoginModal()">✕</button>
-    <span class="modal-emblem">🏛️</span>
-    <h2>GP Sakhi मध्ये स्वागत</h2>
-    <p>तुमच्या Google account ने लॉगिन करा.<br>पहिल्यांदा लॉगिन केल्यावर account आपोआप तयार होईल.</p>
-    <button class="btn-google" id="modalGoogleBtn" onclick="handleGoogleLogin()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-      Google ने Continue करा
-    </button>
-    <p class="modal-note">
-      लॉगिन केल्यावर तुमची माहिती Google च्या सुरक्षित servers वर साठवली जाते.<br>
-      आम्ही तुमचा डेटा कधीही विकत नाही. 🔒
-    </p>
-  </div>
+
+<div class="modal" id="loginModal">
+
+<div class="modal-box">
+
+<h3>Login</h3>
+
+<br>
+
+<button class="google-btn" id="modalGoogleBtn" onclick="handleGoogleLogin()">
+
+<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+
+Google ने Continue करा
+
+</button>
+
 </div>
 
-<!-- Firebase SDK (UNCHANGED LOGIC) -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
-  authDomain: "gpsakhi-9685e.firebaseapp.com",
-  projectId: "gpsakhi-9685e",
-  storageBucket: "gpsakhi-9685e.firebasestorage.app",
-  messagingSenderId: "107629589245",
-  appId: "1:107629589245:web:7b288fda76b26aaadac494"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // आधीच login आहे — dashboard वर redirect करा
-    window.location.href = 'dashboard.html';
-    return;
-  }
-  // Login नाही — loading screen hide करा
-  document.getElementById('loadingScreen').classList.add('hide');
-  setTimeout(() => { document.getElementById('loadingScreen').style.display='none'; }, 800);
-  document.getElementById('navLoginBtn').style.display = 'flex';
-  document.getElementById('navUser').classList.remove('show');
-  sessionStorage.removeItem('gpUser');
-});
-
-window.handleGoogleLogin = async function() {
-  const btn = document.getElementById('modalGoogleBtn');
-  btn.textContent = 'लॉगिन होत आहे...';
-  btn.disabled = true;
-  try {
-    await signInWithPopup(auth, provider);
-    closeLoginModal();
-    window.location.href = 'dashboard.html';
-  } catch(e) {
-    btn.disabled = false;
-    btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:26px"> Google ने Continue करा';
-    alert('Login failed: ' + e.message);
-  }
-};
-
-window.handleLogout = async function() {
-  await signOut(auth);
-  sessionStorage.removeItem('gpUser');
-};
-</script>
+</div>
 
 <script>
-function showLoginModal(){document.getElementById('loginModal').classList.add('show');}
-function closeLoginModal(){document.getElementById('loginModal').classList.remove('show');}
-document.getElementById('loginModal').onclick=function(e){if(e.target===this)closeLoginModal();};
 
-// Scroll reveal & Line animation
-const observer = new IntersectionObserver(function(entries){
-  entries.forEach(function(entry){
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-},{threshold:0.15});
+function showLoginModal(){
+document.getElementById('loginModal').classList.add('show');
+}
 
-document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el);});
-observer.observe(document.getElementById('how-section'));
+function closeLoginModal(){
+document.getElementById('loginModal').classList.remove('show');
+}
 
-// Navbar blur effect on scroll
-window.addEventListener('scroll', function() {
-  const nav = document.querySelector('nav');
-  if (window.scrollY > 20) {
-    nav.style.background = 'rgba(255, 255, 255, 0.95)';
-    nav.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
-  } else {
-    nav.style.background = 'rgba(255, 255, 255, 0.85)';
-    nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.05)';
-  }
-});
+document.getElementById('loginModal').onclick=function(e){
+if(e.target===this)closeLoginModal();
+}
+
 </script>
+
 </body>
 </html>
-
