@@ -333,7 +333,6 @@ footer p { font-size: 10.5pt; line-height: 1.8; margin-bottom: 10px; }
 </head>
 <body>
 
-<!-- Loading -->
 <div class="loading-screen" id="loadingScreen">
   <div class="load-emblem">🏛️</div>
   <div class="loading-logo">GP <span>Sakhi</span></div>
@@ -349,7 +348,6 @@ setTimeout(function(){
 }, 2500);
 </script>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo" onclick="window.scrollTo(0,0)">
     <div class="nav-emblem">🏛️</div>
@@ -369,7 +367,6 @@ setTimeout(function(){
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-shapes">
     <div class="shape shape-1"></div>
@@ -419,7 +416,6 @@ setTimeout(function(){
   </div>
 </section>
 
-<!-- TOOLS SECTION -->
 <section class="section tools-section">
   <div class="section-wrap">
     <div class="section-eyebrow reveal">
@@ -467,7 +463,6 @@ setTimeout(function(){
   </div>
 </section>
 
-<!-- FEATURES -->
 <section class="section features">
   <div class="features-bg-pattern"></div>
   <div class="section-wrap">
@@ -504,7 +499,6 @@ setTimeout(function(){
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
 <section class="section how" id="how-section">
   <div class="how-bg"></div>
   <div class="section-wrap">
@@ -544,7 +538,6 @@ setTimeout(function(){
   </div>
 </section>
 
-<!-- GOVT BANNER -->
 <div class="govt-banner reveal">
   <div class="govt-banner-inner">
     <span class="ashoka">☸</span>
@@ -558,7 +551,6 @@ setTimeout(function(){
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-tricolor"></div>
   <div class="footer-logo">GP <span>Sakhi</span></div>
@@ -571,7 +563,6 @@ setTimeout(function(){
   <p class="footer-copy">© 2025 GP Sakhi • सर्व हक्क राखीव</p>
 </footer>
 
-<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="loginModal">
   <div class="modal">
     <button class="modal-close" onclick="closeLoginModal()">✕</button>
@@ -589,19 +580,12 @@ setTimeout(function(){
   </div>
 </div>
 
-<!-- Firebase SDK (UNCHANGED LOGIC) -->
+<script src="config.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
-  authDomain: "gpsakhi-9685e.firebaseapp.com",
-  projectId: "gpsakhi-9685e",
-  storageBucket: "gpsakhi-9685e.firebasestorage.app",
-  messagingSenderId: "107629589245",
-  appId: "1:107629589245:web:7b288fda76b26aaadac494"
-};
+const firebaseConfig = window.myFirebaseConfig;
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -610,6 +594,10 @@ const provider = new GoogleAuthProvider();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // आधीच login आहे — dashboard वर redirect करा
+    // पण आधीच dashboard/tool page वर असाल तर redirect नको
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const toolPages = ['dashboard.html', 'voucher.html', 'letter.html', 'tharav.html', 'namuna8.html', 'profile.html'];
+    if (toolPages.includes(currentPage)) return; // आधीच आत आहे
     window.location.href = 'dashboard.html';
     return;
   }
@@ -673,4 +661,3 @@ window.addEventListener('scroll', function() {
 </script>
 </body>
 </html>
-
