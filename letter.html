@@ -209,7 +209,6 @@ nav::before {
 </style>
 </head>
 <body>
-<!-- Clean Nav -->
 <nav>
   <a href="dashboard.html" class="back-btn">← डॅशबोर्ड</a>
   <a href="index.html" class="nav-logo">
@@ -231,7 +230,6 @@ nav::before {
   <div class="form-title">✉️ पत्र जनरेटर</div>
   <div class="form-sub">शासकीय व अधिकृत पत्रे सोप्या पद्धतीने तयार करा</div>
 
-  <!-- ══ COMMON FIELDS ══ -->
   <div class="card">
     <div class="sec-title">🏛️ ग्रामपंचायत माहिती</div>
     <div class="sec-body">
@@ -292,6 +290,7 @@ nav::before {
   </div>
 
   <button class="bprint" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Print / PDF सेव करा</button>
+  <button class="bprint" id="letterSaveBtn" onclick="doSaveLetter()" style="background:linear-gradient(135deg,#138808,#0f6b06);margin-top:8px;">💾 इतिहासात जतन करा</button>
  </div>
 
  <div class="preview-panel">
@@ -300,7 +299,6 @@ nav::before {
  </div>
 </div>
 
-<!-- PRINT TIP POPUP -->
 <div id="printTipOverlay" class="print-tip-overlay">
   <div class="print-tip-box">
     <div class="print-tip-head">🖨️ Print करण्यापूर्वी</div>
@@ -427,27 +425,22 @@ g('rc').innerHTML = ''; RC = 0;
 rp();
 </script>
 
-<!-- Firebase -->
+<script src="config.js"></script>
 <script type="module">
 import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey:            'AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw',
-  authDomain:        'gpsakhi-9685e.firebaseapp.com',
-  projectId:         'gpsakhi-9685e',
-  storageBucket:     'gpsakhi-9685e.firebasestorage.app',
-  messagingSenderId: '107629589245',
-  appId:             '1:107629589245:web:7b288fda76b26aaadac494'
-};
+const firebaseConfig = window.myFirebaseConfig;
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
+let currentUser = null;
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
 
   try {
     const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
@@ -458,29 +451,58 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
     const d = snap.data();
-
-    /* GP Type */
     var gpType = d.gpType || 'gat';
     window.sgpt(gpType === 'gram' ? 0 : 1);
-
-    /* Fields fill */
     document.getElementById('gpn').value   = d.gpName || '';
     document.getElementById('gpt').value   = d.ps     || '';
     document.getElementById('gpd').value   = d.dist   || '';
     document.getElementById('sarp').value  = d.sarp   || '';
     document.getElementById('usarp').value = d.usSarp || '';
     document.getElementById('gram').value  = d.gram   || '';
-
-    /* Autofill bar */
     var bar = document.getElementById('autofillBar');
     if(bar) bar.classList.add('show');
-
     window.rp();
   } catch(e) {
     console.log('Profile fetch error:', e);
   }
 });
+
+window.doSaveLetter = async function() {
+  if (!currentUser) { alert('लॉगिन करा.'); return; }
+  const vishay = document.getElementById('vis').value.trim();
+  if (!vishay) { alert('आधी विषय भरा.'); return; }
+  const htmlContent = document.getElementById('lp').innerHTML;
+  if (!htmlContent || htmlContent.trim() === '') { alert('आधी पत्र तयार करा.'); return; }
+  const btn = document.getElementById('letterSaveBtn');
+  btn.textContent = '⏳ जतन होत आहे...'; btn.disabled = true;
+  try {
+
+    // Print-ready HTML wrapper सह snapshot
+    var PCSS = '*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:#f0f0f0;}.a4{width:210mm;min-height:297mm;padding:25mm 20mm;margin:10mm auto;background:white;box-shadow:0 0 10px rgba(0,0,0,.1);box-sizing:border-box;line-height:1.6;font-size:15px;color:#000;}.hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:15px;margin-bottom:25px;}.hdr h1{margin:0;font-size:24px;font-weight:bold;}.hdr h2{margin:8px 0;font-size:16px;font-weight:normal;}.offs{display:flex;justify-content:space-between;margin-top:15px;font-weight:bold;font-size:14px;}.ob{text-align:center;width:30%;}.meta{display:flex;justify-content:space-between;margin-top:25px;font-weight:bold;font-size:14px;}.prati{margin-top:30px;margin-bottom:20px;font-size:15px;line-height:1.8;}.subref{margin-top:20px;font-size:14px;}.subref p{margin:6px 0;}.cont{margin-top:30px;text-align:justify;font-size:15px;line-height:1.9;}.cont p{margin:8px 0;}.sign{margin-top:80px;display:flex;justify-content:space-around;text-align:center;font-weight:bold;font-size:14px;line-height:1.9;}@page{size:A4;margin:0;}@media print{body{background:none;}.a4{margin:0;padding:25mm 20mm;box-shadow:none;}}';
+    var fullHTML = '<style>' + PCSS + '</style><div class="a4">' + htmlContent + '</div>';
+
+    await addDoc(collection(db, 'users', currentUser.uid, 'letter'), {
+      vishay: vishay,
+      gpName: document.getElementById('gpn').value.trim(),
+      jno:    document.getElementById('jno').value.trim(),
+      date:   document.getElementById('din').value,
+      pratiPad: document.getElementById('pp').value.trim(),
+      pratiOff: document.getElementById('po').value.trim(),
+      htmlSnapshot: fullHTML,
+      createdAt: serverTimestamp()
+    });
+    btn.textContent = '✅ यशस्वीरित्या जतन झाले!';
+    btn.style.background = 'linear-gradient(135deg,#0a4d00,#0f6b06)';
+    setTimeout(() => {
+      btn.textContent = '💾 इतिहासात जतन करा';
+      btn.style.background = 'linear-gradient(135deg,#138808,#0f6b06)';
+      btn.disabled = false;
+    }, 2500);
+  } catch(e) {
+    alert('त्रुटी: ' + e.message);
+    btn.textContent = '💾 इतिहासात जतन करा'; btn.disabled = false;
+  }
+};
 </script>
 </body>
 </html>
-

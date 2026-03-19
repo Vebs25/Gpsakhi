@@ -327,33 +327,52 @@ nav::before {
 @keyframes arrowBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(19, 136, 8, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(19, 136, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(19, 136, 8, 0); } }
 
-/* ── PRINT MEDIA (STRICTLY PRESERVED) ── */
+/* ── PRINT MEDIA ── */
 @media print {
-  @page { size: A4 landscape; margin: 4mm 4mm; }
+  @page { size: A4 landscape; margin: 15mm 10mm; }
   html, body { background: #fff !important; }
-  nav, .autofill-bar, .step-tabs, .app-body > .sidebar, .preview-label { display: none !important; }
+  nav, .autofill-bar, .step-tabs, .app-body > .sidebar, .preview-label,
+  .print-tip-overlay { display: none !important; }
   .app-body { display: block !important; }
   .preview-area { background: #fff !important; padding: 0 !important; overflow: visible !important; display: block !important; }
-  #doc { box-shadow: none !important; border: none !important; border-radius: 0 !important; width: 289mm !important; min-height: 0 !important; padding: 0 !important; font-size: 8.5pt !important; margin: 0 !important; display: block !important; }
-  #doc table { font-size: 8.5pt !important; }
-  #doc .sub-header th { height: 9mm !important; font-size: 7pt !important; }
-  #doc .data-td { height: 8mm !important; font-size: 8.5pt !important; }
-  #doc .col-num td { height: 3.5mm !important; font-size: 7pt !important; }
-  #doc .amount { font-size: 8.5pt !important; }
-  #doc .grand { font-size: 8.5pt !important; background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
-  #doc th, #doc td { padding: 1px 1px !important; }
-  .doc-header .namuna-line { font-size: 11pt !important; }
-  .doc-header .gp-line { font-size: 9.5pt !important; }
-  .doc-header .raj-line { font-size: 7.5pt !important; }
-  .doc-bottom { margin-top: 4mm !important; }
-  .sig-line { font-size: 9pt !important; }
-  .tip-section { font-size: 7pt !important; }
+  #doc {
+    box-shadow: none !important; border: none !important; border-radius: 0 !important;
+    width: 100% !important; padding: 0 !important; margin: 0 !important;
+    display: block !important; font-size: 10pt !important;
+    page-break-inside: avoid !important; overflow: visible !important;
+  }
+  #doc * { page-break-inside: avoid !important; page-break-before: avoid !important; page-break-after: avoid !important; }
+  #doc table { width: 100% !important; font-size: 10pt !important; table-layout: fixed !important; }
+  #doc th, #doc td { font-size: 10pt !important; padding: 2px 2px !important; }
+  #doc .sub-header th { font-size: 9pt !important; }
+  .doc-header { margin-bottom: 3mm !important; }
+  .doc-header .namuna-line { font-size: 13pt !important; }
+  .doc-header .gp-line { font-size: 10pt !important; }
+  .doc-header .raj-line { font-size: 8pt !important; }
+  .doc-bottom { margin-top: 3mm !important; }
+  .sig-line { font-size: 10pt !important; }
+  #chatusima_section { margin-top: 2mm !important; }
+  #chatusima_section td { font-size: 8.5pt !important; }
+  .tip-section { font-size: 7.5pt !important; margin-top: 2mm !important; }
+  #tbl1 col.c1{width:3.5%}#tbl1 col.c2{width:3.5%}#tbl1 col.c3{width:4.5%}
+  #tbl1 col.c4{width:13%}#tbl1 col.c5{width:8%}#tbl1 col.c6{width:7.5%}
+  #tbl1 col.c7{width:5.5%}#tbl1 col.c8{width:4.5%}#tbl1 col.c9{width:3.5%}
+  #tbl1 col.c10{width:3.5%}#tbl1 col.c11{width:5%}#tbl1 col.c12{width:5%}
+  #tbl1 col.c13{width:7%}#tbl1 col.c14{width:7%}#tbl1 col.c15{width:5%}
+  #tbl2 col.c16{width:8%}#tbl2 col.c17{width:4%}#tbl2 col.c18{width:8%}
+  #tbl2 col.c19{width:4%}#tbl2 col.c20{width:5.5%}#tbl2 col.c21{width:5%}
+  #tbl2 col.c22{width:5%}#tbl2 col.c23{width:5%}#tbl2 col.c24{width:5%}
+  #tbl2 col.c25{width:5.5%}#tbl2 col.c26{width:5%}#tbl2 col.c27{width:4.5%}
+  #tbl2 col.c28{width:4.5%}#tbl2 col.c29{width:4.5%}#tbl2 col.c30{width:4.5%}
+  #tbl2 col.c31{width:9%}
 }
 
 @media(max-width: 1000px) {
-  .app-body { grid-template-columns: 1fr; }
-  .sidebar { max-height: none; position: static; border-right: none; border-bottom: 1px solid var(--glass-border); padding: 20px; }
-  .preview-area { padding: 15px; }
+  .app-body { grid-template-columns: 1fr; display: flex; flex-direction: column; }
+  .sidebar { max-height: none; position: static; border-right: none; border-bottom: 1px solid var(--glass-border); padding: 16px; order: 1; }
+  .preview-area { padding: 10px; order: 2; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #doc { width: 100% !important; min-width: 900px; font-size: 9pt; }
+  .preview-label { font-size: 9pt; }
 }
 
 @media(max-width: 768px) {
@@ -361,13 +380,17 @@ nav::before {
   .nav-logo span { font-size: 14pt; }
   .nav-emblem { width: 32px; height: 32px; font-size: 16px; }
   .back-btn { padding: 6px 12px; font-size: 8.5pt; }
-  .nav-spacer { display: none; } /* Hide spacer on mobile */
+  .nav-spacer { display: none; }
+}
+/* Dynamic print fit */
+@media print {
+  #doc { overflow: visible !important; }
+  #doc table { overflow: visible !important; }
 }
 </style>
 </head>
 <body>
 
-<!-- Topbar (Voucher सारखा क्लीन) -->
 <nav>
   <a href="dashboard.html" class="back-btn">← डॅशबोर्ड</a>
   <a href="index.html" class="nav-logo">
@@ -380,7 +403,6 @@ nav::before {
   <span class="nav-spacer" style="width:70px;display:inline-block;"></span>
 </nav>
 
-<!-- Auto-fill bar -->
 <div class="autofill-bar" id="autofillBar" style="display:none;">
   ✅ Profile मधून माहिती आपोआप भरली गेली आहे. <a href="profile.html" style="color:var(--green);font-weight:800;margin-left:6px;text-decoration:none;">येथे बदला</a>
 </div>
@@ -389,14 +411,12 @@ nav::before {
 <div class="app-body">
 <div class="sidebar">
 
-<!-- Step Tabs -->
 <div class="step-tabs">
   <button class="step-tab active" id="stab1" onclick="goStep(1)"><span class="sn">१</span>ग्रामपंचायत</button>
   <button class="step-tab" id="stab2" onclick="goStep(2)"><span class="sn">२</span>मालमत्ता</button>
   <button class="step-tab" id="stab3" onclick="goStep(3)"><span class="sn">३</span>तयार करा</button>
 </div>
 
-<!-- STEP 1 — ग्रामपंचायत -->
 <div class="step-panel active" id="sp1">
   <div class="sec-head">🏘️ ग्रामपंचायत माहिती</div>
   <div class="form-group"><label>ग्रामपंचायत नाव</label><input type="text" id="gp" placeholder="उदा. तोंडली"></div>
@@ -423,47 +443,41 @@ nav::before {
 
   <div class="sec-head">💰 रेडी रेकनर व कर दर — ५ प्रकार</div>
   <div class="rate-legend">
-    <strong>Col १३</strong> = खाली जागेचा RR दर &nbsp;|&nbsp; <strong>Col १४</strong> = बांधकाम RR दर<br>
-    <strong>कर = (भां.मू. × कर दर रु.) ÷ १,०००</strong>
+    <strong>रेडी रेकनर दर</strong> = चौरस मीटर प्रमाणे शासन निर्धारित दर<br>
+    <strong>कर = (भांडवली मूल्य × कर दर) ÷ १,०००</strong>
   </div>
   <div class="rate-table-wrap">
     <table class="rate-table">
       <thead>
         <tr>
-          <th style="width:38%;text-align:left;">मालमत्ता प्रकार</th>
-          <th>Col १३<br>RR दर</th>
-          <th>Col १४<br>RR दर</th>
+          <th style="width:44%;text-align:left;">मालमत्ता प्रकार</th>
+          <th>रेडी रेकनर दर<br>(रु./चौ.मी.)</th>
           <th>कर दर<br>(रु./१०००)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><div class="prop-label">🌳 खाली जागा</div><div class="prop-note">Col १३ | घरकर लागतो</div></td>
+          <td><div class="prop-label">🌳 खाली जागा</div><div class="prop-note">घरकर लागतो</div></td>
           <td><input type="number" id="rr_jaga" value="1600" oninput="liveCalc()"></td>
-          <td class="na-cell">—</td>
           <td><input type="number" id="tr_jaga" value="2" oninput="liveCalc()"></td>
         </tr>
         <tr>
-          <td><div class="prop-label">🏠 आर.सी.सी.</div><div class="prop-note">Col १४</div></td>
-          <td class="na-cell">—</td>
+          <td><div class="prop-label">🏠 आर.सी.सी.</div></td>
           <td><input type="number" id="rr_rcc" value="15000" oninput="liveCalc()"></td>
           <td><input type="number" id="tr_rcc" value="1.50" step="0.01" oninput="liveCalc()"></td>
         </tr>
         <tr>
-          <td><div class="prop-label">🧱 दगड/विटा-सिमेंट</div><div class="prop-note">Col १४</div></td>
-          <td class="na-cell">—</td>
+          <td><div class="prop-label">🧱 दगड/विटा-सिमेंट</div></td>
           <td><input type="number" id="rr_sem" value="12000" oninput="liveCalc()"></td>
           <td><input type="number" id="tr_sem" value="1.12" step="0.01" oninput="liveCalc()"></td>
         </tr>
         <tr>
-          <td><div class="prop-label">🏚️ दगड/विटा-माती</div><div class="prop-note">Col १४</div></td>
-          <td class="na-cell">—</td>
+          <td><div class="prop-label">🏚️ दगड/विटा-माती</div></td>
           <td><input type="number" id="rr_mati" value="8000" oninput="liveCalc()"></td>
           <td><input type="number" id="tr_mati" value="0.90" step="0.01" oninput="liveCalc()"></td>
         </tr>
         <tr>
-          <td><div class="prop-label">🛖 झोपडी/माती</div><div class="prop-note">Col १४</div></td>
-          <td class="na-cell">—</td>
+          <td><div class="prop-label">🛖 झोपडी/माती</div></td>
           <td><input type="number" id="rr_jhop" value="4000" oninput="liveCalc()"></td>
           <td><input type="number" id="tr_jhop" value="0.52" step="0.01" oninput="liveCalc()"></td>
         </tr>
@@ -475,7 +489,6 @@ nav::before {
   </div>
 </div>
 
-<!-- STEP 2 — मालमत्ता -->
 <div class="step-panel" id="sp2">
   <div class="sec-head">👤 मालकाची माहिती</div>
   <div class="form-row">
@@ -523,14 +536,27 @@ nav::before {
           <option value="aud">औद्योगिक</option>
         </select>
       </div>
-      <div class="form-row" style="padding:0;">
-        <div class="form-group"><label>बांधकामाचे वर्ष</label><input type="number" id="f_yr" value="2000" min="1900" max="2025"></div>
-        <div class="form-group"><label>मजले</label><input type="number" id="f_fl" value="1" min="1" max="20"></div>
-      </div>
+      <div class="form-group"><label>बांधकामाचे वर्ष</label><input type="number" id="f_yr" value="2000" min="1900" max="2025"></div>
     </div>
     <div class="form-row" style="padding:0;">
       <div class="form-group"><label id="f_l_lbl">लांबी (फूट)</label><input type="number" id="f_len" value="0" min="0"></div>
       <div class="form-group"><label id="f_w_lbl">रुंदी (फूट)</label><input type="number" id="f_wid" value="0" min="0"></div>
+    </div>
+    <div id="f_dep_section">
+      <div class="form-group" style="margin-top:10px;margin-bottom:6px;">
+        <label>घसारा दर</label>
+        <div style="display:flex;gap:0;border:2px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-top:4px;">
+          <button type="button" id="dep_auto_btn" onclick="setDepMode('auto')" style="flex:1;padding:10px;border:none;background:#1A2744;color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:800;cursor:pointer;transition:all 0.3s;">⚡ Auto</button>
+          <button type="button" id="dep_manual_btn" onclick="setDepMode('manual')" style="flex:1;padding:10px;border:none;background:#f8fafc;color:#64748b;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;font-weight:800;cursor:pointer;transition:all 0.3s;">✍️ Manual</button>
+        </div>
+      </div>
+      <div id="dep_auto_note" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:8px 12px;font-size:9.5pt;color:#0369a1;font-weight:600;margin-bottom:8px;">⚡ <b>Auto:</b> बांधकाम वर्षावरून घसारा आपोआप calculate होईल.</div>
+      <div id="dep_manual_box" style="display:none;margin-bottom:8px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label>घसारा % टाका (उदा. 80 म्हणजे 80%)</label>
+          <input type="number" id="f_dep_manual" value="100" min="1" max="100" step="1" placeholder="उदा. 80">
+        </div>
+      </div>
     </div>
     <button onclick="addProp()" style="width:100%;margin-top:10px;background:var(--navy);color:#fff;border:none;border-radius:12px;padding:14px;font-size:11pt;font-weight:800;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;box-shadow:0 6px 15px rgba(26,39,68,0.2);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ मालमत्ता जोडा</button>
   </div>
@@ -555,19 +581,31 @@ nav::before {
   </div>
   <div class="form-group"><label>नंतर वाढ/घट आदेश शेरा</label><textarea id="aadesh" rows="2" placeholder="आदेशाचे संदर्भात शेरा..."></textarea></div>
 
+  <div class="sec-sub">🏠 घराची चातुःसीमा (ऐच्छिक)</div>
+  <div style="background:#fff8f0;border:1px solid #fed7aa;border-radius:12px;padding:10px 14px;font-size:9.5pt;color:#c2410c;margin-bottom:12px;font-weight:500;">
+    ℹ️ चातुःसीमा टाकली तर document मध्ये दिसेल, नाही टाकली तर ओळ येणार नाही.
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>पूर्वेस</label><input type="text" id="cs_purv" placeholder="उदा. सूर्यभान कोठरंगे यांचे घर"></div>
+    <div class="form-group"><label>पश्चिमेस</label><input type="text" id="cs_pash" placeholder="उदा. रोड"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>उत्तरेस</label><input type="text" id="cs_uttar" placeholder="उदा. रोड"></div>
+    <div class="form-group"><label>दक्षिणेस</label><input type="text" id="cs_daksh" placeholder="उदा. रोड"></div>
+  </div>
+
   <div class="nav-btns">
     <button class="btn-back" onclick="goStep(1)">← मागे</button>
     <button class="btn-next" onclick="goStep(3)">पुढे ➔ तयार करा</button>
   </div>
 </div>
 
-<!-- STEP 3 — तयार करा -->
 <div class="step-panel" id="sp3">
   <div class="sec-head">✅ नमुना ८ तयार करा</div>
   <div class="info-box">
     <strong>📐 सूत्र:</strong><br>
-    इमारत भां.मू. = (चौ.मी. × Col१४ × घसारा%) × भारांक<br>
-    जागा भां.मू. = चौ.मी. × Col१३<br>
+    इमारत भां.मू. = (चौ.मी. × बांधकाम रेडी रेकनर दर × घसारा%) × भारांक<br>
+    जागा भां.मू. = चौ.मी. × खाली जागा रेडी रेकनर दर<br>
     घरकर = (भां.मू. × कर दर) ÷ १,०००<br><br>
     <strong>⚠️ नियम:</strong> दिवाबत्ती/आरोग्य/पाणी कर फक्त इमारतीसाठी लागू.<br>
     <strong>🖨️ Print:</strong> A4 Landscape (आडवे पान) — पूर्ण पान भरतो.
@@ -575,6 +613,7 @@ nav::before {
   
   <button class="btn-gen" onclick="generateDoc()">✅ नमुना ८ तयार करा</button>
   <button class="btn-print" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Landscape मध्ये प्रिंट करा</button>
+  <button class="btn-print" id="n8SaveBtn" onclick="doSaveNamuna8()" style="background:linear-gradient(135deg,#138808,#0f6b06);margin-top:8px;">💾 इतिहासात जतन करा</button>
   
   <div class="nav-btns" style="margin-top:16px;">
     <button class="btn-back" onclick="goStep(2)">← मालमत्ता बदल</button>
@@ -583,16 +622,13 @@ nav::before {
   <button class="btn-reset" onclick="resetAll()">🔄 सर्व माहिती रीसेट करा</button>
 </div>
 
-</div><!-- sidebar -->
-
-<!-- PREVIEW -->
-<div class="preview-area">
+</div><div class="preview-area">
   <div class="preview-label">📄 नमुना ८ — A4 Landscape Preview</div>
   <div id="doc">
     <div class="doc-header">
-      <div class="raj-line">महाराष्ट्र शासन राजपत्र असाधारण चार-ब डिसेंबर २०१५/पौष १०, शके १९३७</div>
+      <div class="raj-line">महाराष्ट्र शासन राजपत्र असाधारण भाग चार-ब डिसेंबर २०१५/पौष १०, शके १९३७</div>
       <div class="namuna-line">नमुना ८ — नियम ३२(१)</div>
-      <div class="gp-line" id="d_hdr">सन २०२५-२६ ते २०२८-२९ या वर्षांसाठी कर आकारणी नोंदवही ग्रामपंचायत तोंडली तालुका मौदा जिल्हा नागपूर</div>
+      <div class="gp-line" id="d_hdr_yr">सन २०२५-२६ ते २०२८-२९ या वर्षांसाठी कर आकारणी नोंदवही &nbsp;|&nbsp; ग्रामपंचायत <strong id="d_sgp2">—</strong> &nbsp; ता. <strong id="d_sta2">—</strong> &nbsp; जि. <strong id="d_sdist2">—</strong></div>
     </div>
     <table id="tbl1">
       <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9"><col class="c10"><col class="c11"><col class="c12"><col class="c13"><col class="c14"><col class="c15"></colgroup>
@@ -600,44 +636,58 @@ nav::before {
         <tr class="sub-header">
           <th rowspan="2">अ.<br>क्र.</th><th rowspan="2">वार्ड<br>क्र.</th><th rowspan="2">माल<br>मत्ता<br>क्र.</th><th rowspan="2">मालकाचे नाव</th><th rowspan="2">भोगवटादाराचे नाव</th><th rowspan="2">मालमत्तेचे वर्णन</th><th rowspan="2">इमारतीचा वापर</th><th rowspan="2">बांध<br>कामाचे<br>वर्ष</th>
           <th colspan="4">क्षेत्रफळ चौ. फु.</th>
-          <th class="col13-head" rowspan="2">Col १३<br>खाली<br>जागा<br>RR दर</th><th class="col14-head" rowspan="2">Col १४<br>बांधकाम<br>RR दर</th><th rowspan="2">घसारा<br>दर</th>
+          <th class="col13-head" rowspan="2">खाली जागेचा<br>रेडी रेकनर<br>दर</th><th class="col14-head" rowspan="2">बांधकामाचा<br>रेडी रेकनर<br>दर</th><th rowspan="2">घसारा<br>दर</th>
         </tr>
         <tr class="sub-header"><th>लांबी</th><th>रुंदी</th><th>एकुण<br>चौ.फु.</th><th>चौ.मी.</th></tr>
       </thead>
       <tbody id="tbody1">
-        <tr class="col-num"><td>१</td><td>२</td><td>३</td><td>४</td><td>५</td><td>६</td><td>७</td><td>८</td><td>९</td><td>१०</td><td>११</td><td>१२</td><td>१३</td><td>१४</td><td>१५</td></tr>
+
       </tbody>
     </table>
     <table id="tbl2" style="margin-top:4px;">
       <colgroup><col class="c16"><col class="c17"><col class="c18"><col class="c19"><col class="c20"><col class="c21"><col class="c22"><col class="c23"><col class="c24"><col class="c25"><col class="c26"><col class="c27"><col class="c28"><col class="c29"><col class="c30"><col class="c31"></colgroup>
       <thead>
         <tr class="sub-header">
-          <th rowspan="2">रेडी रेकनर<br>एकूण किंमत<br>(col १६)</th><th rowspan="2">भारांक<br>(col १७)</th><th rowspan="2">एकूण<br>भांडवली<br>मूल्य<br>(col १८)</th><th rowspan="2">कराचा<br>दर<br>(col १९)</th>
+          <th rowspan="2">रेडी रेकनर<br>नुसार निघालेली<br>एकूण किंमत</th><th rowspan="2">भारांक</th><th rowspan="2">एकूण<br>भांडवली<br>मूल्य</th><th rowspan="2">कराचा<br>दर</th>
           <th colspan="6">कराची रक्कम रुपये</th>
           <th colspan="5">अपीलाचे निकाल व फेरफार (रुपये)</th>
           <th rowspan="2">नंतर वाढ/घट<br>आदेश शेरा<br>(col ३१)</th>
         </tr>
-        <tr class="sub-header"><th>घरकर<br>(२०)</th><th>दिवाबत्ती<br>कर<br>(२१)</th><th>आरोग्य<br>कर<br>(२२)</th><th>सामान्य<br>पाणी<br>(२३)</th><th>विशेष<br>पाणी<br>(२४)</th><th>एकुण<br>(२५)</th><th>घरकर<br>(२६)</th><th>दिवाबत्ती<br>(२७)</th><th>आरोग्य<br>(२८)</th><th>सामान्य<br>(२९)</th><th>विशेष<br>(३०)</th></tr>
+        <tr class="sub-header"><th>घरकर</th><th>दिवाबत्ती<br>कर</th><th>आरोग्य<br>कर</th><th>सामान्य<br>पाणी कर</th><th>विशेष<br>पाणी कर</th><th>एकूण</th><th>घरकर</th><th>दिवाबत्ती</th><th>आरोग्य</th><th>सामान्य<br>पाणी</th><th>विशेष<br>पाणी</th></tr>
       </thead>
       <tbody id="tbody2">
-        <tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३0</td><td>३१</td></tr>
+
       </tbody>
     </table>
+    <div id="chatusima_section" style="display:none;margin-top:4px;">
+      <table style="width:100%;border-collapse:collapse;font-size:9pt;">
+        <tr class="chatusima-row">
+          <td style="border:1px solid #000;font-weight:700;padding:3px 6px;width:18%;background:#f0f0f0;">घराची चातुःसीमा</td>
+          <td style="border:1px solid #000;font-weight:700;padding:3px 6px;width:8%;background:#f0f0f0;"><strong>पूर्वेस</strong></td>
+          <td id="d_cs_purv" style="border:1px solid #000;padding:3px 6px;width:27%;"></td>
+          <td style="border:1px solid #000;font-weight:700;padding:3px 6px;width:8%;background:#f0f0f0;"><strong>पश्चिमेस</strong></td>
+          <td id="d_cs_pash" style="border:1px solid #000;padding:3px 6px;width:27%;"></td>
+        </tr>
+        <tr class="chatusima-row">
+          <td style="border:1px solid #000;padding:3px 6px;background:#f0f0f0;"></td>
+          <td style="border:1px solid #000;font-weight:700;padding:3px 6px;background:#f0f0f0;"><strong>उत्तरेस</strong></td>
+          <td id="d_cs_uttar" style="border:1px solid #000;padding:3px 6px;"></td>
+          <td style="border:1px solid #000;font-weight:700;padding:3px 6px;background:#f0f0f0;"><strong>दक्षिणेस</strong></td>
+          <td id="d_cs_daksh" style="border:1px solid #000;padding:3px 6px;"></td>
+        </tr>
+      </table>
+    </div>
     <div class="doc-bottom">
       <div class="date-left">दिनांक: <span id="d_date">—</span></div>
       <div class="sig-right">
         <div style="height:20px;"></div>
-        <div class="sig-line">ग्रामपंचायत अधिकारी<br>ग्रा.पं. <span id="d_sgp">तोंडली</span>, ता. <span id="d_sta">मौदा</span>, जि. <span id="d_sdist">नागपूर</span></div>
+        <div class="sig-line">ग्रामपंचायत अधिकारी<br>ग्रा.पं. <span id="d_sgp">—</span>, ता. <span id="d_sta">—</span>, जि. <span id="d_sdist">—</span></div>
       </div>
     </div>
     <div class="tip-section"><strong>टिप —</strong> शासन परिपत्रक क्रमांक ग्रापं-२०१५/प्र.क्र.२८३/पंरा-१४ दिनांक ३१ डिसेंबर २०१५ नुसार नमुना ८ म्हणजे इमारती व मोकळ्या जागेचे मालकी हक्क दर्शविणारा अभिलेख नसून हा केवळ ग्रामपंचायतीच्या कर आकारणीसाठी असलेला अभिलेख आहे. या उताऱ्यावरून खरेदी-विक्रीचे व्यवहार झाल्यास त्यास ग्रा.पं. जबाबदार राहणार नाही.</div>
   </div>
 </div>
-</div><!-- app-body -->
-</div><!-- n8wrap -->
-
-<!-- PRINT TIP POPUP -->
-<div id="printTipOverlay" class="print-tip-overlay">
+</div></div><div id="printTipOverlay" class="print-tip-overlay">
   <div class="print-tip-box">
     <div class="print-tip-head">🖨️ Print करण्यापूर्वी</div>
     <div class="print-tip-body">
@@ -671,36 +721,28 @@ nav::before {
   </div>
 </div>
 
-<!-- Firebase Auth -->
+<script src="config.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const app = initializeApp({
-  apiKey:"AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
-  authDomain:"gpsakhi-9685e.firebaseapp.com",
-  projectId:"gpsakhi-9685e",
-  storageBucket:"gpsakhi-9685e.firebasestorage.app",
-  messagingSenderId:"107629589245",
-  appId:"1:107629589245:web:7b288fda76b26aaadac494"
-});
+const firebaseConfig = window.myFirebaseConfig;
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db_old = getFirestore(app);
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   
   // Profile मधून auto-fill
   try {
-    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+    const snap = await getDoc(doc(db_old, 'users', user.uid, 'profile', 'gp'));
     if (snap.exists()) {
       const d = snap.data();
-      // ग्रामपंचायत fields
       if (d.gpName) document.getElementById('gp').value = d.gpName;
       if (d.ps)     document.getElementById('taluka').value = d.ps;
       if (d.dist)   document.getElementById('dist').value = d.dist;
-      // नमुना ८ specific fields
       if (d.n8YrS)  document.getElementById('yr_s').value = d.n8YrS;
       if (d.n8YrE)  document.getElementById('yr_e').value = d.n8YrE;
       if (d.n8Din)  document.getElementById('din').value = d.n8Din;
@@ -718,7 +760,6 @@ onAuthStateChanged(auth, async (user) => {
       if (d.n8TrMati !== undefined) document.getElementById('tr_mati').value = d.n8TrMati;
       if (d.n8RrJhop !== undefined) document.getElementById('rr_jhop').value = d.n8RrJhop;
       if (d.n8TrJhop !== undefined) document.getElementById('tr_jhop').value = d.n8TrJhop;
-
       document.getElementById('autofillBar').style.display = 'flex';
       if (typeof liveCalc === 'function') liveCalc();
       if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
@@ -727,9 +768,20 @@ onAuthStateChanged(auth, async (user) => {
 });
 </script>
 
-<!-- Original Namuna 8 Logic — UNCHANGED -->
 <script>
 const PROP_NAMES={jaga:'खाली जागा',rcc:'आर.सी.सी.',sem:'दगड/विटा-सिमेंट',mati:'दगड/विटा-माती',jhop:'झोपडी/माती'};
+let depMode='auto';
+function setDepMode(mode){
+  depMode=mode;
+  const ab=document.getElementById('dep_auto_btn');
+  const mb=document.getElementById('dep_manual_btn');
+  const an=document.getElementById('dep_auto_note');
+  const mb2=document.getElementById('dep_manual_box');
+  if(ab){ab.style.background=mode==='auto'?'#1A2744':'#f8fafc';ab.style.color=mode==='auto'?'white':'#64748b';}
+  if(mb){mb.style.background=mode==='manual'?'#1A2744':'#f8fafc';mb.style.color=mode==='manual'?'white':'#64748b';}
+  if(an) an.style.display=mode==='auto'?'block':'none';
+  if(mb2) mb2.style.display=mode==='manual'?'block':'none';
+}
 const US_NAMES={niv:'निवासी',van:'वाणिज्यिक',aud:'औद्योगिक'};
 const WT={niv:1.00,van:1.25,aud:1.20};
 
@@ -763,6 +815,8 @@ function updateWaterDisplay(){
 function onFTypeChange(){
   const isJ=document.getElementById('f_type').value==='jaga';
   document.getElementById('f_build_fields').style.display=isJ?'none':'block';
+  const depSec=document.getElementById('f_dep_section');
+  if(depSec) depSec.style.display=isJ?'none':'block';
   document.getElementById('f_l_lbl').textContent=isJ?'जागा लांबी (फूट)':'इमारत लांबी (फूट)';
   document.getElementById('f_w_lbl').textContent=isJ?'जागा रुंदी (फूट)':'इमारत रुंदी (फूट)';
 }
@@ -771,14 +825,23 @@ function addProp(){
   const type=document.getElementById('f_type').value;
   const usage=document.getElementById('f_usage').value;
   const yr=parseInt(document.getElementById('f_yr').value)||2000;
-  const fl=parseInt(document.getElementById('f_fl').value)||1;
   const len=parseFloat(document.getElementById('f_len').value)||0;
   const wid=parseFloat(document.getElementById('f_wid').value)||0;
   if(len<=0||wid<=0){alert('लांबी व रुंदी भरा!');return;}
-  props.push({type,usage,yr,fl,len,wid});
+  const isJ=(type==='jaga');
+  let manualDep=null;
+  if(!isJ && typeof depMode!=='undefined' && depMode==='manual'){
+    const depEl=document.getElementById('f_dep_manual');
+    if(depEl) manualDep=(parseFloat(depEl.value)||100)/100;
+  }
+  props.push({type,usage,yr,len,wid,manualDep});
   renderPropList();liveCalc();
   document.getElementById('f_len').value=0;
   document.getElementById('f_wid').value=0;
+  const depManEl=document.getElementById('f_dep_manual');
+  if(depManEl) depManEl.value=100;
+  setDepMode('auto');
+  renderPropList();liveCalc();
 }
 
 function delProp(i){props.splice(i,1);renderPropList();liveCalc();}
@@ -800,7 +863,7 @@ function renderPropList(){
   </div>`;
   el.innerHTML=countBar+props.map((p,i)=>{
     const isJ=p.type==='jaga';
-    const sqft=isJ?p.len*p.wid:p.len*p.wid*p.fl;
+    const sqft=p.len*p.wid;  // मजले नाही — प्रत्येक मजला वेगळी मालमत्ता
     const typeIcon={jaga:'🌳',rcc:'🏠',sem:'🧱',mati:'🏚️',jhop:'🛖'}[p.type]||'🏠';
     return `<div class="prop-card" style="margin-top:${i===0?'5px':'0'};">
       <div class="prop-card-head">
@@ -810,7 +873,7 @@ function renderPropList(){
       </div>
       <div style="font-size:10pt;color:#555;font-weight:600;display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
         ${isJ?'':`<span>📅 ${p.yr}</span>`}
-        <span>📐 ${p.len}×${p.wid}${isJ?'':('×'+p.fl+'मजले')}</span>
+        <span>📐 ${p.len}×${p.wid}</span>
         <span>= <strong style="color:var(--navy);font-size:11pt;">${sqft.toFixed(0)} चौ.फु.</strong></span>
       </div>
     </div>`;
@@ -820,10 +883,11 @@ function renderPropList(){
 function calcOne(p){
   const isJ=p.type==='jaga';
   const isRCC=(p.type==='rcc'||p.type==='sem');
-  const sqft=isJ?p.len*p.wid:p.len*p.wid*p.fl;
+  const sqft=p.len*p.wid;
   const sqmtr=sqm(sqft);
   const age=Math.max(0,2025-p.yr);
-  const dep=isJ?1:getDep(age,isRCC);
+  const autoDep=isJ?1:getDep(age,isRCC);
+  const dep=isJ?1:(p.manualDep!==null&&p.manualDep!==undefined?p.manualDep:autoDep);
   const wt=isJ?1:(WT[p.usage]||1);
   const rr_jaga=parseFloat(document.getElementById('rr_jaga').value)||0;
   const rr_prop=parseFloat(document.getElementById('rr_'+p.type)?.value||0);
@@ -892,13 +956,26 @@ function generateDoc(){
   const isSam=(waterType==='sam')&&hasImarat;
   const isVis=(waterType==='vis')&&hasImarat;
 
-  document.getElementById('d_hdr').textContent=
-    `सन ${yrs}-${String(yrs+1).slice(2)} ते ${yre-1}-${String(yre).slice(2)} या वर्षांसाठी कर आकारणी नोंदवही ग्रामपंचायत ${gp} तालुका ${ta} जिल्हा ${dist}`;
+  document.getElementById('d_hdr_yr').innerHTML=
+    `सन ${yrs}-${String(yrs+1).slice(2)} ते ${yre-1}-${String(yre).slice(2)} या वर्षांसाठी कर आकारणी नोंदवही &nbsp;|&nbsp; ग्रामपंचायत <strong>${gp}</strong> &nbsp; ता. <strong>${ta}</strong> &nbsp; जि. <strong>${dist}</strong>`;
+  ['d_sgp','d_sgp2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=gp;});
+  ['d_sta','d_sta2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ta;});
+  ['d_sdist','d_sdist2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=dist;});
   const [y,m,d]=(din||'').split('-');
   document.getElementById('d_date').textContent=din?`${d}/${m}/${y}`:'—';
-  document.getElementById('d_sgp').textContent=gp;
-  document.getElementById('d_sta').textContent=ta;
-  document.getElementById('d_sdist').textContent=dist;
+  // चातुःसीमा
+  const cs_purv=document.getElementById('cs_purv').value.trim();
+  const cs_pash=document.getElementById('cs_pash').value.trim();
+  const cs_uttar=document.getElementById('cs_uttar').value.trim();
+  const cs_daksh=document.getElementById('cs_daksh').value.trim();
+  const hasCS=cs_purv||cs_pash||cs_uttar||cs_daksh;
+  document.getElementById('chatusima_section').style.display=hasCS?'block':'none';
+  if(hasCS){
+    document.getElementById('d_cs_purv').textContent=cs_purv||'—';
+    document.getElementById('d_cs_pash').textContent=cs_pash||'—';
+    document.getElementById('d_cs_uttar').textContent=cs_uttar||'—';
+    document.getElementById('d_cs_daksh').textContent=cs_daksh||'—';
+  }
 
   const calcs=props.map(p=>calcOne(p));
   let totalGhar=calcs.reduce((s,c)=>s+c.gharkr,0);
@@ -924,7 +1001,7 @@ function generateDoc(){
     t1+=`<tr class="bg-grey"><td colspan="5" style="text-align:right;font-weight:700;padding-right:6px;">एकूण</td><td class="amount">${totalSqft.toFixed(0)}</td><td class="amount">${totalSqm2.toFixed(2)}</td><td></td><td></td><td></td></tr>`;
   }
   document.getElementById('tbody1').innerHTML=
-    `<tr class="col-num"><td>१</td><td>२</td><td>३</td><td>४</td><td>५</td><td>६</td><td>७</td><td>८</td><td>९</td><td>१०</td><td>११</td><td>१२</td><td>१३</td><td>१४</td><td>१५</td></tr>${t1}`;
+    `${t1}`;
 
   const aadeshRS=props.length+1;
   const ekun_kr=totalGhar+(hasImarat?div_kr+aro_kr:0)+paniAmt;
@@ -948,7 +1025,7 @@ function generateDoc(){
   });
   t2+=`<tr class="bg-grey total-row"><td></td><td></td><td class="amount">${fmtN(totalBv)}</td><td>—</td><td class="amount">${fmtN(totalGhar)}</td><td class="amount">${hasImarat?fmtN(div_kr):''}</td><td class="amount">${hasImarat?fmtN(aro_kr):''}</td><td class="amount">${isSam?fmtN(paniAmt):''}</td><td class="amount">${isVis?fmtN(paniAmt):''}</td><td class="grand">${fmtN(ekun_kr)}</td><td>${fmtN(ap_ghar)}</td><td>${fmtN(ap_div)}</td><td>${fmtN(ap_aro)}</td><td>${fmtN(ap_pani)}</td><td>0</td></tr>`;
   document.getElementById('tbody2').innerHTML=
-    `<tr class="col-num"><td>१६</td><td>१७</td><td>१८</td><td>१९</td><td>२०</td><td>२१</td><td>२२</td><td>२३</td><td>२४</td><td>२५</td><td>२६</td><td>२७</td><td>२८</td><td>२९</td><td>३०</td><td>३१</td></tr>${t2}`;
+    `${t2}`;
 
   const btn=document.querySelector('.btn-gen');
   btn.innerHTML='✅ नमुना ८ तयार झाला!';
@@ -971,7 +1048,7 @@ function resetAll(){
   if(!confirm('सर्व माहिती रीसेट करायची का?'))return;
   props=[];waterType='none';setWater('none');
   renderPropList();liveCalc();
-  ['owner','tenant','akr','malmno','ward','aadesh'].forEach(id=>document.getElementById(id).value='');
+  ['owner','tenant','akr','malmno','ward','aadesh','cs_purv','cs_pash','cs_uttar','cs_daksh'].forEach(id=>document.getElementById(id).value='');
   ['ap_ghar','ap_div','ap_aro','ap_pani'].forEach(id=>document.getElementById(id).value=0);
   document.getElementById('tenant').value='स्वतः';
   goStep(1);
@@ -979,6 +1056,7 @@ function resetAll(){
 
 window.onload=()=>{
   onFTypeChange();
+  setDepMode('auto');
   renderPropList();
   setWater('none');
   updateWaterDisplay();
@@ -987,7 +1065,109 @@ window.onload=()=>{
   });
 };
 </script>
+<script>
+// ══ DYNAMIC PRINT FIT ══
+// Print होण्यापूर्वी row heights auto-adjust करतो
+// A4 Landscape: 297mm wide, 210mm tall
+// Margins: 15mm top+bottom = 30mm, उरते 180mm = ~680px at 96dpi
+// पण mm→px: 1mm = 3.7795px at 96dpi
+// Print: 1mm ≈ 3.7795px (screen), पण print resolution वेगळी
+// Strategy: सर्व data rows ला height:auto ठेवतो,
+//   sub-header rows ला min-height fix करतो
+//   JS मध्ये available space calculate करून scale करतो
+
+// Print — page break avoid
+window.addEventListener('beforeprint', function() {
+  document.getElementById('doc').style.pageBreakInside = 'avoid';
+});
+window.addEventListener('afterprint', function() {
+  document.getElementById('doc').style.pageBreakInside = '';
+});
+</script>
+
+<script src="config.js"></script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = window.myFirebaseConfig;
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+let currentUser = null;
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+    if (snap.exists()) {
+      const d = snap.data();
+      const gpEl = document.getElementById('gp');
+      const taEl = document.getElementById('taluka');
+      const diEl = document.getElementById('dist');
+      if (gpEl && !gpEl.value) gpEl.value = d.gpName || '';
+      if (taEl && !taEl.value) taEl.value = d.ps    || '';
+      if (diEl && !diEl.value) diEl.value = d.dist  || '';
+      const bar = document.getElementById('autofillBar');
+      if (bar) bar.style.display = 'flex';
+    }
+  } catch(e) { console.log(e); }
+});
+
+window.doSaveNamuna8 = async function() {
+  if (!currentUser) { alert('लॉगिन करा.'); return; }
+  const akr    = document.getElementById('akr').value.trim();
+  const malmno = document.getElementById('malmno').value.trim();
+  const owner  = document.getElementById('owner').value.trim();
+  if (!owner) { alert('आधी मालकाचे नाव भरा.'); return; }
+
+  // document तयार झाला आहे का — doc element मध्ये data आहे का ते तपासतो
+  const tbody1 = document.getElementById('tbody1');
+  if (!tbody1 || !tbody1.innerHTML.trim()) {
+    alert('आधी "नमुना ८ तयार करा" बटण दाबा, मग जतन करा.');
+    return;
+  }
+
+  const btn = document.getElementById('n8SaveBtn');
+  btn.textContent = '⏳ जतन होत आहे...'; btn.disabled = true;
+
+  try {
+    // पूर्ण doc element चा HTML snapshot
+    const docEl = document.getElementById('doc');
+    const docCSS = Array.from(document.styleSheets)
+      .filter(s => { try { return s.cssRules; } catch(e) { return false; } })
+      .map(s => Array.from(s.cssRules).map(r => r.cssText).join('\n'))
+      .join('\n');
+
+    const htmlSnapshot = '<style>' + docCSS + '@page{size:A4 landscape;margin:6mm 8mm;}</style>' + docEl.outerHTML;
+
+    await addDoc(collection(db, 'users', currentUser.uid, 'namuna8'), {
+      akr:    akr,
+      malmno: malmno,
+      owner:  owner,
+      gpName: document.getElementById('gp').value.trim(),
+      taluka: document.getElementById('taluka').value.trim(),
+      dist:   document.getElementById('dist').value.trim(),
+      ward:   document.getElementById('ward').value.trim(),
+      tenant: document.getElementById('tenant').value.trim(),
+      htmlSnapshot: htmlSnapshot,
+      createdAt: serverTimestamp()
+    });
+
+    btn.textContent = '✅ यशस्वीरित्या जतन झाले!';
+    btn.style.background = 'linear-gradient(135deg,#0a4d00,#0f6b06)';
+    setTimeout(() => {
+      btn.textContent = '💾 इतिहासात जतन करा';
+      btn.style.background = 'linear-gradient(135deg,#138808,#0f6b06)';
+      btn.disabled = false;
+    }, 2500);
+  } catch(e) {
+    alert('त्रुटी: ' + e.message);
+    btn.textContent = '💾 इतिहासात जतन करा'; btn.disabled = false;
+  }
+};
+</script>
 </body>
 </html>
-
-

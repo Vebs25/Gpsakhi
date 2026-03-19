@@ -211,7 +211,7 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
   </div>
 
   <button class="btn-print" onclick="doPrint()">🖨️ Print / PDF</button>
-  <button class="btn-save" id="saveBtn" onclick="doSave()">💾 Firebase मध्ये Save करा</button>
+  <button class="btn-save" id="saveBtn" onclick="doSave()">💾 इतिहासात जतन करा</button>
  </div>
 
  <div class="preview-panel">
@@ -223,7 +223,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
  </div>
 </div>
 
-<!-- 100% Safe Global Variables to Prevent Errors -->
 <script>
 window.SABHA = 0;
 window.VISHESH = false;
@@ -391,20 +390,13 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- Firebase SDK -->
+<script src="config.js"></script>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey:            'AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw',
-  authDomain:        'gpsakhi-9685e.firebaseapp.com',
-  projectId:         'gpsakhi-9685e',
-  storageBucket:     'gpsakhi-9685e.firebasestorage.app',
-  messagingSenderId: '107629589245',
-  appId:             '1:107629589245:web:7b288fda76b26aaadac494'
-};
+const firebaseConfig = window.myFirebaseConfig;
 
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -457,6 +449,8 @@ window.doSave = async function() {
   if (!currentUser) { alert('लॉगिन करा.'); return; }
   const gpn = document.getElementById('gpn').value.trim();
   if (!gpn) { alert('ग्रामपंचायत नाव भरा.'); return; }
+  const vishay = document.getElementById('vishay').value.trim();
+  if (!vishay) { alert('ठरावाचा विषय भरा.'); return; }
   
   const btn = document.getElementById('saveBtn');
   btn.textContent = '⏳ Save होत आहे...'; btn.disabled = true;
@@ -466,6 +460,10 @@ window.doSave = async function() {
     const showS = chk ? chk.checked : false;
     const isVishesh = document.getElementById('visheshChk').checked;
     const sabhaName = window.SABHA_NAMES[window.SABHA];
+
+    // HTML Snapshot — preview panel चा HTML + CSS wrapper
+    const tpHTML = document.getElementById('tp').innerHTML;
+    const htmlSnapshot = '<style>' + PCSS + '</style><div class="a4">' + tpHTML + '</div>';
     
     await addDoc(collection(db, 'users', currentUser.uid, 'tharav'), {
       gpName:    gpn,
@@ -477,30 +475,29 @@ window.doSave = async function() {
       sthal:     document.getElementById('sthal').value.trim(),
       adhyaksha: document.getElementById('adhyaksha').value.trim(),
       tharavNo:  document.getElementById('thno').value.trim(),
-      vishay:    document.getElementById('vishay').value.trim(),
+      vishay:    vishay,
       khulasa:   document.getElementById('khulasa').value.trim(),
       suchak:    showS ? document.getElementById('suchak').value.trim() : '',
       anumodik:  showS ? document.getElementById('anumodik').value.trim() : '',
+      htmlSnapshot: htmlSnapshot,
       createdAt: serverTimestamp()
     });
     
-    btn.textContent = '✅ यशस्वीरित्या Saved!'; 
-    btn.style.background = '#1A6E3C';
+    btn.textContent = '✅ यशस्वीरित्या जतन झाले!'; 
+    btn.style.background = '#0a4d00';
     
     setTimeout(function(){ 
-      btn.textContent='💾 Firebase मध्ये Save करा'; 
+      btn.textContent='💾 इतिहासात जतन करा'; 
       btn.style.background=''; 
       btn.disabled=false; 
     }, 2500);
     
   } catch(e) {
     alert('त्रुटी: ' + e.message);
-    btn.textContent = '💾 Firebase मध्ये Save करा'; 
+    btn.textContent = '💾 इतिहासात जतन करा'; 
     btn.disabled = false;
   }
 };
 </script>
 </body>
 </html>
-
-

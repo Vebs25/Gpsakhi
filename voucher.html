@@ -187,7 +187,7 @@ nav::before {
 @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(245, 130, 32, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(245, 130, 32, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 130, 32, 0); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
 
-/* ══ VOUCHER PRINT STYLES (DO NOT TOUCH - KEEPS OFFICIAL LAYOUT) ══ */
+/* ══ VOUCHER PRINT STYLES ══ */
 .vp{width:277mm;background:white;margin:0 auto 14px;padding:4mm 7mm;border:1px solid #888;display:flex;flex-direction:column;justify-content:flex-start;gap:0;}
 .gp{width:100%;max-width:277mm;background:white;margin:0 auto 14px;padding:8mm 10mm;border:1px solid #888;}
 .vhd{text-align:center;margin-bottom:4px;}
@@ -250,7 +250,6 @@ nav::before {
 <div class="cont">
   <div class="ad-box">Advertisement Space</div>
 
-  <!-- GP INFO CARD -->
   <div class="card">
     <div class="ch">🏛️ ग्रामपंचायत माहिती</div>
     <div class="cb">
@@ -280,7 +279,6 @@ nav::before {
     </div>
   </div>
 
-  <!-- WORK INFO CARD -->
   <div class="card">
     <div class="ch">📋 कामाची माहिती</div>
     <div class="cb">
@@ -298,11 +296,9 @@ nav::before {
     </div>
   </div>
 
-  <!-- WORKERS CARD -->
   <div class="card">
     <div class="ch">👷 मजुरांची माहिती</div>
     <div class="cb">
-      <!-- MODE TOGGLE -->
       <div style="display:flex;gap:0;border:2px solid #cbd5e1;border-radius:12px;overflow:hidden;margin-bottom:20px;">
         <button id="MODE_AUTO" onclick="setMode('auto')"
           style="flex:1;padding:12px;border:none;background:#1A2744;color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;transition:all 0.3s;">
@@ -348,20 +344,18 @@ nav::before {
     <span style="font-weight:800;font-size:12pt;">✅ मजुरी बिल तयार झाले</span>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <button class="bprt" id="BTN_PRT">🖨️ Print / PDF सेव करा</button>
+      <button class="bprt" id="BTN_SAVE" onclick="doSaveVoucher()" style="background:linear-gradient(135deg,var(--green),#0f6b06);color:white;">💾 इतिहासात जतन करा</button>
     </div>
   </div>
   <div id="VOUT"></div>
 </div>
 
-
-<!-- PRINT TIP POPUP (REDESIGNED MODAL) -->
 <div id="printTipOverlay" style="display:none;position:fixed;inset:0;background:rgba(11, 17, 32, 0.85);backdrop-filter:blur(8px);z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;border-radius:24px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 25px 50px rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.5);animation:fadeIn 0.3s ease;">
     <div style="background:linear-gradient(135deg, var(--navy), #2C3E50);color:white;padding:20px 24px;font-size:14pt;font-weight:800;display:flex;align-items:center;gap:10px;">
       🖨️ Print करण्यापूर्वी
     </div>
     <div style="padding:30px;font-family:'Noto Sans Devanagari',sans-serif;">
-      
       <div style="display:flex;gap:15px;margin-bottom:20px;align-items:flex-start;">
         <div style="width:32px;height:32px;border-radius:50%;background:var(--saffron-light);color:var(--saffron);font-weight:800;font-size:12pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">१</div>
         <div><strong style="font-size:11pt;color:var(--navy);display:block;margin-bottom:2px;">Print dialog उघडेल</strong><span style="font-size:9.5pt;color:#64748b;">More options / ▼ वर click करा</span></div>
@@ -374,11 +368,9 @@ nav::before {
         <div style="width:32px;height:32px;border-radius:50%;background:var(--saffron-light);color:var(--saffron);font-weight:800;font-size:12pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;">३</div>
         <div><strong style="font-size:11pt;color:var(--navy);display:block;margin-bottom:2px;">Save as PDF करा</strong><span style="font-size:9.5pt;color:#64748b;">सर्व माहिती एका page मध्ये अचूक येईल</span></div>
       </div>
-      
       <div style="background:#f0f9ff;border-radius:12px;padding:12px 16px;margin:20px 0;border:1px solid #bae6fd;font-size:10pt;color:#0369a1;font-weight:700;text-align:center;">
         📄 Orientation: Landscape &nbsp;|&nbsp; Size: A4
       </div>
-      
       <div style="display:flex;gap:12px;margin-top:24px;">
         <button onclick="document.getElementById('printTipOverlay').style.display='none';" style="flex:1;padding:12px;border:2px solid #e2e8f0;border-radius:12px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;color:#64748b;cursor:pointer;transition:all 0.2s;">रद्द करा</button>
         <button onclick="document.getElementById('printTipOverlay').style.display='none';var s=document.getElementById('PS');if(!s){s=document.createElement('style');s.id='PS';document.head.appendChild(s);}s.innerHTML='@page{size:A4 landscape;margin:6mm 8mm;}';setTimeout(function(){window.print();},100);" style="flex:2;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg, var(--saffron), #e66b0e);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;box-shadow:0 6px 15px rgba(245, 130, 32, 0.3);transition:all 0.2s;">🖨️ Print उघडा ➔</button>
@@ -387,21 +379,13 @@ nav::before {
   </div>
 </div>
 
-<!-- Firebase + Voucher Logic (UNCHANGED LOGIC) -->
+<script src="config.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
-  authDomain: "gpsakhi-9685e.firebaseapp.com",
-  projectId: "gpsakhi-9685e",
-  storageBucket: "gpsakhi-9685e.firebasestorage.app",
-  messagingSenderId: "107629589245",
-  appId: "1:107629589245:web:7b288fda76b26aaadac494"
-};
-
+const firebaseConfig = window.myFirebaseConfig;
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -411,25 +395,56 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
   
-  // Load GP profile → auto-fill
-  const ref = doc(db, 'users', user.uid, 'profile', 'gp');
-  const snap = await getDoc(ref);
-  if (snap.exists()) {
-    const d = snap.data();
-    document.getElementById('GP_NAME').value = d.gpName || '';
-    document.getElementById('GP_PS').value = d.ps || '';
-    document.getElementById('GP_DIST').value = d.dist || '';
-    document.getElementById('GP_SARP').value = d.sarp || '';
-    document.getElementById('GP_GRAM').value = d.gram || '';
-    document.getElementById('GP_HOL').value = d.hol || '4';
-    document.getElementById('F_VLG').value = d.village || '';
-    document.getElementById('F_MR').value = d.mr || 800;
-    document.getElementById('F_LR').value = d.lr || 500;
-    document.getElementById('autofillBar').style.display = 'flex';
-    document.getElementById('gpBar').style.display = 'flex';
-    document.getElementById('gpBarInfo').innerHTML = '🏛️ ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
-  }
+  try {
+    const ref = doc(db, 'users', user.uid, 'profile', 'gp');
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const d = snap.data();
+      document.getElementById('GP_NAME').value = d.gpName || '';
+      document.getElementById('GP_PS').value = d.ps || '';
+      document.getElementById('GP_DIST').value = d.dist || '';
+      document.getElementById('GP_SARP').value = d.sarp || '';
+      document.getElementById('GP_GRAM').value = d.gram || '';
+      document.getElementById('GP_HOL').value = d.hol || '4';
+      document.getElementById('F_VLG').value = d.village || '';
+      document.getElementById('F_MR').value = d.mr || 800;
+      document.getElementById('F_LR').value = d.lr || 500;
+      document.getElementById('autofillBar').style.display = 'flex';
+      document.getElementById('gpBar').style.display = 'flex';
+      document.getElementById('gpBarInfo').innerHTML = '🏛️ ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
+    }
+  } catch(e) { console.error('Profile fetch error:', e); }
 });
+
+window.doSaveVoucher = async function() {
+  if (!currentUser) { alert('लॉगिन करा.'); return; }
+  const htmlContent = document.getElementById('VOUT').innerHTML;
+  if (!htmlContent || htmlContent.trim() === '') { alert('आधी मजुरी बिल तयार करा.'); return; }
+  const btn = document.getElementById('BTN_SAVE');
+  btn.textContent = '⏳ जतन होत आहे...'; btn.disabled = true;
+  try {
+    const workDetail = document.getElementById('F_WORK').value.trim();
+    const gpName = document.getElementById('GP_NAME').value.trim();
+    const dateVal = document.getElementById('F_DATE').value;
+    const amt = document.getElementById('F_AMT').value;
+    await addDoc(collection(db, 'users', currentUser.uid, 'voucher'), {
+      work: workDetail,
+      gpName: gpName,
+      ps: document.getElementById('GP_PS').value.trim(),
+      dist: document.getElementById('GP_DIST').value.trim(),
+      date: dateVal,
+      amt: amt,
+      htmlSnapshot: htmlContent,
+      createdAt: serverTimestamp()
+    });
+    btn.textContent = '✅ यशस्वीरित्या जतन झाले!';
+    btn.style.background = 'linear-gradient(135deg,#0a4d00,#0f6b06)';
+    setTimeout(() => { btn.textContent = '💾 इतिहासात जतन करा'; btn.style.background = 'linear-gradient(135deg,var(--green),#0f6b06)'; btn.disabled = false; }, 2500);
+  } catch(e) {
+    alert('त्रुटी: ' + e.message);
+    btn.textContent = '💾 इतिहासात जतन करा'; btn.disabled = false;
+  }
+};
 </script>
 
 <script type="text/javascript">
@@ -441,11 +456,9 @@ function ADD_WORKER() {
   var tr = document.createElement('tr');
   tr.id = 'WR' + id;
   var isManual = (document.getElementById('MODE_MANUAL').style.background === 'rgb(248, 250, 252)' || document.getElementById('MODE_MANUAL').style.background === '#f8fafc' || document.getElementById('MODE_MANUAL').style.background === '') ? false : true;
-  // Fallback for logic check: The old JS checked specifically for '#1A2744' or 'rgb(26, 39, 68)'
   if (document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' || document.getElementById('MODE_MANUAL').style.background === '#1A2744') {
       isManual = true;
   }
-  
   var waDisplay = isManual ? '' : 'none';
   tr.innerHTML = '<td class="tdnum"><span class="wnum">' + id + '</span></td>' +
     '<td><input type="text" class="WN" placeholder="मजुराचे नाव"></td>' +
@@ -472,7 +485,6 @@ function GETW() {
   }
   return out;
 }
-// MODE TOGGLE FUNCTION
 window.setMode = function(mode) {
   var autoBtn = document.getElementById('MODE_AUTO');
   var manualBtn = document.getElementById('MODE_MANUAL');
@@ -500,7 +512,6 @@ window.setMode = function(mode) {
     }
   }
 }
-
 document.getElementById('BTN_ADD').onclick = ADD_WORKER;
 document.getElementById('BTN_GEN').onclick = GENERATE;
 document.getElementById('BTN_PRT').onclick = PRINTIT;
@@ -570,7 +581,6 @@ function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
     var w=allW[i],rt=w.post==='मिस्त्री'?mr:lr;
     var isManual=(w._perVoucherPaid!==null&&w._perVoucherPaid!==undefined);
 
-    // ── Auto mode: आधीसारखेच ──
     var days=v.wd, calcAmt=days*rt, dstr=D(days);
     if(!isManual && isLast&&v.pW&&v.pW[i]){
       var pw=v.pW[i];
@@ -578,11 +588,9 @@ function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
       if(pw.type==='half'){calcAmt=v.wd*rt+pw.amt;dstr=D(v.wd)+'½';}
     }
 
-    // ── Manual mode: या voucher साठी paidAmt = per-voucher वाटप ──
     var paidAmt=calcAmt;
     if(isManual && w._perVoucherPaid[vIdx]!==undefined){
       paidAmt=w._perVoucherPaid[vIdx];
-      // एकूण रुपये = paidAmt (दिलेल्या रकमेनुसार दिवस)
       calcAmt=paidAmt;
       var fullDays=Math.floor(paidAmt/rt);
       var remAmt=paidAmt%rt;
@@ -594,10 +602,8 @@ function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
       var c=v.cds[j];
       if(c.hol){cells+='<td class="VHL">-<\/td>';continue;}
       if(isManual){
-        // manual mode: paidAmt > 0 तोपर्यंत P, नंतर -
         var daysWorked=Math.ceil(paidAmt/rt);
         var workDayIdx=0;
-        // या voucher च्या working days मधील position मोजा
         var wdCount=0;
         var showP=false;
         for(var k=0;k<=j;k++){if(!v.cds[k].hol)wdCount++;}
@@ -646,7 +652,6 @@ function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
     '<tr><th rowspan="2" style="width:22px">अनु.<br>क्र.<\/th><th rowspan="2" class="vcn">मजुरांचे नाव<\/th><th rowspan="2" class="vcp">पद<\/th><th rowspan="2" class="vcv">राहणार<\/th>'+h1+'<th class="vct">एकंदर<br>दिवस<\/th><th class="vcr">मजुरी<br>दर<\/th><th class="vca">एकूण<br>रुपये<\/th><th class="vcpa">दिलेली<br>रक्कम<\/th><th class="vcs">स्वाक्षरी<\/th><\/tr>'+
     '<tr>'+h2+'<th colspan="5"><\/th><\/tr><\/thead><tbody>'+rows+
     (function(){
-      // manual mode: या voucher मधील सर्व workers च्या paidAmt ची बेरीज
       var vTotalAmt=v.amt;
       var anyManual=false;
       for(var wi2=0;wi2<workers.length;wi2++){
@@ -658,7 +663,6 @@ function BV(v,vno,workers,mr,lr,info,isLast,vIdx){
           if(workers[wi2]._perVoucherPaid&&workers[wi2]._perVoucherPaid[vIdx]!==undefined){
             vTotalAmt+=workers[wi2]._perVoucherPaid[vIdx];
           } else if(!workers[wi2]._perVoucherPaid){
-            // auto worker असेल तर auto calcAmt
             var rt3=workers[wi2].post==='मिस्त्री'?mr:lr;
             vTotalAmt+=v.wd*rt3;
           }
@@ -715,7 +719,6 @@ function BG(vs,workers,info,total,startVN,mw,lw,mr,lr){
     '<td colspan="5" style="text-align:right;padding-right:10px;border-top:2px solid #000">एकूण (Grand Total) :<\/td>'+
     '<td style="font-size:12pt">₹ '+FM(total)+'<\/td><\/tr><\/tbody><\/table>';
 
-  // मजूर-wise worker table बनवा
   function makeWorkerTable(){
     var wRows='';
     for(var wi=0;wi<workers.length;wi++){
@@ -759,12 +762,9 @@ function BG(vs,workers,info,total,startVN,mw,lw,mr,lr){
   var akshari='<br><div style="text-align:center;font-size:10pt;font-weight:600">रक्कम अक्षरी : '+WORDS(total)+'<\/div><br>';
 
   if(splitPages){
-    // Page 1: voucher गोषवारा + अक्षरी + sign
-    // Page 2: मजूर गोषवारा + अक्षरी + sign
     return '<div class="gp">'+hdr+vTable+akshari+signRow+'<\/div>'+
       '<div class="gp" style="page-break-before:always;">'+hdr+makeWorkerTable()+akshari+signRow+'<\/div>';
   } else {
-    // एकाच page वर दोन्ही tables + अक्षरी + sign
     return '<div class="gp">'+hdr+vTable+makeWorkerTable()+akshari+signRow+'<\/div>';
   }
 }
@@ -790,7 +790,7 @@ function GENERATE() {
   if(!dateV){eb.innerHTML='सुरुवातीची तारीख निवडा.';eb.className='eb on';return;}
   if(amt<=0){eb.innerHTML='एकूण रक्कम टाका.';eb.className='eb on';return;}
   if(!workers.length){eb.innerHTML='कमीत कमी एक मजुराचे नाव टाका.';eb.className='eb on';return;}
-  // Manual mode validation
+  
   var isManualMode = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' || document.getElementById('MODE_MANUAL').style.background === '#1A2744';
   if(isManualMode){
     var anyBlank = workers.some(function(w){return w.manualAmt===null||isNaN(w.manualAmt);});
@@ -866,7 +866,6 @@ function GENERATE() {
       document.getElementById('SPINBOX').className='spin-box';
       document.getElementById('BTN_GEN').disabled=false;
       document.getElementById('RBAR').scrollIntoView({behavior:'smooth'});
-
     }catch(e){
       document.getElementById('SPINBOX').className='spin-box';
       document.getElementById('BTN_GEN').disabled=false;
@@ -882,4 +881,3 @@ function PRINTIT() {
 </script>
 </body>
 </html>
-
