@@ -394,63 +394,7 @@ let currentUser = null;
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
-  
-  // History मधून load करायचे आहे का?
-  const params = new URLSearchParams(window.location.search);
-  const historyId = params.get('history');
 
-  if (historyId) {
-    // History mode — Firestore मधून data fetch करून fill करा
-    try {
-      const hSnap = await getDoc(doc(db, 'users', user.uid, 'voucher', historyId));
-      if (hSnap.exists()) {
-        const d = hSnap.data();
-        document.getElementById('GP_NAME').value = d.gpName  || '';
-        document.getElementById('GP_PS').value   = d.ps      || '';
-        document.getElementById('GP_DIST').value = d.dist    || '';
-        document.getElementById('GP_SARP').value = d.sarp    || '';
-        document.getElementById('GP_GRAM').value = d.gram    || '';
-        document.getElementById('GP_HOL').value  = d.hol     || '4';
-        document.getElementById('F_WORK').value  = d.work    || '';
-        document.getElementById('F_DATE').value  = d.date    || '';
-        document.getElementById('F_AMT').value   = d.amt     || '';
-        document.getElementById('F_MR').value    = d.mr      || 800;
-        document.getElementById('F_LR').value    = d.lr      || 500;
-        document.getElementById('F_VNO').value   = d.vno     || 1;
-        document.getElementById('F_VLG').value   = d.village || '';
-        document.getElementById('autofillBar').style.display = 'flex';
-        document.getElementById('autofillBar').innerHTML = '📋 इतिहासातून माहिती लोड झाली आहे. <a href="profile.html" style="color:var(--green);font-weight:800;text-decoration:none;">प्रोफाइल बदलायला येथे क्लिक करा</a>';
-        document.getElementById('gpBar').style.display = 'flex';
-        document.getElementById('gpBarInfo').innerHTML = '📋 इतिहास: ' + (d.work || '') + ' — ' + (d.gpName || '');
-        // Mode set करा
-        if (d.mode === 'manual') { setMode('manual'); } else { setMode('auto'); }
-        // Workers fill करा
-        if (d.workers && d.workers.length) {
-          document.getElementById('F_VLG').value = d.village || '';
-          d.workers.forEach(function(w) {
-            ADD_WORKER();
-            var rows = document.getElementById('WBODY').getElementsByTagName('tr');
-            var last = rows[rows.length - 1];
-            last.getElementsByClassName('WN')[0].value = w.name    || '';
-            last.getElementsByClassName('WP')[0].value = w.post    || 'लेबर';
-            last.getElementsByClassName('WV')[0].value = w.village || '';
-            if (w.manualAmt) {
-              var waEl = last.getElementsByClassName('WA');
-              if (waEl.length > 0) waEl[0].value = w.manualAmt;
-            }
-          });
-        }
-        // Banner दाखवा
-        const banner = document.createElement('div');
-        banner.style.cssText = 'background:linear-gradient(135deg,#1A2744,#2a3f6e);color:white;padding:14px 24px;text-align:center;font-size:11pt;font-weight:700;display:flex;align-items:center;justify-content:center;gap:12px;';
-        banner.innerHTML = '📋 इतिहासातून लोड केले — माहिती edit करा आणि पुन्हा बिल तयार करा किंवा <button onclick="window.print()" style="background:white;color:#1A2744;border:none;border-radius:8px;padding:6px 14px;font-weight:800;cursor:pointer;font-family:inherit;">🖨️ Print करा</button>';
-        document.querySelector('.cont').insertBefore(banner, document.querySelector('.cont').firstChild);
-      }
-    } catch(e) { console.error('History load error:', e); }
-    return; // Profile auto-fill skip करा — history data आहे
-  }
-
-  // Normal mode — Profile मधून fill करा
   try {
     const ref = doc(db, 'users', user.uid, 'profile', 'gp');
     const snap = await getDoc(ref);

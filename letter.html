@@ -442,42 +442,6 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
 
-  // History load?
-  const params = new URLSearchParams(window.location.search);
-  const historyId = params.get('history');
-
-  if (historyId) {
-    try {
-      const hSnap = await getDoc(doc(db, 'users', user.uid, 'letter', historyId));
-      if (hSnap.exists()) {
-        const d = hSnap.data();
-        window.sgpt(d.gpType === 1 ? 1 : 0);
-        document.getElementById('gpn').value  = d.gpName   || '';
-        document.getElementById('gpt').value  = d.ps       || '';
-        document.getElementById('gpd').value  = d.dist     || '';
-        document.getElementById('sarp').value = d.sarp     || '';
-        document.getElementById('usarp').value= d.usarp    || '';
-        document.getElementById('gram').value = d.gram     || '';
-        document.getElementById('jno').value  = d.jno      || '';
-        document.getElementById('din').value  = d.date     || '';
-        document.getElementById('pp').value   = d.pratiPad || '';
-        document.getElementById('po').value   = d.pratiOff || '';
-        document.getElementById('vis').value  = d.vishay   || '';
-        document.getElementById('bod').value  = d.body     || '';
-        document.getElementById('cl').value   = d.closing  || 'करिता माहितीस सविनय सादर.';
-        // References fill
-        if (d.refs && d.refs.length) {
-          d.refs.forEach(function(r) { addRef(r); });
-        }
-        var bar = document.getElementById('autofillBar');
-        if (bar) { bar.classList.add('show'); bar.innerHTML = '📋 इतिहासातून माहिती लोड झाली — edit करा आणि print किंवा पुन्हा save करा'; }
-        window.rp();
-      }
-    } catch(e) { console.log('History load error:', e); }
-    return;
-  }
-
-  // Normal profile load
   try {
     const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
     if (!snap.exists()) {

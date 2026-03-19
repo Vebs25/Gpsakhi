@@ -735,67 +735,6 @@ const db_old = getFirestore(app);
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   
-  // History load?
-  const params = new URLSearchParams(window.location.search);
-  const historyId = params.get('history');
-
-  if (historyId) {
-    try {
-      const hSnap = await getDoc(doc(db_old, 'users', user.uid, 'namuna8', historyId));
-      if (hSnap.exists()) {
-        const d = hSnap.data();
-        // Step 1 fields
-        if (d.gpName) document.getElementById('gp').value      = d.gpName;
-        if (d.taluka) document.getElementById('taluka').value   = d.taluka;
-        if (d.dist)   document.getElementById('dist').value     = d.dist;
-        if (d.yrS)    document.getElementById('yr_s').value     = d.yrS;
-        if (d.yrE)    document.getElementById('yr_e').value     = d.yrE;
-        if (d.din)    document.getElementById('din').value      = d.din;
-        if (d.divKr !== undefined) document.getElementById('div_kr').value  = d.divKr;
-        if (d.aroKr !== undefined) document.getElementById('aro_kr').value  = d.aroKr;
-        if (d.samKr !== undefined) document.getElementById('sam_kr').value  = d.samKr;
-        if (d.visKr !== undefined) document.getElementById('vis_kr').value  = d.visKr;
-        if (d.rrJaga !== undefined) document.getElementById('rr_jaga').value = d.rrJaga;
-        if (d.trJaga !== undefined) document.getElementById('tr_jaga').value = d.trJaga;
-        if (d.rrRcc  !== undefined) document.getElementById('rr_rcc').value  = d.rrRcc;
-        if (d.trRcc  !== undefined) document.getElementById('tr_rcc').value  = d.trRcc;
-        if (d.rrSem  !== undefined) document.getElementById('rr_sem').value  = d.rrSem;
-        if (d.trSem  !== undefined) document.getElementById('tr_sem').value  = d.trSem;
-        if (d.rrMati !== undefined) document.getElementById('rr_mati').value = d.rrMati;
-        if (d.trMati !== undefined) document.getElementById('tr_mati').value = d.trMati;
-        if (d.rrJhop !== undefined) document.getElementById('rr_jhop').value = d.rrJhop;
-        if (d.trJhop !== undefined) document.getElementById('tr_jhop').value = d.trJhop;
-        // Step 2 fields
-        if (d.akr)    document.getElementById('akr').value     = d.akr;
-        if (d.malmno) document.getElementById('malmno').value  = d.malmno;
-        if (d.owner)  document.getElementById('owner').value   = d.owner;
-        if (d.tenant) document.getElementById('tenant').value  = d.tenant;
-        if (d.ward)   document.getElementById('ward').value    = d.ward;
-        if (d.apGhar !== undefined) document.getElementById('ap_ghar').value = d.apGhar;
-        if (d.apDiv  !== undefined) document.getElementById('ap_div').value  = d.apDiv;
-        if (d.apAro  !== undefined) document.getElementById('ap_aro').value  = d.apAro;
-        if (d.apPani !== undefined) document.getElementById('ap_pani').value = d.apPani;
-        if (d.aadesh) document.getElementById('aadesh').value  = d.aadesh;
-        if (d.csPurv)  document.getElementById('cs_purv').value  = d.csPurv;
-        if (d.csPash)  document.getElementById('cs_pash').value  = d.csPash;
-        if (d.csUttar) document.getElementById('cs_uttar').value = d.csUttar;
-        if (d.csDaksh) document.getElementById('cs_daksh').value = d.csDaksh;
-        // Water type
-        if (d.waterType) { if (typeof setWater === 'function') setWater(d.waterType); }
-        // Props restore करा
-        if (d.props && d.props.length) {
-          window.props = d.props;
-          if (typeof renderPropList === 'function') renderPropList();
-          if (typeof liveCalc === 'function') liveCalc();
-        }
-        document.getElementById('autofillBar').style.display = 'flex';
-        document.getElementById('autofillBar').innerHTML = '📋 इतिहासातून माहिती लोड झाली — <strong>Step ३</strong> वर जाऊन "नमुना ८ तयार करा" दाबा';
-        if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
-      }
-    } catch(e) { console.log('History load error:', e); }
-    return;
-  }
-
   // Normal profile load
   try {
     const snap = await getDoc(doc(db_old, 'users', user.uid, 'profile', 'gp'));

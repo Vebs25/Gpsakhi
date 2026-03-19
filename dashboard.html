@@ -241,12 +241,12 @@ nav::before {
 .history-item-title { font-size: 11pt; font-weight: 700; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
 .history-item-meta { font-size: 9pt; color: #888; font-weight: 500; }
 .history-item-btns { display: flex; gap: 8px; flex-shrink: 0; }
-.hbtn-view {
-  background: var(--navy); color: white; border: none; border-radius: 10px;
+.hbtn-print {
+  background: var(--green); color: white; border: none; border-radius: 10px;
   padding: 8px 14px; font-size: 9pt; font-weight: 700; cursor: pointer;
   font-family: 'Noto Sans Devanagari', sans-serif; transition: all 0.2s; display: flex; align-items: center; gap: 5px;
 }
-.hbtn-view:hover { background: var(--saffron); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(245,130,32,0.3); }
+.hbtn-print:hover { background: #0f6b06; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(19,136,8,0.3); }
 .hbtn-del {
   background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 10px;
   padding: 8px 14px; font-size: 9pt; font-weight: 700; cursor: pointer;
@@ -620,7 +620,7 @@ async function loadHistoryTab(type) {
           <div class="history-item-meta">📅 ${meta}</div>
         </div>
         <div class="history-item-btns">
-          <button class="hbtn-view" onclick="window.location.href='${page}?history=${id}'">👁️ View / Edit</button>
+          <button class="hbtn-print" onclick="printItem('${type}','${id}')">🖨️ Print</button>
           <button class="hbtn-del" onclick="deleteItem('${type}','${id}')">🗑️ Delete</button>
         </div>
       </div>`;
@@ -640,6 +640,27 @@ function getTitle(type, data) {
   if (type === 'namuna8') return 'अ.क्र. ' + (data.akr || '—') + ' | मालमत्ता क्र. ' + (data.malmno || '—') + ' | ' + (data.owner || '—');
   return '—';
 }
+
+window.printItem = async function(type, id) {
+  try {
+    const docRef = doc(db, 'users', currentUID, type, id);
+    const snap = await getDoc(docRef);
+    if (!snap.exists()) { alert('दस्तऐवज सापडला नाही.'); return; }
+    const data = snap.data();
+    const html = data.htmlSnapshot || '';
+    if (!html) { alert('Print HTML उपलब्ध नाही.'); return; }
+    const w = window.open('', '_blank');
+    if (!w) { alert('Popup blocked करण्यात आला. Allow करा.'); return; }
+    const isLandscape = (type === 'voucher' || type === 'namuna8');
+    const size = isLandscape ? 'A4 landscape' : 'A4';
+    const margins = isLandscape ? '6mm 8mm' : '0';
+    w.document.write(`<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+      <style>@page{size:${size};margin:${margins};}body{margin:0;padding:0;background:white;font-family:'Noto Sans Devanagari',sans-serif;}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}</style>
+      </head><body>${html}<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>`);
+    w.document.close();
+  } catch(e) { alert('त्रुटी: ' + e.message); }
+};
 
 window.deleteItem = async function(type, id) {
   if (!confirm('हा दस्तऐवज कायमचा हटवायचा आहे का?')) return;
