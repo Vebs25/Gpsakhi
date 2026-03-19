@@ -407,6 +407,49 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
 
+  // History load?
+  const params = new URLSearchParams(window.location.search);
+  const historyId = params.get('history');
+
+  if (historyId) {
+    try {
+      const hSnap = await getDoc(doc(db, 'users', user.uid, 'tharav', historyId));
+      if (hSnap.exists()) {
+        const d = hSnap.data();
+        // Sabha type set करा
+        if (typeof d.sabhaIndex === 'number') window.setSabha(d.sabhaIndex);
+        if (d.isVishesh) { document.getElementById('visheshChk').checked = true; window.VISHESH = true; }
+        if (typeof d.gpTypeIndex === 'number') window.setGPT(d.gpTypeIndex);
+        // Fields fill करा
+        document.getElementById('gpn').value      = d.gpName   || '';
+        document.getElementById('gpt').value      = d.ps       || '';
+        document.getElementById('gpd').value      = d.dist     || '';
+        document.getElementById('sarp').value     = d.sarp     || '';
+        document.getElementById('usarp').value    = d.usarp    || '';
+        document.getElementById('gram').value     = d.gram     || '';
+        document.getElementById('din').value      = d.date     || '';
+        document.getElementById('vel').value      = d.time     || '11:00';
+        document.getElementById('sthal').value    = d.sthal    || '';
+        document.getElementById('adhyaksha').value= d.adhyaksha|| '';
+        document.getElementById('thno').value     = d.tharavNo || '';
+        document.getElementById('vishay').value   = d.vishay   || '';
+        document.getElementById('khulasa').value  = d.khulasa  || '';
+        // Suchak
+        if (d.suchakChecked) {
+          document.getElementById('suchakChk').checked = true;
+          document.getElementById('suchakFields').classList.add('on');
+          document.getElementById('suchak').value   = d.suchak   || '';
+          document.getElementById('anumodik').value = d.anumodik || '';
+        }
+        var bar = document.getElementById('autoFillBar');
+        if (bar) { bar.classList.add('show'); bar.innerHTML = '📋 इतिहासातून माहिती लोड झाली — edit करा आणि print किंवा पुन्हा save करा'; }
+        window.rp();
+      }
+    } catch(e) { console.log('History load error:', e); }
+    return;
+  }
+
+  // Normal profile load
   try {
     const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
     if (!snap.exists()) {
@@ -415,30 +458,23 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
     const d = snap.data();
-
-    // Auto-fill values
     document.getElementById('gpn').value   = d.gpName || '';
     document.getElementById('gpt').value   = d.ps     || '';
     document.getElementById('gpd').value   = d.dist   || '';
     document.getElementById('sarp').value  = d.sarp   || '';
     document.getElementById('usarp').value = d.usSarp || '';
     document.getElementById('gram').value  = d.gram   || '';
-
     var gpTypeVal = d.gpType || 'gat';
     window.setGPT(gpTypeVal === 'gram' ? 0 : 1);
-
     const sthalEl = document.getElementById('sthal');
     if (sthalEl && !sthalEl.value.trim()) {
       sthalEl.value = 'ग्रामपंचायत कार्यालय' + (d.gpName ? ', ' + d.gpName : '');
     }
-    
     if (!window.adhyakshaEdited) {
       document.getElementById('adhyaksha').value = d.sarp || '';
     }
-
     var bar = document.getElementById('autoFillBar');
     if (bar) bar.classList.add('show');
-    
     window.rp();
   } catch(e) {
     console.log('Profile fetch error:', e);
@@ -466,21 +502,28 @@ window.doSave = async function() {
     const htmlSnapshot = '<style>' + PCSS + '</style><div class="a4">' + tpHTML + '</div>';
     
     await addDoc(collection(db, 'users', currentUser.uid, 'tharav'), {
-      gpName:    gpn,
-      ps:        document.getElementById('gpt').value.trim(),
-      dist:      document.getElementById('gpd').value.trim(),
-      sabhaType: (isVishesh ? 'विशेष ' : '') + sabhaName,
-      date:      document.getElementById('din').value,
-      time:      document.getElementById('vel').value,
-      sthal:     document.getElementById('sthal').value.trim(),
-      adhyaksha: document.getElementById('adhyaksha').value.trim(),
-      tharavNo:  document.getElementById('thno').value.trim(),
-      vishay:    vishay,
-      khulasa:   document.getElementById('khulasa').value.trim(),
-      suchak:    showS ? document.getElementById('suchak').value.trim() : '',
-      anumodik:  showS ? document.getElementById('anumodik').value.trim() : '',
+      gpName:      gpn,
+      ps:          document.getElementById('gpt').value.trim(),
+      dist:        document.getElementById('gpd').value.trim(),
+      sabhaType:   (isVishesh ? 'विशेष ' : '') + sabhaName,
+      sabhaIndex:  window.SABHA,
+      isVishesh:   isVishesh,
+      gpTypeIndex: window.GPT_THARAV,
+      date:        document.getElementById('din').value,
+      time:        document.getElementById('vel').value,
+      sthal:       document.getElementById('sthal').value.trim(),
+      adhyaksha:   document.getElementById('adhyaksha').value.trim(),
+      usarp:       document.getElementById('usarp').value.trim(),
+      sarp:        document.getElementById('sarp').value.trim(),
+      gram:        document.getElementById('gram').value.trim(),
+      tharavNo:    document.getElementById('thno').value.trim(),
+      vishay:      vishay,
+      khulasa:     document.getElementById('khulasa').value.trim(),
+      suchak:      showS ? document.getElementById('suchak').value.trim() : '',
+      anumodik:    showS ? document.getElementById('anumodik').value.trim() : '',
+      suchakChecked: showS,
       htmlSnapshot: htmlSnapshot,
-      createdAt: serverTimestamp()
+      createdAt:   serverTimestamp()
     });
     
     btn.textContent = '✅ यशस्वीरित्या जतन झाले!'; 

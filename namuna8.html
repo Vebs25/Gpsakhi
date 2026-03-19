@@ -735,7 +735,68 @@ const db_old = getFirestore(app);
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   
-  // Profile मधून auto-fill
+  // History load?
+  const params = new URLSearchParams(window.location.search);
+  const historyId = params.get('history');
+
+  if (historyId) {
+    try {
+      const hSnap = await getDoc(doc(db_old, 'users', user.uid, 'namuna8', historyId));
+      if (hSnap.exists()) {
+        const d = hSnap.data();
+        // Step 1 fields
+        if (d.gpName) document.getElementById('gp').value      = d.gpName;
+        if (d.taluka) document.getElementById('taluka').value   = d.taluka;
+        if (d.dist)   document.getElementById('dist').value     = d.dist;
+        if (d.yrS)    document.getElementById('yr_s').value     = d.yrS;
+        if (d.yrE)    document.getElementById('yr_e').value     = d.yrE;
+        if (d.din)    document.getElementById('din').value      = d.din;
+        if (d.divKr !== undefined) document.getElementById('div_kr').value  = d.divKr;
+        if (d.aroKr !== undefined) document.getElementById('aro_kr').value  = d.aroKr;
+        if (d.samKr !== undefined) document.getElementById('sam_kr').value  = d.samKr;
+        if (d.visKr !== undefined) document.getElementById('vis_kr').value  = d.visKr;
+        if (d.rrJaga !== undefined) document.getElementById('rr_jaga').value = d.rrJaga;
+        if (d.trJaga !== undefined) document.getElementById('tr_jaga').value = d.trJaga;
+        if (d.rrRcc  !== undefined) document.getElementById('rr_rcc').value  = d.rrRcc;
+        if (d.trRcc  !== undefined) document.getElementById('tr_rcc').value  = d.trRcc;
+        if (d.rrSem  !== undefined) document.getElementById('rr_sem').value  = d.rrSem;
+        if (d.trSem  !== undefined) document.getElementById('tr_sem').value  = d.trSem;
+        if (d.rrMati !== undefined) document.getElementById('rr_mati').value = d.rrMati;
+        if (d.trMati !== undefined) document.getElementById('tr_mati').value = d.trMati;
+        if (d.rrJhop !== undefined) document.getElementById('rr_jhop').value = d.rrJhop;
+        if (d.trJhop !== undefined) document.getElementById('tr_jhop').value = d.trJhop;
+        // Step 2 fields
+        if (d.akr)    document.getElementById('akr').value     = d.akr;
+        if (d.malmno) document.getElementById('malmno').value  = d.malmno;
+        if (d.owner)  document.getElementById('owner').value   = d.owner;
+        if (d.tenant) document.getElementById('tenant').value  = d.tenant;
+        if (d.ward)   document.getElementById('ward').value    = d.ward;
+        if (d.apGhar !== undefined) document.getElementById('ap_ghar').value = d.apGhar;
+        if (d.apDiv  !== undefined) document.getElementById('ap_div').value  = d.apDiv;
+        if (d.apAro  !== undefined) document.getElementById('ap_aro').value  = d.apAro;
+        if (d.apPani !== undefined) document.getElementById('ap_pani').value = d.apPani;
+        if (d.aadesh) document.getElementById('aadesh').value  = d.aadesh;
+        if (d.csPurv)  document.getElementById('cs_purv').value  = d.csPurv;
+        if (d.csPash)  document.getElementById('cs_pash').value  = d.csPash;
+        if (d.csUttar) document.getElementById('cs_uttar').value = d.csUttar;
+        if (d.csDaksh) document.getElementById('cs_daksh').value = d.csDaksh;
+        // Water type
+        if (d.waterType) { if (typeof setWater === 'function') setWater(d.waterType); }
+        // Props restore करा
+        if (d.props && d.props.length) {
+          window.props = d.props;
+          if (typeof renderPropList === 'function') renderPropList();
+          if (typeof liveCalc === 'function') liveCalc();
+        }
+        document.getElementById('autofillBar').style.display = 'flex';
+        document.getElementById('autofillBar').innerHTML = '📋 इतिहासातून माहिती लोड झाली — <strong>Step ३</strong> वर जाऊन "नमुना ८ तयार करा" दाबा';
+        if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
+      }
+    } catch(e) { console.log('History load error:', e); }
+    return;
+  }
+
+  // Normal profile load
   try {
     const snap = await getDoc(doc(db_old, 'users', user.uid, 'profile', 'gp'));
     if (snap.exists()) {
@@ -1122,40 +1183,62 @@ window.doSaveNamuna8 = async function() {
   const malmno = document.getElementById('malmno').value.trim();
   const owner  = document.getElementById('owner').value.trim();
   if (!owner) { alert('आधी मालकाचे नाव भरा.'); return; }
-
-  // document तयार झाला आहे का — doc element मध्ये data आहे का ते तपासतो
   const tbody1 = document.getElementById('tbody1');
   if (!tbody1 || !tbody1.innerHTML.trim()) {
     alert('आधी "नमुना ८ तयार करा" बटण दाबा, मग जतन करा.');
     return;
   }
-
   const btn = document.getElementById('n8SaveBtn');
   btn.textContent = '⏳ जतन होत आहे...'; btn.disabled = true;
-
   try {
-    // पूर्ण doc element चा HTML snapshot
     const docEl = document.getElementById('doc');
     const docCSS = Array.from(document.styleSheets)
       .filter(s => { try { return s.cssRules; } catch(e) { return false; } })
       .map(s => Array.from(s.cssRules).map(r => r.cssText).join('\n'))
       .join('\n');
-
     const htmlSnapshot = '<style>' + docCSS + '@page{size:A4 landscape;margin:6mm 8mm;}</style>' + docEl.outerHTML;
 
+    // Props + rates data save करा
     await addDoc(collection(db, 'users', currentUser.uid, 'namuna8'), {
-      akr:    akr,
-      malmno: malmno,
-      owner:  owner,
-      gpName: document.getElementById('gp').value.trim(),
-      taluka: document.getElementById('taluka').value.trim(),
-      dist:   document.getElementById('dist').value.trim(),
-      ward:   document.getElementById('ward').value.trim(),
-      tenant: document.getElementById('tenant').value.trim(),
+      akr:      akr,
+      malmno:   malmno,
+      owner:    owner,
+      tenant:   document.getElementById('tenant').value.trim(),
+      ward:     document.getElementById('ward').value.trim(),
+      gpName:   document.getElementById('gp').value.trim(),
+      taluka:   document.getElementById('taluka').value.trim(),
+      dist:     document.getElementById('dist').value.trim(),
+      yrS:      document.getElementById('yr_s').value,
+      yrE:      document.getElementById('yr_e').value,
+      din:      document.getElementById('din').value,
+      divKr:    document.getElementById('div_kr').value,
+      aroKr:    document.getElementById('aro_kr').value,
+      samKr:    document.getElementById('sam_kr').value,
+      visKr:    document.getElementById('vis_kr').value,
+      rrJaga:   document.getElementById('rr_jaga').value,
+      trJaga:   document.getElementById('tr_jaga').value,
+      rrRcc:    document.getElementById('rr_rcc').value,
+      trRcc:    document.getElementById('tr_rcc').value,
+      rrSem:    document.getElementById('rr_sem').value,
+      trSem:    document.getElementById('tr_sem').value,
+      rrMati:   document.getElementById('rr_mati').value,
+      trMati:   document.getElementById('tr_mati').value,
+      rrJhop:   document.getElementById('rr_jhop').value,
+      trJhop:   document.getElementById('tr_jhop').value,
+      apGhar:   document.getElementById('ap_ghar').value,
+      apDiv:    document.getElementById('ap_div').value,
+      apAro:    document.getElementById('ap_aro').value,
+      apPani:   document.getElementById('ap_pani').value,
+      aadesh:   document.getElementById('aadesh').value.trim(),
+      csPurv:   document.getElementById('cs_purv').value.trim(),
+      csPash:   document.getElementById('cs_pash').value.trim(),
+      csUttar:  document.getElementById('cs_uttar').value.trim(),
+      csDaksh:  document.getElementById('cs_daksh').value.trim(),
+      waterType: window.waterType || 'none',
+      props:    window.props || [],
       htmlSnapshot: htmlSnapshot,
       createdAt: serverTimestamp()
     });
-
     btn.textContent = '✅ यशस्वीरित्या जतन झाले!';
     btn.style.background = 'linear-gradient(135deg,#0a4d00,#0f6b06)';
     setTimeout(() => {
