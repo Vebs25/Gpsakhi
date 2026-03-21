@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard — GP Sakhi</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GP Sakhi">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -354,6 +361,12 @@ nav::before {
       <div class="tool-name">ठराव तयार करणे</div>
       <div class="tool-desc">ग्रामसभा / मासिक / महिला / वार्ड सभा</div>
     </a>
+    <a href="davandi.html" class="tool-tile">
+      <span class="tool-status status-live">✓ उपलब्ध</span>
+      <div class="tool-emoji-wrap" style="background: linear-gradient(135deg,#7c3aed22,#5b21b622);">📢</div>
+      <div class="tool-name">दवंडी तयार करणे</div>
+      <div class="tool-desc">दवंडी + ऑडिओ (Sarvam AI)</div>
+    </a>
     <div class="tool-tile disabled">
       <span class="tool-status status-soon">लवकरच</span>
       <div class="tool-emoji-wrap" style="background: #e2e8f0; filter: grayscale(1);">📄</div>
@@ -404,6 +417,14 @@ nav::before {
             <div class="qa-text">
               <strong>नमुना ८</strong>
               <span>कर आकारणी नोंदवही</span>
+            </div>
+            <div class="qa-arrow">➔</div>
+          </a>
+          <a href="davandi.html" class="qa-btn">
+            <div class="qa-icon" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);">📢</div>
+            <div class="qa-text">
+              <strong>नवीन दवंडी</strong>
+              <span>दवंडी + ऑडिओ तयार करा</span>
             </div>
             <div class="qa-arrow">➔</div>
           </a>
@@ -464,12 +485,14 @@ nav::before {
       <button class="htab" id="htab-letter" onclick="switchTab('letter')">📝 पत्र</button>
       <button class="htab" id="htab-namuna8" onclick="switchTab('namuna8')">🏠 नमुना ८</button>
       <button class="htab" id="htab-tharav" onclick="switchTab('tharav')">📜 ठराव</button>
+      <button class="htab" id="htab-davandi" onclick="switchTab('davandi')">📢 दवंडी</button>
     </div>
     <div class="history-body" id="historyBody">
       <div class="history-panel active" id="hpanel-voucher"><div class="history-loading">⏳ लोड होत आहे...</div></div>
       <div class="history-panel" id="hpanel-letter"><div class="history-loading">⏳ लोड होत आहे...</div></div>
       <div class="history-panel" id="hpanel-namuna8"><div class="history-loading">⏳ लोड होत आहे...</div></div>
       <div class="history-panel" id="hpanel-tharav"><div class="history-loading">⏳ लोड होत आहे...</div></div>
+      <div class="history-panel" id="hpanel-davandi"></div>
     </div>
   </div>
 
@@ -591,12 +614,12 @@ async function loadHistoryTab(type) {
   const panel = document.getElementById('hpanel-' + type);
   panel.innerHTML = '<div class="history-loading">⏳ लोड होत आहे...</div>';
   try {
-    const colMap = { voucher: 'voucher', letter: 'letter', namuna8: 'namuna8', tharav: 'tharav' };
+    const colMap = { voucher: 'voucher', letter: 'letter', namuna8: 'namuna8', tharav: 'tharav', davandi: 'davandi' };
     const colName = colMap[type];
     const q = query(collection(db, 'users', currentUID, colName), orderBy('createdAt', 'desc'));
     const snap = await getDocs(q);
     if (snap.empty) {
-      const labels = { voucher: 'मजुरी बिल', letter: 'पत्र', namuna8: 'नमुना ८', tharav: 'ठराव' };
+      const labels = { voucher: 'मजुरी बिल', letter: 'पत्र', namuna8: 'नमुना ८', tharav: 'ठराव', davandi: 'दवंडी' };
       panel.innerHTML = `<div class="history-empty">
         <div class="history-empty-icon">📂</div>
         <div class="history-empty-text">अद्याप कोणतेही ${labels[type]} जतन केलेले नाही</div>
@@ -610,8 +633,8 @@ async function loadHistoryTab(type) {
       const id = d.id;
       const title = getTitle(type, data);
       const meta = fmtDate(data.createdAt);
-      const icon = { voucher: '📋', letter: '📝', namuna8: '🏠', tharav: '📜' }[type];
-      const pageMap = { voucher: 'voucher.html', letter: 'letter.html', namuna8: 'namuna8.html', tharav: 'tharav.html' };
+      const icon = { voucher: '📋', letter: '📝', namuna8: '🏠', tharav: '📜', davandi: '📢' }[type];
+      const pageMap = { voucher: 'voucher.html', letter: 'letter.html', namuna8: 'namuna8.html', tharav: 'tharav.html', davandi: 'davandi.html' };
       const page = pageMap[type];
       html += `<div class="history-item">
         <div class="history-item-icon">${icon}</div>
@@ -638,6 +661,7 @@ function getTitle(type, data) {
   if (type === 'letter') return data.vishay || data.subject || 'शासकीय पत्र';
   if (type === 'tharav') return data.vishay || data.subject || 'ठराव';
   if (type === 'namuna8') return 'अ.क्र. ' + (data.akr || '—') + ' | मालमत्ता क्र. ' + (data.malmno || '—') + ' | ' + (data.owner || '—');
+  if (type === 'davandi') return '📢 दवंडी' + (data.gpName ? ' — ' + data.gpName : '') + (data.date ? ' | ' + data.date.split('-').reverse().join('/') : '');
   return '—';
 }
 
@@ -651,14 +675,68 @@ window.printItem = async function(type, id) {
     if (!html) { alert('Print HTML उपलब्ध नाही.'); return; }
     const w = window.open('', '_blank');
     if (!w) { alert('Popup blocked करण्यात आला. Allow करा.'); return; }
+
     const isLandscape = (type === 'voucher' || type === 'namuna8');
-    const size = isLandscape ? 'A4 landscape' : 'A4';
-    const margins = isLandscape ? '6mm 8mm' : '0';
-    w.document.write(`<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">
-      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
-      <style>@page{size:${size};margin:${margins};}body{margin:0;padding:0;background:white;font-family:'Noto Sans Devanagari',sans-serif;}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}</style>
-      </head><body>${html}<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>`);
-    w.document.close();
+    const pageSize = isLandscape ? 'A4 landscape' : 'A4 portrait';
+    const margins  = isLandscape ? '6mm 8mm' : '0';
+
+    // Type नुसार extra CSS
+    let extraCSS = '';
+    if (type === 'voucher') {
+      extraCSS = [
+        '@page{size:A4 landscape;margin:6mm 8mm;}',
+        'body{margin:0;padding:0;background:white;font-family:\'Noto Sans Devanagari\',Arial,sans-serif;}',
+        '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}',
+        '.vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;height:auto!important;padding:2mm 3mm!important;margin:0!important;border-radius:0!important;background:white;display:flex;flex-direction:column;justify-content:flex-start;gap:0;}',
+        '.gp{border:none!important;box-shadow:none!important;width:100%!important;max-width:100%!important;padding:2mm 3mm!important;margin:0!important;overflow:visible!important;border-radius:0!important;background:white;}',
+        '.vhd{text-align:center;margin-bottom:4px;}',
+        '.vof{font-size:14pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:3px;margin-bottom:4px;}',
+        '.vti{font-size:12pt;font-weight:700;margin-bottom:3px;}',
+        '.vwd{font-size:11pt;font-weight:600;margin-bottom:3px;}',
+        '.vvn{text-align:right;font-size:11pt;font-weight:700;margin-bottom:4px;border-bottom:1px solid #000;padding-bottom:3px;}',
+        '.vt{width:100%;border-collapse:collapse;font-size:10.5pt;}',
+        '.vt th,.vt td{border:1px solid #000;text-align:center;padding:6px 2px;line-height:1.4;height:34px;}',
+        '.vt th{background:#e0e0e0!important;font-weight:700;font-size:9.5pt;padding:5px 2px;}',
+        '.vcn{text-align:left!important;padding-left:6px!important;width:130px;}',
+        '.vcp{width:58px;}.vcv{width:54px;}',
+        '.vcd{width:22px;font-size:9pt!important;padding:6px 1px!important;}',
+        '.vct{width:48px;}.vcr{width:46px;}.vca{width:62px;}.vcpa{width:68px;}.vcs{width:82px;}',
+        '.VHL{background:#c8c8c8!important;font-weight:700;}',
+        '.vt tr:nth-child(even) td{background:#f5f5f5!important;}',
+        '.vt tr:nth-child(even) td.VHL{background:#c8c8c8!important;}',
+        '.VTR td{background:#e8e8e8!important;font-weight:700;font-size:10.5pt;border-top:2px solid #000;}',
+        '.vft{margin-top:6px;border-top:1px solid #000;padding-top:6px;}',
+        '.vra{text-align:center;font-size:10.5pt;font-weight:700;margin-bottom:3px;}',
+        '.vst{text-align:center;font-size:9.5pt;border:1px solid #000;padding:3px 8px;margin:3px auto;width:78%;}',
+        '.vsg{display:flex;justify-content:space-around;margin-top:18px;font-size:10pt;font-weight:700;}',
+        '.vsg div{text-align:center;width:130px;}',
+        '.vsl{border-top:1px solid #000;padding-top:4px;}',
+      ].join('');
+    }
+
+    const baseCSS = (type === 'voucher' || type === 'davandi')
+      ? '' // voucher + davandi — htmlSnapshot मध्येच CSS आहे
+      : '@page{size:' + pageSize + ';margin:' + margins + ';}body{margin:0;padding:0;background:white;font-family:\'Noto Sans Devanagari\',Arial,sans-serif;}*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}';
+
+    // htmlSnapshot मध्ये complete HTML आहे का? (नवीन saves)
+    let fullHTML;
+    if (html.trim().startsWith('<!DOCTYPE') || html.trim().startsWith('<html')) {
+      // नवीन format — complete HTML — जसाच्या तसा
+      fullHTML = html;
+    } else {
+      // जुना format — fragment — CSS inject करा
+      fullHTML = '<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
+        + '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">'
+        + '<style>' + baseCSS + extraCSS + '</style>'
+        + '</head><body>' + html
+        + '<scri' + 'pt>window.onload=function(){setTimeout(function(){window.print();},1500);};</' + 'script></body></html>';
+    }
+
+    // Blob URL वापरा — document.write ने complete HTML बरोबर render होत नाही
+    const blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+    const blobURL = URL.createObjectURL(blob);
+    w.location.href = blobURL;
+    setTimeout(function() { URL.revokeObjectURL(blobURL); }, 120000);
   } catch(e) { alert('त्रुटी: ' + e.message); }
 };
 
@@ -675,6 +753,17 @@ window.deleteItem = async function(type, id) {
 window._initHistory = function(uid) {
   currentUID = uid;
 };
+</script>
+
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#1A2744;color:white;padding:8px 16px;font-size:9.5pt;z-index:9999;align-items:center;justify-content:center;gap:8px;font-family:sans-serif;text-align:center;">📴 Offline Mode — Cache वरून काम करत आहे</div>
+<script>
+if("serviceWorker"in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(function(r){console.log("[GP Sakhi] SW OK");})
+    .catch(function(e){console.warn("[GP Sakhi] SW fail",e);});
+  });
+}
 </script>
 </body>
 </html>

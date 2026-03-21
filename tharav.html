@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ठराव जनरेटर — GP Sakhi</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GP Sakhi">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--gold:#C49A22;--cream:#FAF7F2;--sand:#E0D5C0;--text:#1C1410;}
@@ -108,9 +115,44 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
 #tp .suchak-row .suchak-right{text-align:right;}
 #tp .sign{margin-top:50px;display:flex;justify-content:space-between;font-weight:700;font-size:12px;line-height:1.9;}
 #tp .sign .sign-left{text-align:left;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}
-#tp .sign .sign-right{text-align:right;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}
+#tp .sign .sign-right{text-align:right;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}.sig-img{display:block;max-height:50px;max-width:150px;object-fit:contain;mix-blend-mode:multiply;}.sign-left .sig-img{margin:0 0 4px 0;}.sign-right .sig-img{margin:0 0 4px auto;}
 #tp .th-empty{color:#ccc;text-align:center;padding:50px;font-size:11pt;}
 
+
+/* ── SIGNATURE MODAL ── */
+.sig-overlay{position:fixed;inset:0;background:rgba(11,17,32,0.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;}
+.sig-overlay.open{display:flex;}
+.sig-box{background:white;border-radius:24px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,0.3);animation:fadeIn 0.3s ease;}
+.sig-head{background:linear-gradient(135deg,#1A2744,#2C3E50);color:white;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;}
+.sig-head-title{font-size:13pt;font-weight:800;display:flex;align-items:center;gap:10px;}
+.sig-head-sub{font-size:9pt;color:#94a3b8;margin-top:2px;font-weight:500;}
+.sig-close{background:rgba(255,255,255,0.1);border:none;color:white;width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.sig-close:hover{background:rgba(255,255,255,0.25);}
+.sig-body{padding:24px;}
+.sig-canvas-wrap{border:2px dashed #cbd5e1;border-radius:16px;overflow:hidden;background:#f8faff;position:relative;cursor:crosshair;transition:border-color 0.3s;}
+.sig-canvas-wrap.drawing{border-color:#1A2744;border-style:solid;}
+.sig-canvas-wrap canvas{display:block;width:100%;touch-action:none;}
+.sig-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#94a3b8;font-size:10pt;font-weight:600;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity 0.3s;}
+.sig-actions{display:flex;gap:10px;margin-top:16px;}
+.sig-btn-clear{flex:1;padding:12px;border:2px solid #fee2e2;border-radius:12px;background:white;color:#dc2626;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.sig-btn-clear:hover{background:#fee2e2;}
+.sig-btn-save{flex:2;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#1A2744,#2C3E50);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;font-weight:800;cursor:pointer;box-shadow:0 6px 15px rgba(26,39,68,0.25);transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.sig-btn-save:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(26,39,68,0.35);}
+.sig-btn-save:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.sign-btn-wrap{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.sign-trigger{display:flex;align-items:center;gap:10px;padding:11px 14px;border:2px dashed #cbd5e1;border-radius:12px;background:white;cursor:pointer;transition:all 0.3s;width:100%;font-family:'Noto Sans Devanagari',sans-serif;}
+.sign-trigger:hover{border-color:#1A2744;background:#f8faff;}
+.sign-trigger.done{border-style:solid;border-color:#1e40af;background:#eff6ff;}
+.sign-trigger-icon{width:36px;height:36px;border-radius:9px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;transition:background 0.3s;}
+.sign-trigger.done .sign-trigger-icon{background:#dbeafe;}
+.sign-trigger-text{text-align:left;flex:1;}
+.sign-trigger-label{font-size:9.5pt;font-weight:800;color:var(--navy);display:block;}
+.sign-trigger-status{font-size:8pt;color:#64748b;display:block;margin-top:1px;}
+.sign-trigger.done .sign-trigger-status{color:#1e40af;}
+/* Signature image on preview */
+#tp .sig-img{display:block;max-height:50px;max-width:150px;object-fit:contain;mix-blend-mode:multiply;}
+#tp .sign-left .sig-img{margin:0 0 4px 0;}
+#tp .sign-right .sig-img{margin:0 0 4px auto;}
 @media(max-width:800px){.main-wrap{grid-template-columns:1fr;}.form-panel{max-height:none;position:static;}.preview-panel{padding:16px;}.g2,.g3{grid-template-columns:1fr;}}
 @media print{nav,.form-panel,.autofill-bar-wrap,.ptit{display:none!important;}.main-wrap{display:block;}.preview-panel{padding:0;}.lout{box-shadow:none;}body{background:white;}}
 </style>
@@ -170,6 +212,25 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
         <div class="fld"><label>उपसरपंच</label><input type="text" id="usarp" placeholder="श्री. रामपाल धांडे" oninput="rp()"></div>
       </div>
       <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="श्री. वैभव बावनकर" oninput="rp()"></div>
+
+      <div class="sign-btn-wrap">
+        <button class="sign-trigger" id="stSarp" onclick="openSig('sarp')">
+          <div class="sign-trigger-icon">✍️</div>
+          <div class="sign-trigger-text">
+            <span class="sign-trigger-label">सरपंच — सही करा</span>
+            <span class="sign-trigger-status" id="stSarpStatus">अजून सही केली नाही · क्लिक करा</span>
+          </div>
+          <span id="stSarpArrow" style="color:#94a3b8;font-size:14px;">→</span>
+        </button>
+        <button class="sign-trigger" id="stGram" onclick="openSig('gram')">
+          <div class="sign-trigger-icon">✍️</div>
+          <div class="sign-trigger-text">
+            <span class="sign-trigger-label">ग्रामपंचायत अधिकारी — सही करा</span>
+            <span class="sign-trigger-status" id="stGramStatus">अजून सही केली नाही · क्लिक करा</span>
+          </div>
+          <span id="stGramArrow" style="color:#94a3b8;font-size:14px;">→</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -341,9 +402,13 @@ function buildHTML(){
 
   var ss = sarp.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'') || 'सरपंच';
   var gs = gram.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'') || 'ग्रामपंचायत अधिकारी';
+  var sarpImg = window.sarpSign ? '<img class="sig-img" src="'+window.sarpSign+'" alt="सरपंच सही">' : '<div style="height:50px;width:130px;border-bottom:1px dashed #aaa;margin-bottom:4px;"></div>';
+  var gramImg = window.gramSign ? '<img class="sig-img" src="'+window.gramSign+'" alt="GPA सही">'  : '<div style="height:50px;width:130px;border-bottom:1px dashed #aaa;margin-bottom:4px;margin-left:auto;"></div>';
+  var sarpBorder = window.sarpSign ? 'border-top:none;padding-top:0;' : '';
+  var gramBorder = window.gramSign ? 'border-top:none;padding-top:0;' : '';
   var sign = '<div class="sign">'
-    +'<div class="sign-left">('+ss+')<br>सरपंच<br>'+office+'</div>'
-    +'<div class="sign-right">('+gs+')<br>ग्रामपंचायत अधिकारी<br>'+office+'</div>'
+    +'<div class="sign-left" style="'+sarpBorder+'">'+sarpImg+'('+ss+')<br>सरपंच<br>'+office+'</div>'
+    +'<div class="sign-right" style="'+gramBorder+'">'+gramImg+'('+gs+')<br>ग्रामपंचायत अधिकारी<br>'+office+'</div>'
     +'</div>';
 
   return hdr + ttl + meta + body + sign;
@@ -355,7 +420,7 @@ function rp(){
 }
 window.rp = rp;
 
-var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:white;color:#000;}.a4{width:210mm;min-height:297mm;padding:18mm 22mm 18mm 28mm;margin:0 auto;background:white;line-height:1.85;font-size:13px;color:#000;}.th-hdr{text-align:center;border-bottom:3px double #000;padding-bottom:12px;margin-bottom:18px;}.th-hdr h1{font-size:18px;font-weight:800;margin:0;letter-spacing:0.3px;}.th-hdr h2{font-size:12px;font-weight:400;margin:4px 0 0;}.tharav-title{text-align:center;font-size:15px;font-weight:800;text-decoration:underline;margin:16px 0 12px;letter-spacing:0.5px;}.th-meta{font-size:12px;margin-bottom:14px;border:1.5px solid #000;}.th-meta table{width:100%;border-collapse:collapse;}.th-meta td{padding:5px 10px;border-bottom:1px solid #000;}.th-meta tr:last-child td{border-bottom:none;}.th-body{font-size:13px;line-height:1.85;}.th-body p{margin-bottom:10px;text-indent:40px;text-align:justify;}.tharav-block{margin:16px 0;border:1.5px solid #000;}.tharav-block .t-title{font-weight:800;font-size:13px;background:#efefef!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:7px 12px;border-bottom:1.5px solid #000;}.tharav-block .t-khulasa-wrap{border-top:1.5px solid #000;}.tharav-block .t-khulasa-head{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;font-weight:700;font-size:12px;padding:5px 12px;letter-spacing:0.5px;}.tharav-block .t-khulasa{font-size:13px;line-height:1.85;padding:10px 12px;text-align:justify;}.tharav-block .t-khulasa p{margin:5px 0;text-indent:2em;text-align:justify;}.tharav-block .t-khulasa p.last-line{text-align:center;font-weight:700;text-indent:0;margin-top:10px;padding-top:8px;border-top:1px solid #000;}.tharav-block .t-khulasa .last-line{text-align:center;font-weight:700;display:block;margin-top:8px;}.suchak-row{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;font-weight:700;line-height:1.9;padding:10px 0;border-top:1px solid #000;border-bottom:1px solid #000;}.suchak-row .suchak-left{text-align:left;}.suchak-row .suchak-right{text-align:right;}.sign{margin-top:60px;display:flex;justify-content:space-between;font-weight:700;font-size:12px;line-height:1.9;}.sign .sign-left{text-align:left;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}.sign .sign-right{text-align:right;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}@page{size:A4 portrait;margin:0;}@media print{*{color:#000!important;background:white!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}.tharav-block .t-khulasa-head,.tharav-block .t-title{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}';
+var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:white;color:#000;}.a4{width:210mm;min-height:297mm;padding:18mm 22mm 18mm 28mm;margin:0 auto;background:white;line-height:1.85;font-size:13px;color:#000;}.th-hdr{text-align:center;border-bottom:3px double #000;padding-bottom:12px;margin-bottom:18px;}.th-hdr h1{font-size:18px;font-weight:800;margin:0;letter-spacing:0.3px;}.th-hdr h2{font-size:12px;font-weight:400;margin:4px 0 0;}.tharav-title{text-align:center;font-size:15px;font-weight:800;text-decoration:underline;margin:16px 0 12px;letter-spacing:0.5px;}.th-meta{font-size:12px;margin-bottom:14px;border:1.5px solid #000;}.th-meta table{width:100%;border-collapse:collapse;}.th-meta td{padding:5px 10px;border-bottom:1px solid #000;}.th-meta tr:last-child td{border-bottom:none;}.th-body{font-size:13px;line-height:1.85;}.th-body p{margin-bottom:10px;text-indent:40px;text-align:justify;}.tharav-block{margin:16px 0;border:1.5px solid #000;}.tharav-block .t-title{font-weight:800;font-size:13px;background:#efefef!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;padding:7px 12px;border-bottom:1.5px solid #000;}.tharav-block .t-khulasa-wrap{border-top:1.5px solid #000;}.tharav-block .t-khulasa-head{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;font-weight:700;font-size:12px;padding:5px 12px;letter-spacing:0.5px;}.tharav-block .t-khulasa{font-size:13px;line-height:1.85;padding:10px 12px;text-align:justify;}.tharav-block .t-khulasa p{margin:5px 0;text-indent:2em;text-align:justify;}.tharav-block .t-khulasa p.last-line{text-align:center;font-weight:700;text-indent:0;margin-top:10px;padding-top:8px;border-top:1px solid #000;}.tharav-block .t-khulasa .last-line{text-align:center;font-weight:700;display:block;margin-top:8px;}.suchak-row{display:flex;justify-content:space-between;margin-top:20px;font-size:12px;font-weight:700;line-height:1.9;padding:10px 0;border-top:1px solid #000;border-bottom:1px solid #000;}.suchak-row .suchak-left{text-align:left;}.suchak-row .suchak-right{text-align:right;}.sign{margin-top:60px;display:flex;justify-content:space-between;font-weight:700;font-size:12px;line-height:1.9;}.sign .sign-left{text-align:left;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}.sign .sign-right{text-align:right;border-top:1.5px solid #000;padding-top:6px;min-width:160px;}.sig-img{display:block;max-height:50px;max-width:150px;object-fit:contain;mix-blend-mode:multiply;}.sign-left .sig-img{margin:0 0 4px 0;}.sign-right .sig-img{margin:0 0 4px auto;}@page{size:A4 portrait;margin:0;}@media print{*{color:#000!important;background:white!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}}.tharav-block .t-khulasa-head,.tharav-block .t-title{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}';
 
 function doPrint(){
   var w = window.open('','_blank');
@@ -391,6 +456,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 
 <script src="config.js"></script>
+<script src="offline-profile.js"></script>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -407,14 +473,9 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
 
-  try {
-    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
-    if (!snap.exists()) {
-      const bar = document.getElementById('noProfileBar');
-      if (bar) bar.style.display = 'block';
-      return;
-    }
-    const d = snap.data();
+  if (window.GPOffline) window.GPOffline.saveUser(user);
+
+  function fillTharavProfile(d) {
     document.getElementById('gpn').value   = d.gpName || '';
     document.getElementById('gpt').value   = d.ps     || '';
     document.getElementById('gpd').value   = d.dist   || '';
@@ -433,8 +494,23 @@ onAuthStateChanged(auth, async (user) => {
     var bar = document.getElementById('autoFillBar');
     if (bar) bar.classList.add('show');
     window.rp();
-  } catch(e) {
-    console.log('Profile fetch error:', e);
+  }
+
+  const localP = window.GPOffline ? window.GPOffline.loadProfile() : null;
+  if (localP) fillTharavProfile(localP);
+
+  if (navigator.onLine) {
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+      if (snap.exists()) {
+        const d = snap.data();
+        fillTharavProfile(d);
+        if (window.GPOffline) window.GPOffline.saveProfile(d);
+      } else if (!localP) {
+        const bar = document.getElementById('noProfileBar');
+        if (bar) bar.style.display = 'block';
+      }
+    } catch(e) { console.log('Profile fetch error:', e); }
   }
 });
 
@@ -498,6 +574,196 @@ window.doSave = async function() {
     btn.disabled = false;
   }
 };
+</script>
+
+<!-- ── SIGNATURE MODAL ── -->
+<div id="sigOverlay" class="sig-overlay">
+  <div class="sig-box">
+    <div class="sig-head">
+      <div>
+        <div class="sig-head-title">✍️ <span id="sigTitle">सही करा</span></div>
+        <div class="sig-head-sub">बोटाने किंवा माऊसने सही करा</div>
+      </div>
+      <button class="sig-close" onclick="closeSig()">✕</button>
+    </div>
+    <div class="sig-body">
+      <div class="sig-canvas-wrap" id="sigCanvasWrap">
+        <canvas id="sigCanvas" height="180"></canvas>
+        <div class="sig-hint" id="sigHint">येथे सही करा</div>
+      </div>
+      <div class="sig-actions">
+        <button class="sig-btn-clear" onclick="clearSig()">🗑️ पुन्हा करा</button>
+        <button class="sig-btn-save" id="sigSaveBtn" onclick="saveSig()" disabled>✅ सही जतन करा</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── SIGNATURE PAD ── */
+window.sarpSign = null;
+window.gramSign = null;
+var sigTarget = null;
+var sigDrawing = false;
+var sigCanvas, sigCtx;
+var sigHasContent = false;
+var sigPoints = [];
+
+window.openSig = function openSig(who) {
+  sigTarget = who;
+  var label = who === 'sarp' ? 'सरपंच — सही करा' : 'ग्रामपंचायत अधिकारी — सही करा';
+  document.getElementById('sigTitle').textContent = label;
+  document.getElementById('sigOverlay').classList.add('open');
+  sigCanvas = document.getElementById('sigCanvas');
+  sigCtx = sigCanvas.getContext('2d');
+  var wrap = document.getElementById('sigCanvasWrap');
+  var dpr = window.devicePixelRatio || 1;
+  var displayW = wrap.offsetWidth || 460;
+  var displayH = 180;
+  sigCanvas.width  = displayW * dpr;
+  sigCanvas.height = displayH * dpr;
+  sigCanvas.style.width  = displayW + 'px';
+  sigCanvas.style.height = displayH + 'px';
+  sigCtx.scale(dpr, dpr);
+  sigCtx.fillStyle = '#ffffff';
+  sigCtx.fillRect(0, 0, displayW, displayH);
+  sigCtx.clearRect(0, 0, displayW, displayH);
+  sigCtx.strokeStyle = '#1e3a8a';
+  sigCtx.lineWidth = 2.2;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  sigHasContent = false;
+  sigPoints = [];
+  document.getElementById('sigHint').style.opacity = '1';
+  document.getElementById('sigSaveBtn').disabled = true;
+  document.getElementById('sigCanvasWrap').classList.remove('drawing');
+  attachSigEvents();
+}
+
+window.closeSig = function closeSig() {
+  document.getElementById('sigOverlay').classList.remove('open');
+  detachSigEvents();
+}
+
+window.clearSig = function clearSig() {
+  if (!sigCanvas) return;
+  var dpr = window.devicePixelRatio || 1;
+  sigCtx.clearRect(0, 0, sigCanvas.width / dpr, sigCanvas.height / dpr);
+  sigHasContent = false;
+  sigPoints = [];
+  document.getElementById('sigHint').style.opacity = '1';
+  document.getElementById('sigSaveBtn').disabled = true;
+  document.getElementById('sigCanvasWrap').classList.remove('drawing');
+}
+
+window.saveSig = function saveSig() {
+  if (!sigCanvas || !sigHasContent) return;
+  var dataURL = sigCanvas.toDataURL('image/png');
+  if (sigTarget === 'sarp') {
+    window.sarpSign = dataURL;
+    document.getElementById('stSarp').classList.add('done');
+    document.getElementById('stSarpStatus').textContent = '✅ सही झाली · पुन्हा क्लिक करून बदला';
+    document.getElementById('stSarpArrow').textContent = '✓';
+    document.getElementById('stSarpArrow').style.color = '#1e40af';
+  } else {
+    window.gramSign = dataURL;
+    document.getElementById('stGram').classList.add('done');
+    document.getElementById('stGramStatus').textContent = '✅ सही झाली · पुन्हा क्लिक करून बदला';
+    document.getElementById('stGramArrow').textContent = '✓';
+    document.getElementById('stGramArrow').style.color = '#1e40af';
+  }
+  closeSig();
+  rp();
+}
+
+function getSigPos(e) {
+  var rect = sigCanvas.getBoundingClientRect();
+  var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function onSigStart(e) {
+  e.preventDefault();
+  sigDrawing = true;
+  sigHasContent = true;
+  sigPoints = [];
+  document.getElementById('sigHint').style.opacity = '0';
+  document.getElementById('sigSaveBtn').disabled = false;
+  document.getElementById('sigCanvasWrap').classList.add('drawing');
+  var pos = getSigPos(e);
+  sigPoints.push(pos);
+  sigCtx.beginPath();
+  sigCtx.moveTo(pos.x, pos.y);
+}
+
+function onSigMove(e) {
+  e.preventDefault();
+  if (!sigDrawing) return;
+  var pos = getSigPos(e);
+  sigPoints.push(pos);
+  if (sigPoints.length < 2) return;
+  var p1 = sigPoints[sigPoints.length - 2];
+  var p2 = sigPoints[sigPoints.length - 1];
+  var midX = (p1.x + p2.x) / 2;
+  var midY = (p1.y + p2.y) / 2;
+  sigCtx.quadraticCurveTo(p1.x, p1.y, midX, midY);
+  sigCtx.stroke();
+  sigCtx.beginPath();
+  sigCtx.moveTo(midX, midY);
+}
+
+function onSigEnd(e) {
+  e.preventDefault();
+  if (sigDrawing && sigPoints.length > 0) {
+    var last = sigPoints[sigPoints.length - 1];
+    sigCtx.lineTo(last.x, last.y);
+    sigCtx.stroke();
+  }
+  sigDrawing = false;
+  sigPoints = [];
+}
+
+function attachSigEvents() {
+  sigCanvas.addEventListener('mousedown', onSigStart);
+  sigCanvas.addEventListener('mousemove', onSigMove);
+  sigCanvas.addEventListener('mouseup', onSigEnd);
+  sigCanvas.addEventListener('mouseleave', onSigEnd);
+  sigCanvas.addEventListener('touchstart', onSigStart, { passive: false });
+  sigCanvas.addEventListener('touchmove', onSigMove, { passive: false });
+  sigCanvas.addEventListener('touchend', onSigEnd, { passive: false });
+}
+
+function detachSigEvents() {
+  if (!sigCanvas) return;
+  sigCanvas.removeEventListener('mousedown', onSigStart);
+  sigCanvas.removeEventListener('mousemove', onSigMove);
+  sigCanvas.removeEventListener('mouseup', onSigEnd);
+  sigCanvas.removeEventListener('mouseleave', onSigEnd);
+  sigCanvas.removeEventListener('touchstart', onSigStart);
+  sigCanvas.removeEventListener('touchmove', onSigMove);
+  sigCanvas.removeEventListener('touchend', onSigEnd);
+}
+
+document.getElementById('sigOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeSig();
+});
+
+window.openSig = openSig;
+window.closeSig = closeSig;
+window.clearSig = clearSig;
+window.saveSig = saveSig;
+</script>
+
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#1A2744;color:white;padding:8px 16px;font-size:9.5pt;z-index:9999;align-items:center;justify-content:center;gap:8px;font-family:sans-serif;text-align:center;">📴 Offline Mode — Cache वरून काम करत आहे</div>
+<script>
+if("serviceWorker"in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(function(r){console.log("[GP Sakhi] SW OK");})
+    .catch(function(e){console.warn("[GP Sakhi] SW fail",e);});
+  });
+}
 </script>
 </body>
 </html>

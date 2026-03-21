@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GP Sakhi — ग्रामपंचायत सखी</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GP Sakhi">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -378,7 +385,7 @@ setTimeout(function(){
   <div class="hero-content">
     <div class="hero-gov-badge">
       <div class="dot"></div>
-      महाराष्ट्र शासन मान्यताप्राप्त डिजिटल साधन
+      ग्रामपंचायत कार्यालयासाठी मोफत डिजिटल साधन
     </div>
     <h1 class="hero-title">GP <span>Sakhi</span></h1>
     <p class="hero-sub">ग्रामपंचायत सखी</p>
@@ -658,6 +665,17 @@ window.addEventListener('scroll', function() {
     nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.05)';
   }
 });
+</script>
+
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#1A2744;color:white;padding:8px 16px;font-size:9.5pt;z-index:9999;align-items:center;justify-content:center;gap:8px;font-family:sans-serif;text-align:center;">📴 Offline Mode — Cache वरून काम करत आहे</div>
+<script>
+if("serviceWorker"in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(function(r){console.log("[GP Sakhi] SW OK");})
+    .catch(function(e){console.warn("[GP Sakhi] SW fail",e);});
+  });
+}
 </script>
 </body>
 </html>

@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GP प्रोफाईल — GP Sakhi</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GP Sakhi">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--saffron:#E8701A;--navy:#1A2744;--green:#1A6E3C;--gold:#C49A22;--sand:#E0D5C0;--cream:#FAF7F2;--text:#1C1410;}
@@ -107,7 +114,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
 
 <div class="page">
 
-  <!-- Page Hero -->
   <div class="page-hero">
     <div class="page-hero-icon">⚙️</div>
     <div>
@@ -116,16 +122,13 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
     </div>
   </div>
 
-  <!-- Success -->
   <div class="success-msg" id="successMsg">✅ माहिती यशस्वीरित्या सेव झाली!</div>
 
-  <!-- Info Note -->
   <div class="info-note">
     <span style="font-size:16px;flex-shrink:0;">💡</span>
     <span>येथे सेव केलेली माहिती सर्व tools मध्ये <strong>automatically भरली</strong> जाईल. प्रत्येक वेळी टाकण्याची गरज नाही.</span>
   </div>
 
-  <!-- ══ 1. ग्रामपंचायत माहिती ══ -->
   <div class="card">
     <div class="card-head">
       <span>🏛️</span>
@@ -157,7 +160,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
     </div>
   </div>
 
-  <!-- ══ 2. अधिकारी व पदाधिकारी माहिती ══ -->
   <div class="card">
     <div class="card-head">
       <span>👤</span>
@@ -183,7 +185,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
     </div>
   </div>
 
-  <!-- ══ 3. मजुरांची माहिती ══ -->
   <div class="card">
     <div class="card-head">
       <span>👷</span>
@@ -222,7 +223,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
     </div>
   </div>
 
-  <!-- ══ 4. नमुना ८ माहिती ══ -->
   <div class="card">
     <div class="card-head">
       <span>📋</span>
@@ -230,7 +230,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
       <span class="card-badge">नमुना ८ साठी</span>
     </div>
     <div class="card-body">
-      <!-- वर्ष व दिनांक -->
       <div class="g2">
         <div class="fld">
           <label>वर्ष सुरुवात</label>
@@ -244,7 +243,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
 
       <div class="sec-divider"></div>
 
-      <!-- इतर कर -->
       <div class="sub-head">💡 इतर कर (रु. प्रति वर्ष)</div>
       <div class="g2">
         <div class="fld"><label>दिवाबत्ती कर (₹)</label><input type="number" id="n8DivKr" value="100" min="0"></div>
@@ -255,7 +253,6 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
 
       <div class="sec-divider"></div>
 
-      <!-- RR दर -->
       <div class="sub-head">🏗️ बांधकाम दर (रु./चौ.मी.) व कर दर (रु./हजार)</div>
       <div class="rate-wrap">
         <table class="rate-tbl">
@@ -298,14 +295,12 @@ nav{background:var(--navy);padding:0 22px;height:64px;display:flex;align-items:c
     </div>
   </div>
 
-  <!-- Save Button -->
   <div class="save-wrap">
     <button class="btn-save" id="saveBtn" onclick="saveProfile()">💾 माहिती सेव करा</button>
   </div>
 
 </div>
 
-<!-- 100% Safe Global Variables for State -->
 <script>
 window.GP_TYPE = 1; // 0=gram, 1=gat (default: गट ग्रामपंचायत)
 function setGPType(t){
@@ -316,19 +311,14 @@ function setGPType(t){
 window.setGPType = setGPType;
 </script>
 
+<script src="config.js"></script>
+<script src="offline-profile.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
-  authDomain: "gpsakhi-9685e.firebaseapp.com",
-  projectId: "gpsakhi-9685e",
-  storageBucket: "gpsakhi-9685e.firebasestorage.app",
-  messagingSenderId: "107629589245",
-  appId: "1:107629589245:web:7b288fda76b26aaadac494"
-};
+const firebaseConfig = window.myFirebaseConfig;
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -339,48 +329,52 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
 
-  try {
-    const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
-    if (snap.exists()) {
-      const d = snap.data();
-      // GP Type
-      if (d.gpType) window.setGPType(d.gpType === 'gram' ? 0 : 1);
-      
-      // ग्रामपंचायत
-      document.getElementById('gpName').value   = d.gpName  || '';
-      document.getElementById('gpPs').value     = d.ps      || '';
-      document.getElementById('gpDist').value   = d.dist    || '';
-      
-      // अधिकारी
-      document.getElementById('gpSarp').value   = d.sarp    || '';
-      document.getElementById('gpUsSarp').value = d.usSarp  || '';
-      document.getElementById('gpGram').value   = d.gram    || '';
-      
-      // मजुरांची माहिती
-      document.getElementById('gpMr').value     = d.mr !== undefined ? d.mr : 800;
-      document.getElementById('gpLr').value     = d.lr !== undefined ? d.lr : 500;
-      document.getElementById('gpHol').value    = d.hol     || '4';
-      document.getElementById('gpVillage').value= d.village || '';
-      
-      // नमुना ८ (Handling 0 values safely)
-      if (d.n8YrS) document.getElementById('n8YrS').value = d.n8YrS;
-      if (d.n8YrE) document.getElementById('n8YrE').value = d.n8YrE;
-      document.getElementById('n8DivKr').value  = d.n8DivKr !== undefined ? d.n8DivKr : 100;
-      document.getElementById('n8AroKr').value  = d.n8AroKr !== undefined ? d.n8AroKr : 100;
-      document.getElementById('n8SamKr').value  = d.n8SamKr !== undefined ? d.n8SamKr : 300;
-      document.getElementById('n8VisKr').value  = d.n8VisKr !== undefined ? d.n8VisKr : 1000;
-      document.getElementById('n8RrJaga').value = d.n8RrJaga !== undefined ? d.n8RrJaga : 1600;
-      document.getElementById('n8TrJaga').value = d.n8TrJaga !== undefined ? d.n8TrJaga : 2;
-      document.getElementById('n8RrRcc').value  = d.n8RrRcc !== undefined ? d.n8RrRcc : 15000;
-      document.getElementById('n8TrRcc').value  = d.n8TrRcc !== undefined ? d.n8TrRcc : 1.50;
-      document.getElementById('n8RrSem').value  = d.n8RrSem !== undefined ? d.n8RrSem : 12000;
-      document.getElementById('n8TrSem').value  = d.n8TrSem !== undefined ? d.n8TrSem : 1.12;
-      document.getElementById('n8RrMati').value = d.n8RrMati !== undefined ? d.n8RrMati : 8000;
-      document.getElementById('n8TrMati').value = d.n8TrMati !== undefined ? d.n8TrMati : 0.90;
-      document.getElementById('n8RrJhop').value = d.n8RrJhop !== undefined ? d.n8RrJhop : 4000;
-      document.getElementById('n8TrJhop').value = d.n8TrJhop !== undefined ? d.n8TrJhop : 0.52;
-    }
-  } catch(e) { console.log('Profile load error:', e); }
+  if (window.GPOffline) window.GPOffline.saveUser(user);
+
+  function fillProfileForm(d) {
+    if (d.gpType) window.setGPType(d.gpType === 'gram' ? 0 : 1);
+    document.getElementById('gpName').value    = d.gpName  || '';
+    document.getElementById('gpPs').value      = d.ps      || '';
+    document.getElementById('gpDist').value    = d.dist    || '';
+    document.getElementById('gpSarp').value    = d.sarp    || '';
+    document.getElementById('gpUsSarp').value  = d.usSarp  || '';
+    document.getElementById('gpGram').value    = d.gram    || '';
+    document.getElementById('gpMr').value      = d.mr  !== undefined ? d.mr  : 800;
+    document.getElementById('gpLr').value      = d.lr  !== undefined ? d.lr  : 500;
+    document.getElementById('gpHol').value     = d.hol     || '4';
+    document.getElementById('gpVillage').value = d.village || '';
+    if (d.n8YrS) document.getElementById('n8YrS').value = d.n8YrS;
+    if (d.n8YrE) document.getElementById('n8YrE').value = d.n8YrE;
+    document.getElementById('n8DivKr').value   = d.n8DivKr  !== undefined ? d.n8DivKr  : 100;
+    document.getElementById('n8AroKr').value   = d.n8AroKr  !== undefined ? d.n8AroKr  : 100;
+    document.getElementById('n8SamKr').value   = d.n8SamKr  !== undefined ? d.n8SamKr  : 300;
+    document.getElementById('n8VisKr').value   = d.n8VisKr  !== undefined ? d.n8VisKr  : 1000;
+    document.getElementById('n8RrJaga').value  = d.n8RrJaga !== undefined ? d.n8RrJaga : 1600;
+    document.getElementById('n8TrJaga').value  = d.n8TrJaga !== undefined ? d.n8TrJaga : 2;
+    document.getElementById('n8RrRcc').value   = d.n8RrRcc  !== undefined ? d.n8RrRcc  : 15000;
+    document.getElementById('n8TrRcc').value   = d.n8TrRcc  !== undefined ? d.n8TrRcc  : 1.50;
+    document.getElementById('n8RrSem').value   = d.n8RrSem  !== undefined ? d.n8RrSem  : 12000;
+    document.getElementById('n8TrSem').value   = d.n8TrSem  !== undefined ? d.n8TrSem  : 1.12;
+    document.getElementById('n8RrMati').value  = d.n8RrMati !== undefined ? d.n8RrMati : 8000;
+    document.getElementById('n8TrMati').value  = d.n8TrMati !== undefined ? d.n8TrMati : 0.90;
+    document.getElementById('n8RrJhop').value  = d.n8RrJhop !== undefined ? d.n8RrJhop : 4000;
+    document.getElementById('n8TrJhop').value  = d.n8TrJhop !== undefined ? d.n8TrJhop : 0.52;
+  }
+
+  const localP = window.GPOffline ? window.GPOffline.loadProfile() : null;
+  if (localP) { fillProfileForm(localP); console.log('[GP Sakhi] Profile from localStorage'); }
+
+  if (navigator.onLine) {
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
+      if (snap.exists()) {
+        const d = snap.data();
+        fillProfileForm(d);
+        if (window.GPOffline) window.GPOffline.saveProfile(d);
+        console.log('[GP Sakhi] Profile synced from Firebase');
+      }
+    } catch(e) { console.log('Profile load error:', e); }
+  }
 });
 
 window.saveProfile = async function() {
@@ -428,6 +422,7 @@ window.saveProfile = async function() {
     };
 
     await setDoc(doc(db, 'users', currentUser.uid, 'profile', 'gp'), data);
+    if (window.GPOffline) window.GPOffline.saveProfile(data);
 
     btn.textContent = '💾 माहिती सेव करा'; btn.disabled = false;
     const msg = document.getElementById('successMsg');
@@ -441,7 +436,16 @@ window.saveProfile = async function() {
   }
 };
 </script>
+
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#1A2744;color:white;padding:8px 16px;font-size:9.5pt;z-index:9999;align-items:center;justify-content:center;gap:8px;font-family:sans-serif;text-align:center;">📴 Offline Mode — Cache वरून काम करत आहे</div>
+<script>
+if("serviceWorker"in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(function(r){console.log("[GP Sakhi] SW OK");})
+    .catch(function(e){console.warn("[GP Sakhi] SW fail",e);});
+  });
+}
+</script>
 </body>
 </html>
-
-

@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>नमुना ८ | GP Sakhi</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GP Sakhi">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -722,6 +729,7 @@ nav::before {
 </div>
 
 <script src="config.js"></script>
+<script src="offline-profile.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -735,36 +743,47 @@ const db_old = getFirestore(app);
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   
-  // Normal profile load
-  try {
-    const snap = await getDoc(doc(db_old, 'users', user.uid, 'profile', 'gp'));
-    if (snap.exists()) {
-      const d = snap.data();
-      if (d.gpName) document.getElementById('gp').value = d.gpName;
-      if (d.ps)     document.getElementById('taluka').value = d.ps;
-      if (d.dist)   document.getElementById('dist').value = d.dist;
-      if (d.n8YrS)  document.getElementById('yr_s').value = d.n8YrS;
-      if (d.n8YrE)  document.getElementById('yr_e').value = d.n8YrE;
-      if (d.n8Din)  document.getElementById('din').value = d.n8Din;
-      if (d.n8DivKr !== undefined) document.getElementById('div_kr').value = d.n8DivKr;
-      if (d.n8AroKr !== undefined) document.getElementById('aro_kr').value = d.n8AroKr;
-      if (d.n8SamKr !== undefined) document.getElementById('sam_kr').value = d.n8SamKr;
-      if (d.n8VisKr !== undefined) document.getElementById('vis_kr').value = d.n8VisKr;
-      if (d.n8RrJaga !== undefined) document.getElementById('rr_jaga').value = d.n8RrJaga;
-      if (d.n8TrJaga !== undefined) document.getElementById('tr_jaga').value = d.n8TrJaga;
-      if (d.n8RrRcc  !== undefined) document.getElementById('rr_rcc').value  = d.n8RrRcc;
-      if (d.n8TrRcc  !== undefined) document.getElementById('tr_rcc').value  = d.n8TrRcc;
-      if (d.n8RrSem  !== undefined) document.getElementById('rr_sem').value  = d.n8RrSem;
-      if (d.n8TrSem  !== undefined) document.getElementById('tr_sem').value  = d.n8TrSem;
-      if (d.n8RrMati !== undefined) document.getElementById('rr_mati').value = d.n8RrMati;
-      if (d.n8TrMati !== undefined) document.getElementById('tr_mati').value = d.n8TrMati;
-      if (d.n8RrJhop !== undefined) document.getElementById('rr_jhop').value = d.n8RrJhop;
-      if (d.n8TrJhop !== undefined) document.getElementById('tr_jhop').value = d.n8TrJhop;
-      document.getElementById('autofillBar').style.display = 'flex';
-      if (typeof liveCalc === 'function') liveCalc();
-      if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
-    }
-  } catch(e) { console.log('Profile load error:', e); }
+  if (window.GPOffline) window.GPOffline.saveUser(user);
+
+  function fillN8Profile(d) {
+    if (d.gpName) document.getElementById('gp').value = d.gpName;
+    if (d.ps)     document.getElementById('taluka').value = d.ps;
+    if (d.dist)   document.getElementById('dist').value = d.dist;
+    if (d.n8YrS)  document.getElementById('yr_s').value = d.n8YrS;
+    if (d.n8YrE)  document.getElementById('yr_e').value = d.n8YrE;
+    if (d.n8Din)  document.getElementById('din').value = d.n8Din;
+    if (d.n8DivKr !== undefined) document.getElementById('div_kr').value = d.n8DivKr;
+    if (d.n8AroKr !== undefined) document.getElementById('aro_kr').value = d.n8AroKr;
+    if (d.n8SamKr !== undefined) document.getElementById('sam_kr').value = d.n8SamKr;
+    if (d.n8VisKr !== undefined) document.getElementById('vis_kr').value = d.n8VisKr;
+    if (d.n8RrJaga !== undefined) document.getElementById('rr_jaga').value = d.n8RrJaga;
+    if (d.n8TrJaga !== undefined) document.getElementById('tr_jaga').value = d.n8TrJaga;
+    if (d.n8RrRcc  !== undefined) document.getElementById('rr_rcc').value  = d.n8RrRcc;
+    if (d.n8TrRcc  !== undefined) document.getElementById('tr_rcc').value  = d.n8TrRcc;
+    if (d.n8RrSem  !== undefined) document.getElementById('rr_sem').value  = d.n8RrSem;
+    if (d.n8TrSem  !== undefined) document.getElementById('tr_sem').value  = d.n8TrSem;
+    if (d.n8RrMati !== undefined) document.getElementById('rr_mati').value = d.n8RrMati;
+    if (d.n8TrMati !== undefined) document.getElementById('tr_mati').value = d.n8TrMati;
+    if (d.n8RrJhop !== undefined) document.getElementById('rr_jhop').value = d.n8RrJhop;
+    if (d.n8TrJhop !== undefined) document.getElementById('tr_jhop').value = d.n8TrJhop;
+    document.getElementById('autofillBar').style.display = 'flex';
+    if (typeof liveCalc === 'function') liveCalc();
+    if (typeof updateWaterDisplay === 'function') updateWaterDisplay();
+  }
+
+  const localP = window.GPOffline ? window.GPOffline.loadProfile() : null;
+  if (localP) fillN8Profile(localP);
+
+  if (navigator.onLine) {
+    try {
+      const snap = await getDoc(doc(db_old, 'users', user.uid, 'profile', 'gp'));
+      if (snap.exists()) {
+        const d = snap.data();
+        fillN8Profile(d);
+        if (window.GPOffline) window.GPOffline.saveProfile(d);
+      }
+    } catch(e) { console.log('Profile load error:', e); }
+  }
 });
 </script>
 
@@ -1190,6 +1209,17 @@ window.doSaveNamuna8 = async function() {
     btn.textContent = '💾 इतिहासात जतन करा'; btn.disabled = false;
   }
 };
+</script>
+
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#1A2744;color:white;padding:8px 16px;font-size:9.5pt;z-index:9999;align-items:center;justify-content:center;gap:8px;font-family:sans-serif;text-align:center;">📴 Offline Mode — Cache वरून काम करत आहे</div>
+<script>
+if("serviceWorker"in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(function(r){console.log("[GP Sakhi] SW OK");})
+    .catch(function(e){console.warn("[GP Sakhi] SW fail",e);});
+  });
+}
 </script>
 </body>
 </html>

@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>मजुरी बिल जनरेटर — GP Sakhi</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1A2744">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GP Sakhi">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -194,7 +201,7 @@ nav::before {
 .vof{font-size:14pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:3px;margin-bottom:4px;}
 .vti{font-size:12pt;font-weight:700;margin-bottom:3px;}
 .vwd{font-size:11pt;font-weight:600;margin-bottom:3px;}
-.vvn{text-align:right;font-size:11pt;font-weight:700;margin-bottom:4px;border-bottom:1px solid #000;padding-bottom:3px;}
+.vvn{text-align:right;font-size:9.5pt;font-weight:700;margin-bottom:4px;border-bottom:1px solid #000;padding-bottom:3px;white-space:nowrap;}
 .vt{width:100%;border-collapse:collapse;font-size:10.5pt;}
 .vt th,.vt td{border:1px solid #000;text-align:center;padding:6px 2px;line-height:1.4;height:34px;}
 .vt th{background:#e0e0e0;font-weight:700;font-size:9.5pt;padding:5px 2px;}
@@ -373,13 +380,14 @@ nav::before {
       </div>
       <div style="display:flex;gap:12px;margin-top:24px;">
         <button onclick="document.getElementById('printTipOverlay').style.display='none';" style="flex:1;padding:12px;border:2px solid #e2e8f0;border-radius:12px;background:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;color:#64748b;cursor:pointer;transition:all 0.2s;">रद्द करा</button>
-        <button onclick="document.getElementById('printTipOverlay').style.display='none';var s=document.getElementById('PS');if(!s){s=document.createElement('style');s.id='PS';document.head.appendChild(s);}s.innerHTML='@page{size:A4 landscape;margin:6mm 8mm;}';setTimeout(function(){window.print();},100);" style="flex:2;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg, var(--saffron), #e66b0e);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;box-shadow:0 6px 15px rgba(245, 130, 32, 0.3);transition:all 0.2s;">🖨️ Print उघडा ➔</button>
+        <button onclick="document.getElementById('printTipOverlay').style.display='none';var s=document.getElementById('PS');if(!s){s=document.createElement('style');s.id='PS';document.head.appendChild(s);}s.innerHTML='@page{size:A4 landscape;margin:6mm 10mm 6mm 8mm;}';setTimeout(function(){window.print();},100);" style="flex:2;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg, var(--saffron), #e66b0e);color:white;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:800;cursor:pointer;box-shadow:0 6px 15px rgba(245, 130, 32, 0.3);transition:all 0.2s;">🖨️ Print उघडा ➔</button>
       </div>
     </div>
   </div>
 </div>
 
 <script src="config.js"></script>
+<script src="offline-profile.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -395,25 +403,37 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href = 'index.html'; return; }
   currentUser = user;
 
-  try {
-    const ref = doc(db, 'users', user.uid, 'profile', 'gp');
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      const d = snap.data();
-      document.getElementById('GP_NAME').value = d.gpName || '';
-      document.getElementById('GP_PS').value = d.ps || '';
-      document.getElementById('GP_DIST').value = d.dist || '';
-      document.getElementById('GP_SARP').value = d.sarp || '';
-      document.getElementById('GP_GRAM').value = d.gram || '';
-      document.getElementById('GP_HOL').value = d.hol || '4';
-      document.getElementById('F_VLG').value = d.village || '';
-      document.getElementById('F_MR').value = d.mr || 800;
-      document.getElementById('F_LR').value = d.lr || 500;
-      document.getElementById('autofillBar').style.display = 'flex';
-      document.getElementById('gpBar').style.display = 'flex';
-      document.getElementById('gpBarInfo').innerHTML = '🏛️ ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
-    }
-  } catch(e) { console.error('Profile fetch error:', e); }
+  if (window.GPOffline) window.GPOffline.saveUser(user);
+
+  function fillVoucherProfile(d) {
+    document.getElementById('GP_NAME').value = d.gpName || '';
+    document.getElementById('GP_PS').value   = d.ps     || '';
+    document.getElementById('GP_DIST').value = d.dist   || '';
+    document.getElementById('GP_SARP').value = d.sarp   || '';
+    document.getElementById('GP_GRAM').value = d.gram   || '';
+    document.getElementById('GP_HOL').value  = d.hol    || '4';
+    document.getElementById('F_VLG').value   = d.village || '';
+    document.getElementById('F_MR').value    = d.mr || 800;
+    document.getElementById('F_LR').value    = d.lr || 500;
+    document.getElementById('autofillBar').style.display = 'flex';
+    document.getElementById('gpBar').style.display = 'flex';
+    document.getElementById('gpBarInfo').innerHTML = '🏛️ ग्रामपंचायत ' + (d.gpName || '') + ' • ' + (d.ps || '') + ' • ' + (d.dist || '');
+  }
+
+  const localP = window.GPOffline ? window.GPOffline.loadProfile() : null;
+  if (localP) fillVoucherProfile(localP);
+
+  if (navigator.onLine) {
+    try {
+      const ref = doc(db, 'users', user.uid, 'profile', 'gp');
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const d = snap.data();
+        fillVoucherProfile(d);
+        if (window.GPOffline) window.GPOffline.saveProfile(d);
+      }
+    } catch(e) { console.error('Profile fetch error:', e); }
+  }
 });
 
 window.doSaveVoucher = async function() {
@@ -435,6 +455,41 @@ window.doSaveVoucher = async function() {
     }
     const isManual = document.getElementById('MODE_MANUAL').style.background === 'rgb(26, 39, 68)' ||
                      document.getElementById('MODE_MANUAL').style.background === '#1A2744';
+
+    // Complete print-ready HTML save करा — dashboard history print साठी
+    const VOUCHER_CSS = '@page{size:A4 landscape;margin:6mm 10mm 6mm 8mm;}'
+      +'body{margin:0;padding:0;background:white;font-family:\'Noto Sans Devanagari\',Arial,sans-serif;}'
+      +'*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}'
+      +'.vp{page-break-after:always;border:none!important;box-shadow:none!important;width:100%!important;min-height:0!important;height:auto!important;padding:2mm 3mm!important;margin:0!important;border-radius:0!important;background:white;display:flex;flex-direction:column;justify-content:flex-start;gap:0;}'
+      +'.gp{border:none!important;box-shadow:none!important;width:100%!important;max-width:100%!important;padding:2mm 3mm!important;margin:0!important;overflow:visible!important;border-radius:0!important;background:white;}'
+      +'.vhd{text-align:center;margin-bottom:4px;}'
+      +'.vof{font-size:14pt;font-weight:700;border-bottom:2px solid #000;padding-bottom:3px;margin-bottom:4px;}'
+      +'.vti{font-size:12pt;font-weight:700;margin-bottom:3px;}'
+      +'.vwd{font-size:11pt;font-weight:600;margin-bottom:3px;}'
+      +'.vvn{text-align:right;font-size:9.5pt;font-weight:700;margin-bottom:4px;border-bottom:1px solid #000;padding-bottom:3px;white-space:nowrap;}'
+      +'.vt{width:100%;border-collapse:collapse;font-size:10.5pt;}'
+      +'.vt th,.vt td{border:1px solid #000;text-align:center;padding:6px 2px;line-height:1.4;height:34px;}'
+      +'.vt th{background:#e0e0e0!important;font-weight:700;font-size:9.5pt;padding:5px 2px;}'
+      +'.vcn{text-align:left!important;padding-left:6px!important;width:130px;}'
+      +'.vcp{width:58px;}.vcv{width:54px;}'
+      +'.vcd{width:22px;font-size:9pt!important;padding:6px 1px!important;}'
+      +'.vct{width:48px;}.vcr{width:46px;}.vca{width:62px;}.vcpa{width:68px;}.vcs{width:82px;}'
+      +'.VHL{background:#c8c8c8!important;font-weight:700;}'
+      +'.vt tr:nth-child(even) td{background:#f5f5f5!important;}'
+      +'.vt tr:nth-child(even) td.VHL{background:#c8c8c8!important;}'
+      +'.VTR td{background:#e8e8e8!important;font-weight:700;font-size:10.5pt;border-top:2px solid #000;}'
+      +'.vft{margin-top:6px;border-top:1px solid #000;padding-top:6px;}'
+      +'.vra{text-align:center;font-size:10.5pt;font-weight:700;margin-bottom:3px;}'
+      +'.vst{text-align:center;font-size:9.5pt;border:1px solid #000;padding:3px 8px;margin:3px auto;width:78%;}'
+      +'.vsg{display:flex;justify-content:space-around;margin-top:18px;font-size:10pt;font-weight:700;}'
+      +'.vsg div{text-align:center;width:130px;}'
+      +'.vsl{border-top:1px solid #000;padding-top:4px;}';
+    const htmlSnapshot = '<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
+      +'<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">'
+      +'<style>'+VOUCHER_CSS+'</style></head><body>'
+      +htmlContent
+      +'<scri'+'pt>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script>'
+      +'</body></html>';
     await addDoc(collection(db, 'users', currentUser.uid, 'voucher'), {
       work:    document.getElementById('F_WORK').value.trim(),
       gpName:  document.getElementById('GP_NAME').value.trim(),
@@ -451,7 +506,7 @@ window.doSaveVoucher = async function() {
       village: document.getElementById('F_VLG').value.trim(),
       mode:    isManual ? 'manual' : 'auto',
       workers: workers,
-      htmlSnapshot: htmlContent,
+      htmlSnapshot: htmlSnapshot,
       createdAt: serverTimestamp()
     });
     btn.textContent = '✅ यशस्वीरित्या जतन झाले!';
@@ -894,6 +949,17 @@ function GENERATE() {
 function PRINTIT() {
   var ov=document.getElementById('printTipOverlay');
   if(ov){ ov.style.display='flex'; }
+}
+</script>
+
+<div id="offline-banner" style="display:none;position:fixed;top:0;left:0;right:0;background:#1A2744;color:white;padding:8px 16px;font-size:9.5pt;z-index:9999;align-items:center;justify-content:center;gap:8px;font-family:sans-serif;text-align:center;">📴 Offline Mode — Cache वरून काम करत आहे</div>
+<script>
+if("serviceWorker"in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("/service-worker.js")
+    .then(function(r){console.log("[GP Sakhi] SW OK");})
+    .catch(function(e){console.warn("[GP Sakhi] SW fail",e);});
+  });
 }
 </script>
 </body>

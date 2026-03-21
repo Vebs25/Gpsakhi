@@ -1,9 +1,9 @@
 window.myFirebaseConfig = {
-  apiKey: "AIzaSyBdSsS6M5VgvozmWwQqocbY1sDuVQWUFTw",
-  authDomain: "gpsakhi-9685e.firebaseapp.com",
-  projectId: "gpsakhi-9685e",
-  storageBucket: "gpsakhi-9685e.firebasestorage.app",
-  messagingSenderId: "107629589245",
-  appId: "1:107629589245:web:7b288fda76b26aaadac494",
-  measurementId: "G-29FM4RM449"
+  apiKey: "AIzaSyA6NC2_jH8Ak4FwxjC-8GTQ7G-5jrPMHqg",
+  authDomain: "gpsakhidata.firebaseapp.com",
+  projectId: "gpsakhidata",
+  storageBucket: "gpsakhidata.firebasestorage.app",
+  messagingSenderId: "235936604445",
+  appId: "1:235936604445:web:582fd09db07403382f01f4",
+  measurementId: "G-DKE4F5YRSY"
 };
