@@ -4,593 +4,135 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>दवंडी जनरेटर — GP Sakhi</title>
-<meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1A2744">
-<meta name="description" content="GP Sakhi: Free Gram Panchayat document generation tool for rural government offices in Maharashtra. Generates official Marathi-language administrative documents. No credentials or financial data are collected.">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi:ital@0;1&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --saffron:#F58220; --navy:#1A2744; --green:#138808; --gold:#D4AF37;
-  --cream:#FDFBF7; --sand:#EAE3D5; --text:#2C3E50;
-  --glass-bg:rgba(255,255,255,0.88);
-  --tricolor-top:#FF9933; --tricolor-mid:#FFFFFF; --tricolor-bot:#138808;
+body{
+  font-family:'Noto Sans Devanagari',sans-serif;
+  background:#f5f5f5;
+  margin:0;
+  padding:20px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans Devanagari',sans-serif;background:linear-gradient(145deg,var(--cream) 0%,#f0ebd8 100%);color:var(--text);min-height:100vh;}
-::-webkit-scrollbar{width:7px;}::-webkit-scrollbar-thumb{background:var(--saffron);border-radius:4px;}
-
-/* NAV */
-nav{background:var(--glass-bg);backdrop-filter:blur(15px);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,0.06);border-bottom:1px solid rgba(255,255,255,0.6);}
-nav::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--tricolor-top) 33%,var(--tricolor-mid) 33%,var(--tricolor-mid) 66%,var(--tricolor-bot) 66%);}
-.back-btn{color:rgba(26,39,68,0.6);text-decoration:none;font-size:9.5pt;display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;transition:all 0.2s;border:1px solid transparent;}
-.back-btn:hover{background:rgba(26,39,68,0.06);border-color:var(--sand);color:var(--navy);}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.nav-emblem{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 3px 10px rgba(245,130,32,0.3);}
-.nav-logo span{font-family:'Tiro Devanagari Marathi',serif;font-size:16pt;color:var(--navy);font-weight:bold;}
-.nav-logo small{font-size:7.5pt;color:#888;display:block;margin-top:-2px;}
-
-/* AUTOFILL BAR */
-.autofill-bar{display:none;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border-left:4px solid var(--green);padding:10px 20px;font-size:9.5pt;color:#1b5e20;font-weight:600;align-items:center;gap:8px;}
-.autofill-bar.show{display:flex;}
-
-/* PAGE */
-.page{max-width:1200px;margin:0 auto;padding:24px 18px 80px;}
-.page-hero{background:linear-gradient(135deg,var(--navy),#1e3a5f);border-radius:16px;padding:22px 28px;margin-bottom:22px;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden;}
-.page-hero::before{content:'📢';position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:90px;opacity:0.07;}
-.page-hero-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 4px 14px rgba(245,130,32,0.35);}
-.page-hero h1{font-family:'Tiro Devanagari Marathi',serif;font-size:20pt;color:white;margin-bottom:4px;}
-.page-hero p{font-size:9.5pt;color:rgba(255,255,255,0.55);}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-@media(max-width:860px){.two-col{grid-template-columns:1fr;}}
-
-/* CARDS */
-.card{background:white;border-radius:14px;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid rgba(224,213,192,0.5);}
-.card-head{background:linear-gradient(135deg,var(--navy),#2a3f6e);padding:11px 18px;display:flex;align-items:center;gap:8px;}
-.card-head h2{font-size:10.5pt;font-weight:700;color:white;}
-.card-body{padding:18px;}
-
-/* FORM */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:4px;}
-.fld label{font-size:8pt;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.4px;}
-.req{color:var(--saffron);}
-.fld input,.fld select,.fld textarea{padding:9px 12px;border:1.5px solid var(--sand);border-radius:9px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;background:#FAFAF7;transition:all 0.2s;width:100%;}
-.fld textarea{resize:vertical;min-height:150px;line-height:1.8;}
-.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--saffron);background:white;box-shadow:0 0 0 3px rgba(245,130,32,0.1);}
-.char-count{font-size:8pt;color:#9CA3AF;text-align:right;margin-top:3px;}
-.char-count.warn{color:#f59e0b;font-weight:700;}
-.char-count.over{color:#ef4444;font-weight:700;}
-.gptw{display:flex;gap:8px;margin-bottom:4px;}
-.gptb{flex:1;padding:9px 8px;text-align:center;border:1.5px solid var(--sand);border-radius:9px;cursor:pointer;font-family:'Noto Sans Devanagari',sans-serif;font-size:10pt;color:#6B7280;transition:all 0.2s;font-weight:600;}
-.gptb.on{border-color:var(--saffron);background:linear-gradient(135deg,#FFF5EE,#FFE8D6);color:var(--saffron);font-weight:700;box-shadow:0 2px 8px rgba(245,130,32,0.18);}
-
-/* PREVIEW */
-.preview-panel{position:sticky;top:80px;}
-.preview-label{font-size:9pt;font-weight:700;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.preview-box{background:white;border-radius:12px;border:1px solid var(--sand);box-shadow:0 4px 20px rgba(0,0,0,0.06);padding:20px;min-height:400px;overflow:auto;max-height:72vh;}
-.preview-placeholder{color:#ccc;text-align:center;padding:60px 20px;font-size:11pt;}
-
-/* DAVANDI PREVIEW */
-.dav-preview{font-family:'Noto Sans Devanagari',serif;font-size:13px;line-height:1.7;color:#000;}
-.dav-hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:12px;margin-bottom:16px;}
-.dav-hdr h1{font-size:17px;font-weight:800;margin-bottom:3px;}
-.dav-hdr h2{font-size:12px;font-weight:500;color:#444;}
-.dav-offs{display:flex;justify-content:space-between;margin-top:12px;font-size:11px;font-weight:700;}
-.dav-ob{text-align:center;}
-.dav-meta{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:16px;border-bottom:1px solid #ccc;padding-bottom:8px;}
-.dav-heading{text-align:center;font-size:20px;font-weight:800;letter-spacing:3px;margin:18px 0 16px;padding:6px 0;font-family:'Tiro Devanagari Marathi',serif;}
-.dav-body{font-size:13px;line-height:2;text-align:justify;min-height:60px;color:#111;}
-.dav-body.empty{color:#ccc;font-style:italic;text-align:center;padding:30px 0;}
-.dav-sign{margin-top:50px;display:flex;justify-content:flex-end;}
-.dav-sign-box{text-align:center;}
-.dav-sign-line{border-top:1px solid #000;padding-top:4px;margin-top:45px;min-width:180px;max-width:260px;font-size:12px;font-weight:700;line-height:1.8;}
-
-/* BUTTONS */
-.btn-generate{display:block;width:100%;background:linear-gradient(135deg,var(--navy),#2a3f6e);color:white;border:none;border-radius:12px;padding:14px;font-family:'Noto Sans Devanagari',sans-serif;font-size:12pt;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(26,39,68,0.3);transition:all 0.25s;margin-bottom:10px;}
-.btn-generate:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(26,39,68,0.4);}
-.btn-print{display:block;width:100%;background:linear-gradient(135deg,var(--saffron),#e66b0e);color:white;border:none;border-radius:12px;padding:14px;font-family:'Noto Sans Devanagari',sans-serif;font-size:12pt;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(245,130,32,0.3);transition:all 0.25s;margin-bottom:10px;}
-.btn-print:hover{transform:translateY(-2px);}
-.btn-audio{display:block;width:100%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:12px;padding:14px;font-family:'Noto Sans Devanagari',sans-serif;font-size:12pt;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(124,58,237,0.3);transition:all 0.25s;margin-bottom:10px;}
-.btn-audio:hover{transform:translateY(-2px);}
-.btn-save{display:block;width:100%;background:linear-gradient(135deg,var(--green),#0f6b06);color:white;border:none;border-radius:12px;padding:14px;font-family:'Noto Sans Devanagari',sans-serif;font-size:12pt;font-weight:700;cursor:pointer;box-shadow:0 4px 15px rgba(19,136,8,0.3);transition:all 0.25s;margin-bottom:10px;}
-.btn-save:hover{transform:translateY(-2px);}
-#actionSection{display:none;}
-#actionSection.show{display:block;}
-
-/* AUDIO MODAL - Google TTS आधारित (माइक्रोफोनशिवाय) */
-.sarvam-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.6);backdrop-filter:blur(5px);flex-direction:column;}
-.sarvam-overlay.open{display:flex;}
-.sarvam-header{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
-.sarvam-close{background:rgba(255,255,255,0.2);border:none;color:white;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
-.sarvam-close:hover{background:rgba(255,255,255,0.35);}
-.sarvam-scroll{flex:1;overflow-y:auto;background:#f0eff0;padding:14px 14px 30px;display:flex;flex-direction:column;gap:14px;}
-.audio-step-card{background:white;border-radius:16px;padding:16px;border:2px solid #e5e7eb;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
-.active-step{border-color:var(--saffron)!important;box-shadow:0 4px 18px rgba(245,130,32,0.18);}
-.step-header-row{display:flex;align-items:center;gap:10px;margin-bottom:13px;}
-.step-badge{background:var(--navy);color:white;font-size:8pt;font-weight:800;padding:4px 12px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
-.step-badge-purple{background:#7c3aed;}
-.step-badge-green{background:var(--green);}
-.step-title{font-size:11pt;font-weight:800;color:var(--navy);line-height:1.3;}
-.text-area-copy{width:100%;padding:11px 13px;border:2px solid var(--saffron);border-radius:12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:10.5pt;background:#fffbf6;resize:none;min-height:100px;line-height:1.8;outline:none;color:#333;}
-.btn-copy-text{width:100%;background:linear-gradient(135deg,var(--saffron),#e66b0e);color:white;border:none;border-radius:12px;padding:13px;font-family:'Noto Sans Devanagari',sans-serif;font-size:11pt;font-weight:700;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;}
-.btn-copy-text:hover{transform:translateY(-1px);}
-.copy-confirm{display:none;text-align:center;color:var(--green);font-size:10pt;font-weight:700;margin-top:10px;background:#e8f5e9;border-radius:10px;padding:10px 14px;}
-.copy-confirm.show{display:block;}
-.voice-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
-.voice-card{text-align:center;padding:12px;border-radius:14px;cursor:pointer;border:2px solid #e2e8f0;transition:all 0.2s;background:#f8fafc;}
-.voice-card.selected{border-color:var(--saffron);background:#fff5ee;box-shadow:0 2px 8px rgba(245,130,32,0.2);}
-.voice-card strong{display:block;font-size:12pt;margin-bottom:4px;}
-.voice-card span{font-size:9pt;color:#555;}
-.btn-generate-audio{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:14px;padding:14px;font-weight:700;font-size:12pt;cursor:pointer;width:100%;margin-top:8px;transition:0.2s;}
-.btn-generate-audio:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(124,58,237,0.4);}
-.btn-download-audio{background:linear-gradient(135deg,var(--green),#0f6b06);color:white;border:none;border-radius:14px;padding:14px;font-weight:700;font-size:12pt;cursor:pointer;width:100%;margin-top:8px;transition:0.2s;display:none;}
-.btn-download-audio.show{display:block;}
-.audio-progress{height:6px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin:12px 0;display:none;}
-.audio-progress-bar{width:0%;height:100%;background:var(--saffron);transition:width 0.2s;}
-.audio-status{font-size:9pt;color:#4b5563;text-align:center;margin-top:8px;}
-
-/* Misc */
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-.errbox{display:none;background:#fff0f0;border:1.5px solid #fca5a5;border-radius:10px;padding:10px 14px;color:#dc2626;font-size:10pt;font-weight:600;margin-bottom:12px;}
-.errbox.on{display:block;}
+.container{
+  max-width:800px;
+  margin:auto;
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.1);
+}
+h1{
+  text-align:center;
+}
+textarea{
+  width:100%;
+  min-height:150px;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.generate{
+  background:#1A2744;
+  color:white;
+}
+.audio{
+  background:#7c3aed;
+  color:white;
+}
+.preview{
+  margin-top:20px;
+  padding:15px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  min-height:100px;
+}
 </style>
 </head>
+
 <body>
 
-<nav>
-  <a href="/dashboard" class="back-btn">← डॅशबोर्ड</a>
-  <div class="nav-logo">
-    <div class="nav-emblem">🏛️</div>
-    <div>
-      <span>GP Sakhi</span>
-      <small>दवंडी जनरेटर</small>
-    </div>
-  </div>
-  <div style="width:80px;"></div>
-</nav>
+<div class="container">
 
-<div class="autofill-bar" id="autofillBar">
-  ✅ Profile मधून माहिती आपोआप भरली गेली आहे. <a href="/profile" style="color:var(--green);font-weight:700;margin-left:6px;">बदलायचे असेल तर येथे क्लिक करा</a>
+<h1>📢 दवंडी जनरेटर</h1>
+
+<textarea id="davText" placeholder="दवंडीचा मजकूर लिहा..."></textarea>
+
+<button class="generate" onclick="previewText()">📄 Preview</button>
+<button class="audio" onclick="generateAudioMP3()">🔊 MP3 डाउनलोड करा</button>
+
+<div class="preview" id="previewBox">
+Preview येथे दिसेल...
 </div>
 
-<div class="page">
-  <div class="page-hero">
-    <div class="page-hero-icon">📢</div>
-    <div>
-      <h1>दवंडी जनरेटर</h1>
-      <p>ग्रामपंचायत दवंडी — मुद्रण स्वरूप आणि ऑडिओ सहित</p>
-    </div>
-  </div>
-
-  <div class="two-col">
-    <!-- FORM -->
-    <div>
-      <div class="card">
-        <div class="card-head"><h2>🏛️ ग्रामपंचायत माहिती</h2></div>
-        <div class="card-body">
-          <div class="fld" style="margin-bottom:12px;">
-            <label>प्रकार</label>
-            <div class="gptw">
-              <div class="gptb on" id="gp0" onclick="setGPT(0)">ग्रामपंचायत</div>
-              <div class="gptb"    id="gp1" onclick="setGPT(1)">गट ग्रामपंचायत</div>
-            </div>
-          </div>
-          <div class="g3">
-            <div class="fld"><label>GP नाव <span class="req">*</span></label><input type="text" id="gpn" placeholder="उदा. तोंडली" oninput="rp()"></div>
-            <div class="fld"><label>तालुका</label><input type="text" id="gpt" placeholder="उदा. मौदा" oninput="rp()"></div>
-            <div class="fld"><label>जिल्हा</label><input type="text" id="gpd" placeholder="उदा. नागपूर" oninput="rp()"></div>
-          </div>
-          <div class="g2">
-            <div class="fld"><label>सरपंच</label><input type="text" id="sarp" placeholder="उदा. सौ. दर्शना बागडे" oninput="rp()"></div>
-            <div class="fld"><label>उप सरपंच</label><input type="text" id="usarp" placeholder="उदा. श्री. रामपाल धांडे" oninput="rp()"></div>
-          </div>
-          <div class="fld"><label>ग्रामपंचायत अधिकारी</label><input type="text" id="gram" placeholder="उदा. श्री. वैभव बावनकर" oninput="rp()"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h2>📢 दवंडीचा मजकूर</h2></div>
-        <div class="card-body">
-          <div class="g2">
-            <div class="fld"><label>जावक क्र.</label><input type="text" id="jno" placeholder="उदा. ४२३/२०२५-२६" oninput="rp()"></div>
-            <div class="fld"><label>दिनांक <span class="req">*</span></label><input type="date" id="din" onchange="rp()"></div>
-          </div>
-          <div class="fld" style="margin-top:8px;">
-            <label>दवंडीचा संपूर्ण मजकूर <span class="req">*</span></label>
-            <textarea id="davText" placeholder="उदा. ग्रामपंचायत तोंडली येथील सर्व ग्रामस्थांना कळविण्यात येते की, दिनांक १५ मार्च २०२५ रोजी सकाळी ११ वाजता ग्रामसभा आयोजित करण्यात आली आहे. सर्व ग्रामस्थांनी उपस्थित राहावे." oninput="rp();updateCount()"></textarea>
-            <div class="char-count" id="charCount">0 / 2500 अक्षरे</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="errbox" id="errBox"></div>
-
-      <button class="btn-generate" onclick="generateDavandi()">📢 दवंडी तयार करा</button>
-
-      <div id="actionSection">
-        <button class="btn-print" onclick="doPrint()">🖨️ Print / PDF सेव करा</button>
-        <button class="btn-audio" onclick="openAudioModal()">🔊 ऑडिओ तयार करा</button>
-        <button class="btn-save" id="saveBtn" onclick="doSave()">💾 इतिहासात जतन करा</button>
-      </div>
-    </div>
-
-    <!-- PREVIEW -->
-    <div class="preview-panel">
-      <div class="preview-label">👁️ दवंडीचे Live Preview <span style="font-weight:400;letter-spacing:0;margin-left:4px;">बदल केल्यावर लगेच दिसतो</span></div>
-      <div class="preview-box">
-        <div id="davPreview">
-          <div class="preview-placeholder">📢<br><br>मजकूर भरल्यावर दवंडी येथे दिसेल...</div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-
-<!-- AUDIO MODAL - Google TTS आधारित (माइक्रोफोनशिवाय) -->
-<div class="sarvam-overlay" id="audioModal">
-  <div class="sarvam-header">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="width:38px;height:38px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;">🔊</div>
-      <div>
-        <div style="font-size:13pt;font-weight:800;line-height:1.2;">दवंडी ऑडिओ तयार करा</div>
-        <div style="font-size:8.5pt;opacity:0.7;">Google Text-to-Speech • मराठी</div>
-      </div>
-    </div>
-    <button class="sarvam-close" onclick="closeAudioModal()">✕</button>
-  </div>
-  <div class="sarvam-scroll">
-    <!-- Step 1: मजकूर पुष्टी -->
-    <div class="audio-step-card active-step">
-      <div class="step-header-row">
-        <div class="step-badge">पायरी १</div>
-        <div class="step-title">📄 दवंडीचा मजकूर</div>
-      </div>
-      <textarea class="text-area-copy" id="audioTextDisplay" readonly style="background:#f9f7f3;"></textarea>
-      <button class="btn-copy-text" id="copyAudioTextBtn" onclick="copyAudioText()">
-        <span>📋</span> मजकूर Copy करा
-      </button>
-      <div class="copy-confirm" id="audioCopyConfirm">✅ मजकूर Copy झाला!</div>
-    </div>
-
-    <!-- Step 2: Voice निवड (Google TTS साठी फक्त मराठी) -->
-    <div class="audio-step-card">
-      <div class="step-header-row">
-        <div class="step-badge step-badge-purple">पायरी २</div>
-        <div class="step-title">🎙️ Google TTS • मराठी ऑडिओ तयार करा</div>
-      </div>
-      <div class="voice-row">
-        <div class="voice-card selected" data-voice="mr" onclick="selectVoice('mr', this)">
-          <strong>🇮🇳 मराठी (Google)</strong>
-          <span>स्पष्ट, नैसर्गिक आवाज</span>
-        </div>
-        <div class="voice-card" data-voice="mr" style="opacity:0.8;" onclick="selectVoice('mr', this)">
-          <strong>🎧 मराठी (उच्चार)</strong>
-          <span>समान गुणवत्ता</span>
-        </div>
-      </div>
-      <div class="audio-progress" id="audioProgress">
-        <div class="audio-progress-bar" id="audioProgressBar"></div>
-      </div>
-      <div class="audio-status" id="audioStatusMsg">"ऑडिओ तयार करा" बटण दाबा.</div>
-      <button class="btn-generate-audio" id="generateAudioBtn" onclick="generateAudioFromText()">🔊 Google TTS ऑडिओ तयार करा</button>
-      <button class="btn-download-audio" id="downloadAudioBtn" onclick="downloadAudio()">⬇️ MP3 डाउनलोड करा</button>
-    </div>
-    <div style="padding:4px 0 10px; font-size:9pt; text-align:center; color:#6b7280;">
-      💡 टीप: Google TTS सेवा वापरली जाते. इंटरनेट कनेक्शन आवश्यक. माइक्रोफोन परवानगीची गरज नाही.
-    </div>
-  </div>
-</div>
-
-<script src="config.js"></script>
-<script src="offline-profile.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const app  = initializeApp(window.myFirebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-let currentUser = null;
-
-onAuthStateChanged(auth, async (user) => {
-  if (!user) { window.location.href = '/'; return; }
-  currentUser = user;
-  if (window.GPOffline) window.GPOffline.saveUser(user);
-
-  function fillProfile(d) {
-    if (d.gpType) setGPT(d.gpType === 'gram' ? 0 : 1);
-    document.getElementById('gpn').value   = d.gpName || '';
-    document.getElementById('gpt').value   = d.ps     || '';
-    document.getElementById('gpd').value   = d.dist   || '';
-    document.getElementById('sarp').value  = d.sarp   || '';
-    document.getElementById('usarp').value = d.usSarp || '';
-    document.getElementById('gram').value  = d.gram   || '';
-    document.getElementById('autofillBar').classList.add('show');
-    rp();
-  }
-
-  const localP = window.GPOffline ? window.GPOffline.loadProfile() : null;
-  if (localP) fillProfile(localP);
-
-  if (navigator.onLine) {
-    try {
-      const snap = await getDoc(doc(db, 'users', user.uid, 'profile', 'gp'));
-      if (snap.exists()) {
-        fillProfile(snap.data());
-        if (window.GPOffline) window.GPOffline.saveProfile(snap.data());
-      }
-    } catch(e) { console.log('Profile load error:', e); }
-  }
-});
-
-window.doSave = async function() {
-  if (!currentUser) { alert('लॉगिन करा.'); return; }
-  var text = document.getElementById('davText').value.trim();
-  if (!text) { alert('आधी दवंडी तयार करा.'); return; }
-  var btn = document.getElementById('saveBtn');
-  btn.textContent = '⏳ जतन होत आहे...'; btn.disabled = true;
-  try {
-    var html = buildPrintHTML();
-    await addDoc(collection(db, 'users', currentUser.uid, 'davandi'), {
-      gpName:  document.getElementById('gpn').value.trim(),
-      ps:      document.getElementById('gpt').value.trim(),
-      dist:    document.getElementById('gpd').value.trim(),
-      sarp:    document.getElementById('sarp').value.trim(),
-      jno:     document.getElementById('jno').value.trim(),
-      date:    document.getElementById('din').value,
-      text:    text,
-      htmlSnapshot: html,
-      createdAt: serverTimestamp()
-    });
-    btn.textContent = '✅ यशस्वीरित्या जतन झाले!';
-    btn.style.background = 'linear-gradient(135deg,#0a4d00,#0f6b06)';
-    setTimeout(function(){ btn.textContent = '💾 इतिहासात जतन करा'; btn.style.background = ''; btn.disabled = false; }, 2500);
-  } catch(e) {
-    btn.textContent = '💾 इतिहासात जतन करा'; btn.disabled = false;
-    alert('त्रुटी: ' + e.message);
-  }
-};
-</script>
 
 <script>
-var GPT = 0;
-function g(id){ return document.getElementById(id); }
-function gv(id){ var e=g(id); return e?e.value.trim():''; }
 
-function setGPT(t){
-  GPT=t;
-  g('gp0').classList.toggle('on',t===0);
-  g('gp1').classList.toggle('on',t===1);
-  rp();
-}
-window.setGPT = setGPT;
+const FUNCTION_URL = "PASTE_YOUR_FIREBASE_FUNCTION_URL_HERE";
 
-function fmtD(s){ if(!s)return''; var p=s.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
-function getON(){ return(GPT===1?'गट ग्रामपंचायत कार्यालय ':'ग्रामपंचायत कार्यालय ')+(gv('gpn')||'_____'); }
-function getONSign(){ return(GPT===1?'गट ग्रामपंचायत ':'ग्रामपंचायत ')+(gv('gpn')||'_____'); }
-function getOA(){ var p=[],t=gv('gpt'),d=gv('gpd'); if(t)p.push('पं. स. '+t); if(d)p.push('जि. '+d); return p.join(', '); }
-
-function updateCount(){
-  var n=g('davText').value.length, el=g('charCount');
-  el.textContent=n+' / 2500 अक्षरे';
-  el.className='char-count'+(n>2500?' over':n>2000?' warn':'');
+function previewText(){
+  const text = document.getElementById("davText").value;
+  document.getElementById("previewBox").innerText = text;
 }
 
-function buildBodyHTML(text){
-  var bh='';
-  if(!text) return '<p style="color:#ccc;text-indent:50px;">मजकूर येथे दिसेल...</p>';
-  text.split('\n').forEach(function(l){
-    if(!l.trim()){bh+='<p style="margin:0;height:8px;"></p>';return;}
-    bh+='<p style="text-indent:50px;margin:0 0 4px 0;">'+l+'</p>';
-  });
-  return bh;
-}
+async function generateAudioMP3(){
 
-function buildPreview(){
-  var on=getON(), oa=getOA();
-  var sarp=gv('sarp'), usarp=gv('usarp'), gr=gv('gram');
-  var jno=gv('jno');
-  var din=fmtD(g('din').value)||'__/__/____';
-  var text=g('davText').value.trim();
-  var ss=sarp.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'')||'सरपंच';
-  var a2=oa?'<br>'+oa:'';
-  var metaHTML='';
-  if(jno){
-    metaHTML='<div class="dav-meta"><span>जावक क्र : '+jno+'</span><span>दिनांक : '+din+'</span></div>';
-  } else {
-    metaHTML='<div class="dav-meta" style="justify-content:flex-end;"><span>दिनांक : '+din+'</span></div>';
-  }
-  return '<div class="dav-preview">'
-    +'<div class="dav-hdr">'
-    +'<h1>'+on+'</h1>'
-    +(oa?'<h2>'+oa+'</h2>':'')
-    +(sarp||usarp||gr?'<div class="dav-offs">'
-      +'<div class="dav-ob">सरपंच<br><strong>'+(sarp||'—')+'</strong></div>'
-      +'<div class="dav-ob">उपसरपंच<br><strong>'+(usarp||'—')+'</strong></div>'
-      +'<div class="dav-ob">ग्रा.पं.अधिकारी<br><strong>'+(gr||'—')+'</strong></div>'
-      +'</div>':'')
-    +'</div>'
-    +metaHTML
-    +'<div class="dav-heading">॥ दवंडी ॥</div>'
-    +'<div class="dav-body">'+buildBodyHTML(text)+'</div>'
-    +'<div class="dav-sign"><div class="dav-sign-box">'
-    +'<div class="dav-sign-line">'+ss+'<br>सरपंच<br>'+getONSign()+a2+'</div>'
-    +'</div></div>'
-    +'</div>';
-}
+  const text = document.getElementById("davText").value.trim();
 
-function rp(){
-  var p=g('davPreview');
-  if(p) p.innerHTML=buildPreview();
-}
-window.rp=rp;
-
-window.addEventListener('DOMContentLoaded',function(){
-  var din=g('din');
-  if(din&&!din.value) din.value=new Date().toISOString().split('T')[0];
-  rp();
-});
-
-function generateDavandi(){
-  var eb=g('errBox');
-  eb.className='errbox';
-  if(!gv('gpn')){ eb.innerHTML='⚠️ ग्रामपंचायत नाव टाका.'; eb.className='errbox on'; return; }
-  if(!g('davText').value.trim()){ eb.innerHTML='⚠️ दवंडीचा मजकूर टाका.'; eb.className='errbox on'; return; }
-  if(g('davText').value.length>2500){ eb.innerHTML='⚠️ मजकूर 2500 अक्षरांपेक्षा जास्त आहे.'; eb.className='errbox on'; return; }
-  rp();
-  g('actionSection').classList.add('show');
-  setTimeout(function(){ g('actionSection').scrollIntoView({behavior:'smooth',block:'nearest'}); }, 100);
-}
-
-/* PRINT */
-var PCSS='*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Noto Sans Devanagari",Arial,sans-serif;background:#f0f0f0;}.a4{width:210mm;min-height:297mm;padding:25mm 20mm;margin:10mm auto;background:white;box-shadow:0 0 10px rgba(0,0,0,.1);box-sizing:border-box;line-height:1.7;font-size:15px;color:#000;}.dav-hdr{text-align:center;border-bottom:2px solid #000;padding-bottom:14px;margin-bottom:18px;}.dav-hdr h1{font-size:20px;font-weight:800;margin-bottom:4px;}.dav-hdr h2{font-size:14px;font-weight:500;color:#444;}.dav-offs{display:flex;justify-content:space-between;margin-top:14px;font-size:13px;font-weight:700;}.dav-ob{text-align:center;}.dav-meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:18px;border-bottom:1px solid #ccc;padding-bottom:8px;}.dav-heading{text-align:center;font-size:26px;font-weight:800;letter-spacing:4px;margin:24px 0 20px;padding:6px 0;}.dav-body{font-size:15px;line-height:2;text-align:justify;white-space:pre-wrap;}.dav-sign{margin-top:80px;display:flex;justify-content:flex-end;text-align:center;font-size:14px;font-weight:700;line-height:1.9;}.dav-sign-line{border-top:1px solid #000;padding-top:4px;margin-top:60px;min-width:200px;max-width:280px;}@page{size:A4;margin:0;}@media print{body{background:none;}.a4{margin:0;padding:25mm 20mm;box-shadow:none;}}';
-
-function buildPrintHTML(){
-  var on=getON(),oa=getOA(),sarp=gv('sarp'),usarp=gv('usarp'),gr=gv('gram');
-  var jno=gv('jno'),din=fmtD(g('din').value)||'__/__/____';
-  var text=g('davText').value.trim();
-  var ss=sarp.replace(/^(सौ\.|श्री\.|श्रीमती\.)\s*/,'')||'सरपंच';
-  var a2=oa?'<br>'+oa:'';
-  var printMeta='';
-  if(jno){
-    printMeta='<div class="dav-meta"><span>जावक क्र : '+jno+'</span><span>दिनांक : '+din+'</span></div>';
-  } else {
-    printMeta='<div class="dav-meta" style="justify-content:flex-end;"><span>दिनांक : '+din+'</span></div>';
-  }
-  var printBody='';
-  text.split('\n').forEach(function(l){
-    if(!l.trim()){printBody+='<p style="margin:0;height:10px;"></p>';return;}
-    printBody+='<p style="text-indent:60px;margin:0 0 6px 0;">'+l+'</p>';
-  });
-  var bodyHTML='<div class="a4">'
-    +'<div class="dav-hdr"><h1>'+on+'</h1>'+(oa?'<h2>'+oa+'</h2>':'')
-    +(sarp||usarp||gr?'<div class="dav-offs">'
-      +'<div class="dav-ob">सरपंच<br><strong>'+(sarp||'—')+'</strong></div>'
-      +'<div class="dav-ob">उपसरपंच<br><strong>'+(usarp||'—')+'</strong></div>'
-      +'<div class="dav-ob">ग्रा.पं.अधिकारी<br><strong>'+(gr||'—')+'</strong></div>'
-      +'</div>':'')
-    +'</div>'
-    +printMeta
-    +'<div class="dav-heading">॥ दवंडी ॥</div>'
-    +'<div class="dav-body">'+printBody+'</div>'
-    +'<div class="dav-sign"><div>'
-    +'<div class="dav-sign-line">'+ss+'<br>सरपंच<br>'+getONSign()+a2+'</div>'
-    +'</div></div></div>';
-  return '<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8">'
-    +'<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">'
-    +'<style>'+PCSS+'</style></head><body>'+bodyHTML
-    +'<scri'+'pt>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>';
-}
-
-function doPrint(){
-  var html=buildPrintHTML();
-  var blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  var url=URL.createObjectURL(blob);
-  var w=window.open(url,'_blank','noopener,noreferrer');
-  if(!w){ alert('Popup blocked आहे — browser मध्ये popup allow करा.'); }
-  setTimeout(function(){ URL.revokeObjectURL(url); },60000);
-}
-
-// ======================= AUDIO (Google TTS - No Microphone) =======================
-let audioBlob = null;
-let audioUrl = null;
-
-function openAudioModal(){
-  let text = g('davText').value.trim();
-  if(!text){ alert('आधी दवंडीचा मजकूर टाका.'); return; }
-  g('audioTextDisplay').value = text;
-  g('audioCopyConfirm').classList.remove('show');
-  g('downloadAudioBtn').classList.remove('show');
-  g('audioStatusMsg').innerHTML = '"Google TTS ऑडिओ तयार करा" बटण दाबा.';
-  g('audioProgress').style.display = 'none';
-  if(audioUrl){ URL.revokeObjectURL(audioUrl); audioUrl=null; }
-  audioBlob=null;
-  g('audioModal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeAudioModal(){
-  g('audioModal').classList.remove('open');
-  document.body.style.overflow='';
-  if(audioUrl){ URL.revokeObjectURL(audioUrl); audioUrl=null; }
-}
-function copyAudioText(){
-  let txt = g('audioTextDisplay').value;
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(()=>{
-      let cf = g('audioCopyConfirm');
-      cf.classList.add('show');
-      setTimeout(()=>cf.classList.remove('show'),2000);
-    }).catch(()=>fallbackCopyAudio(txt));
-  } else { fallbackCopyAudio(txt); }
-}
-function fallbackCopyAudio(text){
-  let ta = g('audioTextDisplay');
-  ta.select(); ta.setSelectionRange(0,99999);
-  try{ document.execCommand('copy'); let cf=g('audioCopyConfirm'); cf.classList.add('show'); setTimeout(()=>cf.classList.remove('show'),2000); }
-  catch(e){ alert('Copy करता आले नाही.'); }
-}
-function selectVoice(type, el){
-  // only one voice for Marathi, just UI update
-  document.querySelectorAll('.voice-card').forEach(card=>card.classList.remove('selected'));
-  el.classList.add('selected');
-}
-async function generateAudioFromText(){
-  let text = g('audioTextDisplay').value;
-  if(!text){ g('audioStatusMsg').innerHTML = 'मजकूर उपलब्ध नाही.'; return; }
-  // Google Translate TTS endpoint (unofficial but works without API key)
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=mr&client=tw-ob`;
-  g('audioProgress').style.display = 'block';
-  g('audioProgressBar').style.width = '0%';
-  g('audioStatusMsg').innerHTML = '⏳ Google TTS वरून ऑडिओ आणत आहे...';
-  let btnGen = g('generateAudioBtn');
-  btnGen.disabled = true;
-  btnGen.style.opacity = '0.6';
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Network response was not ok');
-    const blob = await response.blob();
-    audioBlob = blob;
-    if(audioUrl) URL.revokeObjectURL(audioUrl);
-    audioUrl = URL.createObjectURL(audioBlob);
-    g('downloadAudioBtn').classList.add('show');
-    g('audioStatusMsg').innerHTML = '✅ ऑडिओ तयार झाला! आता MP3 डाउनलोड करा.';
-    g('audioProgressBar').style.width = '100%';
-    setTimeout(()=>{ g('audioProgress').style.display = 'none'; }, 1000);
-  } catch (err) {
-    console.error(err);
-    g('audioStatusMsg').innerHTML = '❌ त्रुटी: Google TTS सेवा वापरता आली नाही. इंटरनेट कनेक्शन तपासा.';
-    g('audioProgress').style.display = 'none';
-  } finally {
-    btnGen.disabled = false;
-    btnGen.style.opacity = '1';
-  }
-}
-function downloadAudio(){
-  if(!audioBlob){
-    alert('प्रथम ऑडिओ तयार करा.');
+  if(!text){
+    alert("कृपया मजकूर भरा");
     return;
   }
-  let link = document.createElement('a');
-  link.href = audioUrl;
-  link.download = 'davandi_audio.mp3';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+
+  const btn = document.querySelector(".audio");
+  btn.innerHTML = "⏳ तयार होत आहे...";
+  btn.disabled = true;
+
+  try{
+
+    const response = await fetch(FUNCTION_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({text})
+    });
+
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "davandi.mp3";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+  }catch(e){
+    alert("Error आला");
+    console.error(e);
+  }
+
+  btn.innerHTML = "🔊 MP3 डाउनलोड करा";
+  btn.disabled = false;
 }
 
-if("serviceWorker" in navigator){
-  window.addEventListener("load",function(){
-    navigator.serviceWorker.register('/service-worker.js')
-    .then(function(){ console.log("[GP Sakhi] SW OK"); })
-    .catch(function(e){ console.warn("[GP Sakhi] SW fail",e); });
-  });
-}
 </script>
+
 </body>
 </html>
-```
