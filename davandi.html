@@ -192,20 +192,6 @@ nav::before {
   filter: invert(20%) sepia(90%) saturate(600%) hue-rotate(195deg) brightness(0.85);
 }
 
-/* Audio player */
-.audio-section { margin-top: 16px; display: none; }
-.audio-section.show { display: block; }
-.audio-player-wrap {
-  background: white; border: 2px solid #e2e8f0; border-radius: 16px; padding: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-}
-.audio-player-wrap audio { width: 100%; margin-bottom: 10px; border-radius: 8px; }
-.dl-audio {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(135deg, var(--green), #0f6b06);
-  color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none;
-  font-weight: 700; font-size: 10pt; transition: all 0.3s;
-}
 .dl-audio:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(19,136,8,0.3); }
 
 /* Print Tip Modal */
@@ -281,26 +267,6 @@ nav::before {
 .sig-btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(26,39,68,0.35); }
 .sig-btn-save:disabled { opacity: 0.4; cursor: not-alllowed; transform: none; }
 
-/* Audio progress overlay */
-.audio-overlay {
-  position: fixed; inset: 0; background: rgba(11,17,32,0.88);
-  backdrop-filter: blur(10px); z-index: 10001;
-  display: none; align-items: center; justify-content: center; padding: 20px;
-}
-.audio-overlay.open { display: flex; }
-.audio-box {
-  background: white; border-radius: 24px; width: 100%; max-width: 420px;
-  overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-  animation: fadeIn 0.3s ease; text-align: center; padding: 40px;
-}
-.audio-spinner {
-  width: 60px; height: 60px; border: 5px solid #e2e8f0; border-top-color: var(--green);
-  border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.audio-box h3 { font-size: 14pt; color: var(--navy); margin-bottom: 8px; }
-.audio-box p { font-size: 10pt; color: #64748b; }
-
 @media(max-width:1000px){
   .main-wrap { grid-template-columns: 1fr; }
   .form-panel { max-height: none; position: static; border-right: none; border-bottom: 1px solid var(--glass-border); padding: 20px; }
@@ -315,7 +281,7 @@ nav::before {
   .nav-spacer { display: none; }
 }
 @media print {
-  nav, .form-panel, .autofill-bar, .ptit, .audio-section { display: none !important; }
+  nav, .form-panel, .autofill-bar, .ptit { display: none !important; }
   .main-wrap { display: block; }
   .preview-panel { padding: 0; background: white; }
   .lout { box-shadow: none; border: none; width: 100%; height: 100%; padding: 0; margin: 0; }
@@ -343,7 +309,7 @@ nav::before {
 <div class="main-wrap">
  <div class="form-panel">
   <div class="form-title">📢 दवंडी जनरेटर</div>
-  <div class="form-sub">शासकीय दवंड्या सोप्या पद्धतीने तयार करा व ऑडिओ मिळवा</div>
+  <div class="form-sub">शासकीय दवंड्या सोप्या पद्धतीने तयार करा</div>
 
   <div class="card">
     <div class="sec-title">🏛️ ग्रामपंचायत माहिती</div>
@@ -399,7 +365,7 @@ nav::before {
 
   <button class="bprint" onclick="document.getElementById('printTipOverlay').style.display='flex';">🖨️ A4 Print / PDF सेव करा</button>
   <button class="bprint" id="letterSaveBtn" onclick="doSaveDavandi()" style="background:linear-gradient(135deg,#138808,#0f6b06);margin-top:8px;">💾 इतिहासात जतन करा</button>
-  <a href="tts.html" class="baudio" style="display:block;width:100%;text-align:center;text-decoration:none;margin-top:8px;">🎙️ दवंडी ऑडिओ — मराठी TTS कन्व्हर्टर</a>
+  <a href="https://dashboard.sarvam.ai/text-to-speech" target="_blank" rel="noopener noreferrer" class="baudio" style="display:block;width:100%;text-align:center;text-decoration:none;margin-top:8px;">🎙️ ऑडिओ तयार करा (Sarvam AI TTS)</a>
  </div>
 
  <div class="preview-panel">
@@ -474,8 +440,6 @@ nav::before {
 </div>
 
 
-<!-- Audio handled by tts.html -->
-
 <script>
 var GPT = 0;
 
@@ -524,10 +488,9 @@ function buildH(){
     +'<h1>'+on+'</h1>'
     +(oa?'<h2>'+oa+'</h2>':'')
     +off
-    +'<div class="dav-heading">दवंडी</div>'
     +'</div>'
     +'<div class="meta"><div>जावक क्र : '+jno+'</div><div>दिनांक : '+din+'</div></div>'
-    +(vis?'<div style="margin-top:20px;font-size:14px;"><strong>विषय : '+vis+'</strong></div>':'')
+    +'<div class="dav-heading" style="text-align:center;margin-top:18px;font-size:28px;font-weight:900;text-decoration:underline;text-underline-offset:8px;letter-spacing:3px;">दवंडी</div>'
     +'<div class="dav-body">'+bh+'</div>'
     +'<div class="sign">'
     +'<div>'+(window.sarpSign?'<img class="sig-img" src="'+window.sarpSign+'" alt="सरपंच सही">':'<div style="height:55px;border-bottom:1px dashed #aaa;width:120px;margin:0 auto 4px;"></div>')+'('+ss+')<br>सरपंच<br>'+on+a2+'</div>'
@@ -550,8 +513,6 @@ function doPrint(){
   w.document.close();
 }
 window.doPrint = doPrint;
-
-/* Audio handled by tts.html - no in-page audio generation needed */
 
 /* ── SIGNATURE PAD ── */
 window.sarpSign = null;
@@ -698,11 +659,6 @@ window.saveSig = saveSig;
 
 /* ── Init ── */
 g('din').value = new Date().toISOString().split('T')[0];
-// Pre-load voices
-if('speechSynthesis' in window){
-  speechSynthesis.onvoiceschanged = function(){ speechSynthesis.getVoices(); };
-  speechSynthesis.getVoices();
-}
 rp();
 </script>
 
