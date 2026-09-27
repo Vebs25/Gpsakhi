@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Demo website concept for Ortho Relief Hospital & Research Centre, Dhantoli, Nagpur.">
+<title>Ortho Relief Hospital & Research Centre | Nagpur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#082b49; --blue:#0b6fae; --cyan:#17a8c8; --ice:#eef8fc; --ink:#122334;
+  --muted:#607284; --white:#fff; --line:#dce8ef; --shadow:0 18px 55px rgba(8,43,73,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"DM Sans",sans-serif;color:var(--ink);background:#f8fbfd;line-height:1.65}
+h1,h2,h3,h4{font-family:Manrope,sans-serif;line-height:1.15;margin:0}
+a{text-decoration:none;color:inherit}
+.container{width:min(1180px,92%);margin:auto}
+.topbar{background:var(--navy);color:#dcecf7;font-size:13px}
+.topbar .container{display:flex;justify-content:space-between;gap:20px;padding:9px 0}
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.93);backdrop-filter:blur(18px);border-bottom:1px solid rgba(220,232,239,.8)}
+.navin{height:76px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(145deg,var(--blue),var(--cyan));display:grid;place-items:center;color:white;font-weight:800;font-size:23px;box-shadow:0 8px 25px rgba(11,111,174,.25)}
+.brand strong{font-family:Manrope;font-size:16px;color:var(--navy)}
+.brand span{display:block;font-size:11px;color:var(--muted)}
+.navlinks{display:flex;gap:24px;align-items:center;font-size:14px;font-weight:600;color:#42576a}
+.navlinks a:hover{color:var(--blue)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:13px;padding:13px 19px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 12px 28px rgba(11,111,174,.25)}
+.btn-primary:hover{transform:translateY(-1px);background:#095f97}
+.btn-soft{background:#e9f6fb;color:var(--blue)}
+.mobile-menu{display:none;border:0;background:#edf6fa;border-radius:12px;padding:10px 12px;font-size:20px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(115deg,#f4fbfe 0%,#eaf6fb 48%,#dff3fa 100%);padding:72px 0 65px}
+.hero:before{content:"";position:absolute;width:600px;height:600px;border-radius:50%;right:-230px;top:-250px;background:rgba(23,168,200,.13)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:54px;align-items:center;position:relative}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--blue);background:#fff;border:1px solid #d9edf5;padding:8px 12px;border-radius:99px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.hero h1{font-size:clamp(42px,5vw,70px);color:var(--navy);margin:19px 0 18px;letter-spacing:-.04em}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero p{font-size:18px;color:#51687b;max-width:620px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+.trust{display:flex;gap:25px;flex-wrap:wrap;margin-top:25px}
+.trust div{font-size:12px;color:#627688}.trust b{display:block;font-family:Manrope;font-size:18px;color:var(--navy)}
+.hero-photo{position:relative}
+.hero-photo img{width:100%;height:560px;object-fit:cover;border-radius:34px;box-shadow:var(--shadow);display:block}
+.float-card{position:absolute;left:-25px;bottom:28px;background:white;padding:18px 20px;border-radius:18px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:center}
+.check{width:40px;height:40px;border-radius:12px;background:#e7f8ef;color:#12935d;display:grid;place-items:center;font-weight:900}
+.float-card small{display:block;color:var(--muted)}
+.section{padding:92px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:38px}
+.kicker{color:var(--blue);font-size:12px;text-transform:uppercase;font-weight:800;letter-spacing:.1em;margin-bottom:10px}
+.section h2{font-size:clamp(31px,4vw,46px);color:var(--navy);letter-spacing:-.035em}
+.section-head p{max-width:520px;color:var(--muted);margin:0}
+.about-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:48px;align-items:center}
+.about-image{height:480px;border-radius:28px;overflow:hidden;box-shadow:var(--shadow)}
+.about-image img{width:100%;height:100%;object-fit:cover}
+.about-copy p{color:var(--muted)}
+.story-card{margin-top:22px;padding:20px;border:1px solid var(--line);border-radius:18px;background:white}
+.story-card strong{color:var(--navy)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:30px}
+.stat{background:#fff;border:1px solid var(--line);padding:21px;border-radius:18px}
+.stat b{font-family:Manrope;font-size:29px;color:var(--blue);display:block}
+.stat span{font-size:13px;color:var(--muted)}
+.services{background:var(--navy);color:white}
+.services .section h2{color:white}
+.services .section-head p{color:#aac0d0}
+.service-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.service{padding:25px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;transition:.2s}
+.service:hover{background:rgba(255,255,255,.11);transform:translateY(-3px)}
+.icon{width:50px;height:50px;border-radius:15px;background:rgba(23,168,200,.16);display:grid;place-items:center;font-size:25px;margin-bottom:22px}
+.service h3{font-size:18px;margin-bottom:8px}.service p{color:#aac0d0;font-size:13px;margin:0}
+.highlight{padding:92px 0;background:linear-gradient(135deg,#f2fbfe,#ffffff)}
+.highlight-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tech-card{border-radius:28px;overflow:hidden;background:white;border:1px solid var(--line);box-shadow:var(--shadow)}
+.tech-card img{width:100%;height:290px;object-fit:cover;display:block}
+.tech-card .pad{padding:25px}
+.tech-card h3{color:var(--navy);margin-bottom:8px}.tech-card p{color:var(--muted);font-size:14px}
+.timeline{display:grid;gap:14px;margin-top:24px}
+.timeline .row{display:grid;grid-template-columns:70px 1fr;gap:15px;align-items:start}
+.year{font-family:Manrope;font-weight:800;color:var(--blue);padding-top:4px}
+.row p{margin:0;color:var(--muted);font-size:14px}
+.doctors{background:#fff}
+.doctor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.doctor{border:1px solid var(--line);border-radius:22px;padding:18px;background:#fff;transition:.2s}
+.doctor:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.doctor-img{height:240px;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#dff3fa,#eef6f9);display:grid;place-items:center}
+.doctor-img img{width:100%;height:100%;object-fit:cover}
+.initial{font-family:Manrope;font-size:50px;font-weight:800;color:var(--blue)}
+.doctor h3{margin-top:17px;font-size:19px;color:var(--navy)}.role{color:var(--blue);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-top:6px}.qual{color:var(--muted);font-size:13px;margin-top:6px}
+.doctor .btn{margin-top:15px;width:100%}
+.appointment{background:linear-gradient(130deg,#062743,#0a527c);color:white}
+.app-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:35px;align-items:center}
+.appointment h2{font-size:45px}.appointment p{color:#b7d0df}
+.form{background:white;border-radius:25px;padding:28px;color:var(--ink);box-shadow:var(--shadow)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-size:12px;font-weight:700;color:#516476}.field input,.field select,.field textarea{font:inherit;border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;background:#fbfdfe}.field textarea{min-height:90px;resize:vertical}
+.form .btn{margin-top:15px;width:100%}
+.success{display:none;background:#e8f8ef;color:#12734d;padding:12px;border-radius:12px;margin-top:12px;font-size:13px}
+.gallery{display:grid;grid-template-columns:1.4fr .8fr .8fr;grid-template-rows:190px 190px;gap:12px}
+.gallery img{width:100%;height:100%;object-fit:cover;border-radius:18px;cursor:pointer}
+.gallery img:first-child{grid-row:1/3}
+.reviews{background:#f2f8fb}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.review{background:white;border:1px solid var(--line);border-radius:20px;padding:25px}
+.stars{color:#f4a51c;letter-spacing:2px}.review p{font-size:14px;color:#566c7d}.review strong{font-size:13px;color:var(--navy)}
+.faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:55px}
+details{background:white;border:1px solid var(--line);border-radius:15px;margin-bottom:10px;padding:17px 19px}
+summary{cursor:pointer;font-weight:700;color:var(--navy)}
+details p{color:var(--muted);font-size:14px;margin-bottom:0}
+.contact{background:#fff}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.contact-card{padding:28px;border:1px solid var(--line);border-radius:22px}
+.contact-item{display:flex;gap:13px;margin:18px 0}.contact-item .ci{width:42px;height:42px;border-radius:12px;background:#eaf6fb;display:grid;place-items:center;color:var(--blue)}.contact-item b{display:block;color:var(--navy)}.contact-item span{font-size:13px;color:var(--muted)}
+.map{min-height:100%;border-radius:22px;background:linear-gradient(135deg,#d9eef6,#eff9fc);display:grid;place-items:center;text-align:center;padding:35px;color:var(--navy)}
+footer{background:#061f35;color:#b4cad8;padding:45px 0 80px}.foot{display:flex;justify-content:space-between;gap:25px;align-items:flex-start}.foot h3{color:#fff;font-size:17px;margin-bottom:10px}.foot p{font-size:13px;max-width:470px}
+.disclaimer{margin-top:30px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;color:#819bab}
+.fab{position:fixed;right:20px;bottom:20px;z-index:60;display:flex;gap:8px}
+.fab a{width:53px;height:53px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.18);font-weight:900}.wa{background:#19a96b}.call{background:var(--blue)}
+.modal{display:none;position:fixed;inset:0;background:rgba(1,17,30,.7);z-index:100;place-items:center;padding:20px}.modal.open{display:grid}.modalbox{background:white;border-radius:24px;max-width:520px;width:100%;padding:28px;position:relative}.close{position:absolute;right:17px;top:14px;border:0;background:#eef5f8;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:20px}
+@media(max-width:900px){
+ .navlinks{display:none}.mobile-menu{display:block}.navin{height:68px}
+ .hero{padding:45px 0}.hero-grid,.about-grid,.app-grid,.faq,.contact-grid{grid-template-columns:1fr}.hero-photo{order:-1}.hero-photo img{height:360px}.float-card{left:15px}
+ .service-grid{grid-template-columns:1fr 1fr}.doctor-grid,.review-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}
+ .gallery{grid-template-columns:1fr 1fr;grid-template-rows:170px 170px}.gallery img:first-child{grid-row:auto}
+}
+@media(max-width:560px){
+ .topbar .container{display:block;text-align:center}.topbar .container span:last-child{display:none}
+ .hero h1{font-size:42px}.section{padding:65px 0}.section-head{display:block}.section-head p{margin-top:15px}
+ .service-grid,.doctor-grid,.review-grid,.stats,.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
+ .gallery{display:grid;grid-template-columns:1fr;grid-template-rows:200px 150px 150px 150px}.gallery img:first-child{grid-row:auto}
+ .hero-photo img{height:320px}.about-image{height:330px}.appointment h2{font-size:35px}.foot{display:block}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container"><span>Ortho Relief Hospital & Research Centre · Dhantoli, Nagpur</span><span>Appointments: <b>+91 90110 08248</b> · Emergency/Front Desk: <b>+91 712 2427799</b></span></div>
+</div>
+
+<nav>
+  <div class="container navin">
+    <a class="brand" href="#home">
+      <div class="logo">OR</div>
+      <div><strong>ORTHO RELIEF</strong><span>Hospital & Research Centre</span></div>
+    </a>
+    <div class="navlinks">
+      <a href="#about">About</a><a href="#specialties">Specialties</a><a href="#doctors">Doctors</a><a href="#technology">Technology</a><a href="#gallery">Gallery</a><a href="#contact">Contact</a>
+      <button class="btn btn-primary" onclick="openModal()">Book Appointment</button>
+    </div>
+    <button class="mobile-menu" onclick="document.querySelector('.navlinks').classList.toggle('show')">☰</button>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">Since 1992 · Central India</span>
+      <h1>Move better.<br><em>Live stronger.</em></h1>
+      <p>A modern digital experience concept for Ortho Relief Hospital & Research Centre — bringing its orthopaedic legacy, specialist team and advanced care into one clear patient journey.</p>
+      <div class="actions">
+        <button class="btn btn-primary" onclick="openModal()">Book an Appointment →</button>
+        <a class="btn btn-soft" href="#specialties">Explore Treatments</a>
+      </div>
+      <div class="trust">
+        <div><b>50</b>bed expanded facility</div>
+        <div><b>2</b>state-of-the-art OTs</div>
+        <div><b>34+</b>years of legacy</div>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="https://orthoreliefhospital.com/wp-content/uploads/2025/01/HJ-Sangtani.jpg" alt="Dr H J Sangtani">
+      <div class="float-card"><div class="check">✓</div><div><b>Consult with a specialist</b><small>Joint replacement · Spine · Sports · Trauma</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+ <div class="container about-grid">
+  <div class="about-image"><img src="https://assets.bajajfinservhealth.in/media/doctorprofilepic/1670847917180_HospitalProfileImage_3257df00-4083-4a32-8ce6-73b6b0a12eb0-w800-h800.webp" alt="Ortho Relief Hospital exterior"></div>
+  <div class="about-copy">
+   <div class="kicker">A legacy of orthopaedic care</div>
+   <h2>Built in Nagpur. Focused on better mobility.</h2>
+   <p>Dr H J Sangtani returned to Nagpur after years of orthopaedic work and training in the UK and established Ortho Relief Hospital & Research Centre in 1992 as a 30-bed facility. The hospital has since expanded its infrastructure and clinical scope.</p>
+   <p>The current public hospital website describes a 2021 expansion to 50 beds with two operating theatres, a CathLab, ICU, CT scan, expanded OPD and IPD amenities.</p>
+   <div class="story-card"><strong>Dr H J Sangtani</strong><br><span style="color:#607284;font-size:14px">MCh Orth (UK) · FRCS · Joint Replacement & Arthroscopic Surgeon · Founder</span></div>
+   <div class="stats">
+    <div class="stat"><b>1992</b><span>Hospital founded</span></div>
+    <div class="stat"><b>50</b><span>Current stated bed capacity</span></div>
+    <div class="stat"><b>2</b><span>Operating theatres</span></div>
+    <div class="stat"><b>24/7</b><span>Designed for urgent contact</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="section services" id="specialties">
+ <div class="container">
+  <div class="section-head"><div><div class="kicker">Clinical specialties</div><h2>Care across the orthopaedic journey</h2></div><p>Clear specialty pathways make it easier for patients and referring doctors to understand where to start.</p></div>
+  <div class="service-grid">
+   <div class="service"><div class="icon">🦿</div><h3>Joint Replacement</h3><p>Knee, hip and other joint replacement pathways with specialist evaluation.</p></div>
+   <div class="service"><div class="icon">◉</div><h3>Arthroscopy</h3><p>Keyhole procedures and sports-related joint care.</p></div>
+   <div class="service"><div class="icon">🦴</div><h3>Spine Surgery</h3><p>Spine evaluation, minimally invasive and complex spine care.</p></div>
+   <div class="service"><div class="icon">🚑</div><h3>Orthopaedic Trauma</h3><p>Assessment and surgical management of orthopaedic injuries.</p></div>
+   <div class="service"><div class="icon">🏃</div><h3>Sports Medicine</h3><p>Injury management, reconstruction and return-to-activity planning.</p></div>
+   <div class="service"><div class="icon">❤️</div><h3>Cardiology</h3><p>Cardiac services reflected in the hospital's public specialty information.</p></div>
+   <div class="service"><div class="icon">🏥</div><h3>ICU & Critical Care</h3><p>Critical-care infrastructure as part of the expanded hospital facility.</p></div>
+   <div class="service"><div class="icon">🤖</div><h3>Robotic Surgery</h3><p>Showcase pathway for next-generation robotic knee replacement technology.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="highlight" id="technology">
+ <div class="container">
+  <div class="section-head"><div><div class="kicker">Technology & innovation</div><h2>Experience that keeps evolving.</h2></div><p>A premium website should make the hospital's technology and milestones easy to understand — without overwhelming the patient.</p></div>
+  <div class="highlight-grid">
+   <div class="tech-card"><img src="https://orthoreliefhospital.com/wp-content/uploads/2026/01/banner-1-copy.jpg.jpeg" alt="Robotic surgery technology"><div class="pad"><h3>Robotic precision meets human expertise</h3><p>The hospital's current website highlights robotic technology for knee joint replacement. This demo gives that capability a dedicated visual story.</p></div></div>
+   <div class="tech-card"><img src="https://orthoreliefhospital.com/wp-content/uploads/2026/01/banner-2-copy.jpg.jpeg" alt="Robotic knee replacement"><div class="pad"><h3>Next-generation knee replacement</h3><p>A dedicated technology section can explain the process, patient suitability, FAQs and consultation pathway.</p></div></div>
+  </div>
+  <div class="section-head" style="margin-top:65px;margin-bottom:18px"><div><div class="kicker">Selected milestones</div><h2 style="font-size:30px">A story worth showing.</h2></div></div>
+  <div class="timeline">
+   <div class="row"><div class="year">1992</div><p>Ortho Relief Hospital & Research Centre established as a 30-bed facility, according to the hospital's public website.</p></div>
+   <div class="row"><div class="year">1993</div><p>Hospital website states Dr H J Sangtani performed Total Knee Replacement Surgery in Central India.</p></div>
+   <div class="row"><div class="year">2005</div><p>Hospital website highlights a Central India first for hip-resurfacing surgery.</p></div>
+   <div class="row"><div class="year">2006</div><p>Hospital website records its first Computer Aided Surgery for Joint Replacement and acquisition of CT-free navigation technology.</p></div>
+   <div class="row"><div class="year">2009</div><p>Hospital website records a Total Elbow Joint Replacement milestone in Central India.</p></div>
+   <div class="row"><div class="year">2021</div><p>New wing expanded the stated capacity to 50 beds and added two OTs, CathLab, ICU, CT scan and expanded OPD/IPD facilities.</p></div>
+ </div>
+ </div>
+</section>
+
+<section class="section doctors" id="doctors">
+ <div class="container">
+  <div class="section-head"><div><div class="kicker">Meet the specialists</div><h2>A multi-consultant orthopaedic team.</h2></div><p>Doctor profiles, consultation days, expertise and a direct appointment CTA can become one of the strongest conversion sections on the finished website.</p></div>
+  <div class="doctor-grid">
+   <div class="doctor"><div class="doctor-img"><img src="https://orthoreliefhospital.com/wp-content/uploads/2025/01/HJ-Sangtani.jpg" alt="Dr H J Sangtani"></div><h3>Dr H J Sangtani</h3><div class="role">Founder · Joint Replacement</div><div class="qual">MCh Orth (UK) · FRCS · Joint Replacement & Arthroscopic Surgeon</div><button class="btn btn-soft" onclick="openModal('Dr H J Sangtani')">Request Consultation</button></div>
+   <div class="doctor"><div class="doctor-img"><div class="initial">SK</div></div><h3>Dr Sameer Kalkotwar</h3><div class="role">Spine Specialist</div><div class="qual">MBBS · MS Orthopaedics · Spine fellowship/training including NYU</div><button class="btn btn-soft" onclick="openModal('Dr Sameer Kalkotwar')">Request Consultation</button></div>
+   <div class="doctor"><div class="doctor-img"><div class="initial">AP</div></div><h3>Dr Anup Pahune</h3><div class="role">Joint Replacement & Trauma</div><div class="qual">DNB Orth · MBBS</div><button class="btn btn-soft" onclick="openModal('Dr Anup Pahune')">Request Consultation</button></div>
+   <div class="doctor"><div class="doctor-img"><div class="initial">AS</div></div><h3>Dr Abhilash P Sangtani</h3><div class="role">Joint Replacement & Sports Medicine</div><div class="qual">MS Orth (Gold Medalist) · Arthroplasty & Arthroscopy fellowships</div><button class="btn btn-soft" onclick="openModal('Dr Abhilash P Sangtani')">Request Consultation</button></div>
+   <div class="doctor"><div class="doctor-img"><div class="initial">ML</div></div><h3>Dr Mukesh Laddha</h3><div class="role">Orthopaedics · Shoulder</div><div class="qual">MBBS · DNB Orthopaedics · Arthroscopy & joint replacement interests</div><button class="btn btn-soft" onclick="openModal('Dr Mukesh Laddha')">Request Consultation</button></div>
+   <div class="doctor"><div class="doctor-img"><div class="initial">GT</div></div><h3>Dr Girish Motwani</h3><div class="role">Foot & Ankle</div><div class="qual">MBBS · MS Orthopaedics · Foot & ankle orthopaedic focus</div><button class="btn btn-soft" onclick="openModal('Dr Girish Motwani')">Request Consultation</button></div>
+ </div>
+ </div>
+</section>
+
+<section class="section appointment" id="appointment">
+ <div class="container app-grid">
+  <div><div class="kicker" style="color:#72d8ed">Patient journey</div><h2>Make the first step simple.</h2><p>In the final website this can connect to the hospital's preferred appointment workflow, WhatsApp, phone desk or a real scheduling system.</p><div class="trust"><div><b style="color:#fff">01</b>Choose specialty</div><div><b style="color:#fff">02</b>Choose doctor</div><div><b style="color:#fff">03</b>Request a slot</div></div></div>
+  <div class="form">
+   <div class="form-grid">
+    <div class="field"><label>Patient name</label><input id="pname" placeholder="Enter full name"></div>
+    <div class="field"><label>Mobile number</label><input id="phone" placeholder="+91"></div>
+    <div class="field"><label>Specialty</label><select><option>Joint Replacement</option><option>Spine Surgery</option><option>Arthroscopy</option><option>Trauma</option><option>Sports Medicine</option><option>Foot & Ankle</option></select></div>
+    <div class="field"><label>Preferred doctor</label><select id="doctorSelect"><option>Any available specialist</option><option>Dr H J Sangtani</option><option>Dr Sameer Kalkotwar</option><option>Dr Anup Pahune</option><option>Dr Abhilash P Sangtani</option><option>Dr Mukesh Laddha</option><option>Dr Girish Motwani</option></select></div>
+    <div class="field"><label>Preferred date</label><input type="date"></div>
+    <div class="field"><label>Preferred time</label><select><option>Morning</option><option>Afternoon</option><option>Evening</option></select></div>
+    <div class="field full"><label>Message (optional)</label><textarea placeholder="Briefly tell us what you need help with"></textarea></div>
+   </div>
+   <button class="btn btn-primary" onclick="submitForm()">Send Appointment Request</button>
+   <div class="success" id="success">✓ Demo request captured. In a live website this would be sent to the hospital's appointment desk.</div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="gallery">
+ <div class="container">
+  <div class="section-head"><div><div class="kicker">Hospital gallery</div><h2>Let patients see the environment.</h2></div><p>A visual gallery builds familiarity before a patient arrives — reception, wards, facilities and technology can all be presented here.</p></div>
+  <div class="gallery">
+   <img src="https://assets.bajajfinservhealth.in/media/doctorprofilepic/1670847917180_HospitalProfileImage_3257df00-4083-4a32-8ce6-73b6b0a12eb0-w800-h800.webp" alt="Hospital exterior">
+   <img src="https://orthoreliefhospital.com/wp-content/uploads/2026/01/banner-3-copy.jpg.jpeg" alt="Orthopaedic care">
+   <img src="https://orthoreliefhospital.com/wp-content/uploads/2026/01/banner-1-copy.jpg.jpeg" alt="Robotic technology">
+   <img src="https://orthoreliefhospital.com/wp-content/uploads/2026/01/banner-2-copy.jpg.jpeg" alt="Knee replacement technology">
+  </div>
+ </div>
+</section>
+
+<section class="section reviews">
+ <div class="container">
+  <div class="section-head"><div><div class="kicker">Patient voice</div><h2>Trust, presented responsibly.</h2></div><p>These are demo excerpts based on themes visible in public patient-review listings. A live site should use approved testimonials and explicit review-source links.</p></div>
+  <div class="review-grid">
+   <div class="review"><div class="stars">★★★★★</div><p>“The doctor explained everything clearly, and the staff were courteous and supportive.”</p><strong>Public patient-review theme · Practo</strong></div>
+   <div class="review"><div class="stars">★★★★★</div><p>“The hospital was neat and clean and the staff were caring throughout the treatment.”</p><strong>Public patient-review theme · Practo</strong></div>
+   <div class="review"><div class="stars">★★★★★</div><p>“The doctors and staff were outstanding, kind and cooperative.”</p><strong>Public review excerpt/theme · Google listing</strong></div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="faq">
+ <div class="container faq">
+  <div><div class="kicker">Patient information</div><h2>Answers before the appointment.</h2><p style="color:#607284">A real website can turn common questions into searchable, structured patient information and reduce calls to the front desk.</p><button class="btn btn-primary" onclick="openModal()">Ask for an Appointment</button></div>
+  <div>
+   <details open><summary>Where is Ortho Relief Hospital located?</summary><p>Plot 19, Opp. Ramakrishna Math, Dhantoli, Nagpur – 440012.</p></details>
+   <details><summary>How can I book an appointment?</summary><p>Use the appointment form in this demo, call the appointment number +91 90110 08248, or connect the final website to the hospital's preferred booking platform.</p></details>
+   <details><summary>What specialties are shown by the hospital?</summary><p>Public hospital information lists joint replacement, arthroscopy, spine surgery, orthopaedic trauma, sports medicine, ICU/critical care, cardiology and robotic surgery.</p></details>
+   <details><summary>Can referring doctors contact the hospital?</summary><p>Yes. A finished website can include a dedicated referral form with secure document upload and callback request.</p></details>
+  </div>
+ </div>
+</section>
+
+<section class="section contact" id="contact">
+ <div class="container contact-grid">
+  <div class="contact-card">
+   <div class="kicker">Visit Ortho Relief</div><h2 style="font-size:35px">Let’s get you moving.</h2>
+   <div class="contact-item"><div class="ci">📍</div><div><b>Address</b><span>Plot 19, Opp. Ramakrishna Math, Dhantoli, Nagpur – 440012</span></div></div>
+   <div class="contact-item"><div class="ci">☎</div><div><b>Phone</b><span>+91 712 2427799 · +91 712 2443313</span></div></div>
+   <div class="contact-item"><div class="ci">💬</div><div><b>Appointments</b><span>+91 90110 08248</span></div></div>
+   <div class="contact-item"><div class="ci">✉</div><div><b>Email</b><span>info@orthoreliefhospital.com · orthoreliefhospital@gmail.com</span></div></div>
+   <button class="btn btn-primary" onclick="openModal()">Book Appointment</button>
+  </div>
+  <div class="map"><div><div style="font-size:48px">📍</div><h3>Dhantoli, Nagpur</h3><p>Interactive Google Maps embed can be added here in the production website.</p><a class="btn btn-soft" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Ortho%20Relief%20Hospital%20Dhantoli%20Nagpur">Open in Google Maps ↗</a></div></div>
+ </div>
+</section>
+
+<footer>
+ <div class="container">
+  <div class="foot"><div><h3>ORTHO RELIEF</h3><p>Hospital & Research Centre · Dhantoli, Nagpur. A premium website concept prepared as a demonstration of a modern patient-first digital experience.</p></div><div><h3>Quick links</h3><p>About · Specialties · Doctors · Technology · Gallery · Appointment</p></div></div>
+  <div class="disclaimer">DEMO WEBSITE · Information and claims should be reviewed and approved by the hospital before production use. Publicly sourced photographs and review themes are included for demonstration; production deployment should use hospital-approved assets, permissions and final copy.</div>
+ </div>
+</footer>
+
+<div class="fab"><a class="call" href="tel:+919011008248">☎</a><a class="wa" target="_blank" href="https://wa.me/919011008248?text=Hello%20Ortho%20Relief%20Hospital%2C%20I%20would%20like%20to%20book%20an%20appointment.">✆</a></div>
+
+<div class="modal" id="modal">
+ <div class="modalbox">
+  <button class="close" onclick="closeModal()">×</button>
+  <div class="kicker">Quick appointment</div><h2 style="font-size:31px;color:#082b49">Request a consultation</h2><p style="color:#607284">This is a working front-end demo. Submit to see the interaction; connect it to the hospital's backend in production.</p>
+  <div class="field"><label>Patient name</label><input id="mname" placeholder="Full name"></div>
+  <div class="field" style="margin-top:12px"><label>Mobile number</label><input placeholder="+91"></div>
+  <div class="field" style="margin-top:12px"><label>Concern</label><select><option>Knee / Joint pain</option><option>Spine / Back pain</option><option>Sports injury</option><option>Trauma</option><option>Other</option></select></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:15px" onclick="closeModal();alert('Demo appointment request received. In production this will be sent to the hospital appointment desk.')">Continue →</button>
+ </div>
+</div>
+
+<script>
+function openModal(doctor){
+  document.getElementById('modal').classList.add('open');
+  if(doctor){
+    const s=document.getElementById('doctorSelect'); if(s){[...s.options].forEach(o=>{if(o.text===doctor)o.selected=true})}
+  }
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+function submitForm(){
+  const n=document.getElementById('pname').value.trim();
+  const p=document.getElementById('phone').value.trim();
+  if(!n||!p){alert('Please enter patient name and mobile number.');return}
+  document.getElementById('success').style.display='block';
+}
+</script>
+</body>
+</html>
